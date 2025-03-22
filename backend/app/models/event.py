@@ -1,7 +1,8 @@
-from app.db.base import Base
+from app.db.base import BaseModel
 from sqlalchemy import Column, Integer, String, DateTime, Enum
 import enum
 from datetime import datetime
+
 
 class StateEnum(enum.Enum):
     CREADO = "CREADO"
@@ -9,16 +10,13 @@ class StateEnum(enum.Enum):
     TERMINADO = "TERMINADO"
     CANCELADO = "CANCELADO"
 
-class Event(Base):
+
+class Event(BaseModel):
     __tablename__ = "events"
 
-    id = Column(Integer, primary_key=True, index=True)
-    name = Column(String, index=True, nullable=False)
     description = Column(String, index=True)
     capacity = Column(Integer, index=True, nullable=False)
     state = Column(Enum(StateEnum, name="state"), index=True, nullable=False)
-    created_at = Column(DateTime, index=True, default=datetime.now, nullable=False)
-    updated_at = Column(DateTime, index=True, default=datetime.now, nullable=False)
     date_start = Column(DateTime, nullable=False)
     date_end = Column(DateTime, nullable=False)
     location = Column(String, index=True)
