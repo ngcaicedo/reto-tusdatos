@@ -4,6 +4,7 @@ from sqlalchemy.orm import sessionmaker
 from sqlalchemy.pool import StaticPool
 from sqlalchemy import inspect
 from app.db.base import Base
+from app.models.event import Event
 
 @pytest.fixture(scope="function")
 def db():
