@@ -1,0 +1,64 @@
+# ───── General ─────
+*.log
+*.bak
+*.swp
+*.tmp
+*.pid
+*.seed
+.DS_Store
+.env
+.env.*
+.vscode/
+.idea/
+*.sublime-workspace
+
+# ───── Python ─────
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.mypy_cache/
+.pytest_cache/
+*.sqlite3
+
+# ───── Poetry ─────
+poetry.lock
+venv/
+.env/
+
+# ───── FastAPI Project (backend) ─────
+backend/__pycache__/
+backend/.pytest_cache/
+backend/.mypy_cache/
+backend/.env
+backend/.env.*
+backend/htmlcov/
+backend/.coverage
+
+# ───── Angular / React / Vue Project (frontend) ─────
+frontend/node_modules/
+frontend/dist/
+frontend/build/
+frontend/.env
+frontend/.env.*
+
+# ───── Docker ─────
+pgdata/
+*.tar
+docker-compose.override.yml
+data/
+*.db
+*.pid
+
+# ───── Coverage / Reports ─────
+coverage/
+htmlcov/
+.nyc_output/
+.coverage
+*.lcov
+lcov-report/
+
+# ───── Logs / Debug / Temp ─────
+logs/
+tmp/
+.cache/
