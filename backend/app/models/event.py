@@ -7,7 +7,7 @@ class StateEnum(enum.Enum):
     CREADO = "CREADO"
     PROGRAMADO = "PROGRAMADO"
     TERMINADO = "TERMINADO"
-    ELIMINADO = "ELIMINADO"
+    CANCELADO = "CANCELADO"
 
 class Event(Base):
     __tablename__ = "events"
