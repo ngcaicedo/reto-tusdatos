@@ -1,7 +1,7 @@
 from app.db.base import BaseModel
-from sqlalchemy import Column, Integer, String, DateTime, Enum
+from sqlalchemy import Column, Integer, String, DateTime, Enum, ForeignKey
 import enum
-from datetime import datetime
+from sqlalchemy.orm import relationship
 
 
 class StateEnum(enum.Enum):
@@ -20,3 +20,9 @@ class Event(BaseModel):
     date_start = Column(DateTime, nullable=False)
     date_end = Column(DateTime, nullable=False)
     location = Column(String, index=True)
+    user_created_id = Column(Integer, ForeignKey("users.id"))
+    
+    users = relationship("User", back_populates="events")
+    
+    sessions = relationship("Session", back_populates="event")
+    assistants = relationship("Assistant", secondary="event_assistant", back_populates="events")

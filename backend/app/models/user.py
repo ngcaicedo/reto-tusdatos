@@ -1,7 +1,7 @@
 from app.db.base import BaseModel
 from sqlalchemy import Column, Integer, String, DateTime, Enum
 import enum
-from datetime import datetime
+from sqlalchemy.orm import relationship
 
 
 class RoleEnum(enum.Enum):
@@ -17,3 +17,6 @@ class User(BaseModel):
     email = Column(String, index=True)
     password = Column(String, nullable=False)
     role = Column(Enum(RoleEnum, name="role"), index=True, nullable=False)
+    
+    events = relationship("Event", back_populates="users")
+    assistant = relationship("Assistant", back_populates="user", uselist=False)

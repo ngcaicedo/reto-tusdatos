@@ -37,6 +37,7 @@ def test_event_has_session(db):
 
     session = Session(
         name=fake.name(),
+        description=fake.text(),
         duration=1,
         speaker_id=speaker.id,
         event_id=event.id,
