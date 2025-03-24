@@ -18,7 +18,7 @@ def test_event_has_session(db, user_factory, event_factory, speaker_factory, ses
     event = event_factory(user=user)
     speaker = speaker_factory()
     session = session_factory(event=event, speaker=speaker)
-    
+
     assert event.sessions[0].id == session.id
     assert session.event.id == event.id
 
@@ -30,3 +30,73 @@ def test_event_created_by_user(db, user_factory, event_factory):
 
     assert event.user_created_id == user.id
     assert user.events[0].id == event.id
+
+
+def test_create_event_without_auth(client, user_factory):
+    create_user, _ = user_factory
+    user = create_user()
+    """ Test para verificar la creación de un evento sin autenticación """
+    data = {
+        'name': faker.Faker().name(),
+        'description': faker.Faker().sentence(),
+        'state': StateEnum.CREADO.value,
+        'user_created_id': user.id
+    }
+
+    headers = {
+        'Authorization': f'Bearer '}
+
+    response = client.post('/events/create', json=data, headers=headers)
+    assert response.status_code == 401
+    response_data = response.json()
+    assert response_data['detail'] == 'Not authenticated'
+
+
+def test_create_event(client, user_factory):
+    """ Test para verificar la creación de un evento """
+    _, login_user = user_factory
+    role = [RoleEnum.ADMIN, RoleEnum.ORGANIZADOR]
+    user_logged = login_user(role=faker.Faker().random_element(elements=role))
+    data = {
+        'name': faker.Faker().name(),
+        'description': faker.Faker().sentence(),
+        'state': StateEnum.CREADO.value,
+        'user_created_id': user_logged['id']
+    }
+
+    headers = {
+        'Authorization': f'Bearer {user_logged['token']}'
+    }
+
+    response = client.post('/events/create', json=data, headers=headers)
+    assert response.status_code == 201
+    response_data = response.json()
+    assert response_data['name'] == data['name']
+    assert response_data['description'] == data['description']
+    assert response_data['state'] == data['state']
+    assert response_data['user_created_id'] == data['user_created_id']
+
+
+def test_create_event_without_data(client, user_factory):
+    """ Test para verificar la creación de un evento sin"""
+    _, login_user = user_factory
+    role = [RoleEnum.ADMIN, RoleEnum.ORGANIZADOR]
+    user_logged = login_user(role=faker.Faker().random_element(elements=role))
+    data = {
+        'name': '',
+        'description': '',
+        'state': '',
+        'user_created_id': ''
+    }
+
+    headers = {
+        'Authorization': f'Bearer {user_logged['token']}'
+    }
+
+    response = client.post('/events/create', json=data, headers=headers)
+    assert response.status_code == 422
+    response_data = response.json()
+    fields_required = ['name', 'description', 'state', 'user_created_id']
+    for error in response_data['detail']:
+        assert error['loc'][-1] in fields_required
+        assert error['msg'] == 'Field required'

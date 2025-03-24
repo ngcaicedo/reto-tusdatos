@@ -1,3 +1,4 @@
+from fastapi.security import OAuth2PasswordRequestForm
 import pytest
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
@@ -7,9 +8,8 @@ import app.models as models
 import faker
 from app.core.authenticator.security import hash_password
 from fastapi.testclient import TestClient
+from app.core.managment import Managment
 
-
-fake = faker.Faker()
 RoleEnum = models.user.RoleEnum
 StateEnum = models.event.StateEnum
 User = models.user.User
@@ -17,6 +17,8 @@ Event = models.event.Event
 Session = models.session.Session
 Speaker = models.session.Speaker
 Assistant = models.assistant.Assistant
+fake = faker.Faker()
+managment = Managment()
 
 
 @pytest.fixture
@@ -35,7 +37,22 @@ def user_factory(db):
         db.commit()
         db.refresh(user)
         return user
-    return create_user
+
+    def login_user(role: RoleEnum) -> dict:
+        """ Función para crear un usuario y autenticarlo """
+        class MockForm:
+            def __init__(self, username, password):
+                self.username = username
+                self.password = password
+                self.scopes = []
+        fake_password = fake.password()
+        new_user = create_user(role=role, password=fake_password)
+        form_data = MockForm(username=new_user.email, password=fake_password)
+        user = managment.login(form_data, db)
+
+        return user
+
+    return create_user, login_user
 
 
 @pytest.fixture
