@@ -8,6 +8,7 @@ import app.models
 
 @pytest.fixture(scope="function")
 def db():
+    """ Fixture para crear una base de datos en memoria para pruebas """
     engine = create_engine(
         "sqlite:///:memory:",
         connect_args={"check_same_thread": False},
