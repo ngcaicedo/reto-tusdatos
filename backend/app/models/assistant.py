@@ -4,6 +4,16 @@ from sqlalchemy.orm import relationship
 
 
 class Assistant(BaseModel):
+    """
+    Modelo que representa un asistente.
+    
+    Relaciones:
+    - Un asistente pertenece a un usuario (`user`).
+    - Un asistente puede asistir a múltiples eventos (`events`) mediante una relación muchos a muchos.
+    
+    Notas:
+    - Se aplica `unique=True` en el campo `user_id` para evitar que un usuario tenga más de un registro en asistente.
+    """
     __tablename__ = "assistants"
 
     email = Column(String, index=True, nullable=False)

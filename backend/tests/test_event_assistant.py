@@ -12,42 +12,11 @@ def test_table_event_assistant(db):
     assert "event_assistant" in table_names
 
 
-def test_event_has_assistant(db):
+def test_event_has_assistant(db, user_factory, event_factory, assistant_factory):
     """ Test para verificar que el modelo Event tiene una relación con el modelo Assistant """
-    fake = faker.Faker()
-    event = Event(
-        name=fake.name(),
-        description=fake.text(),
-        capacity=100,
-        state=StateEnum.CREADO,
-        date_start=fake.date_time_this_year(),
-        date_end=fake.date_time_this_year(),
-        location=fake.address(),
-    )
-    db.add(event)
-    db.commit()
-    db.refresh(event)
-
-    user = User(
-        name=fake.name(),
-        phone=fake.phone_number(),
-        email=fake.email(),
-        role=RoleEnum.ASISTENTE,
-        password="123456",
-    )
-    db.add(user)
-    db.commit()
-    db.refresh(user)
-
-    assistant = Assistant(
-        name=fake.name(),
-        email=fake.email(),
-        phone=fake.phone_number(),
-        user_id=user.id,
-    )
-    db.add(assistant)
-    db.commit()
-    db.refresh(assistant)
+    user = user_factory()
+    event = event_factory(user=user)
+    assistant = assistant_factory(user=user)
 
     event.assistants.append(assistant)
     db.commit()
