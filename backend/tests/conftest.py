@@ -6,6 +6,8 @@ from app.db.base import Base
 import app.models as models
 import faker
 from app.core.authenticator.security import hash_password
+from fastapi.testclient import TestClient
+from app.main import app
 
 
 fake = faker.Faker()
@@ -16,6 +18,7 @@ Event = models.event.Event
 Session = models.session.Session
 Speaker = models.session.Speaker
 Assistant = models.assistant.Assistant
+
 
 @pytest.fixture
 def user_factory(db):
@@ -57,6 +60,7 @@ def event_factory(db):
         return event
     return create_event
 
+
 @pytest.fixture
 def session_factory(db):
     """ Fixture para crear una sesión en la base de datos """
@@ -93,6 +97,7 @@ def assistant_factory(db):
         return assistant
     return create_assistant
 
+
 @pytest.fixture
 def speaker_factory(db):
     """ Fixture para crear un speaker en la base de datos """
@@ -125,3 +130,15 @@ def db():
         yield db
     finally:
         db.close()
+
+
+@pytest.fixture
+def client(db):
+    """ Fixture para crear un cliente de pruebas """
+    from app.db.session import get_db
+
+    def override_get_db():
+        yield db
+
+    app.dependency_overrides[get_db] = override_get_db
+    return TestClient(app)

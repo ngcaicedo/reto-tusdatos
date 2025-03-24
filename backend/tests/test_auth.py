@@ -58,3 +58,33 @@ def test_authenticate_user(db, user_factory):
     assert user_auth is not None
     assert user_auth.email == user.email
     assert user_auth.role == user.role
+
+
+def test_login_success(client, user_factory):
+    """ Test para verificar que un usuario inicia sesión correctamente """
+    user = user_factory(password="password")
+    data = {
+        "email": user.email,
+        "password": "password"
+    }
+    response = client.post("/auth/login", data=data)
+
+    assert response.status_code == 200
+    data_response = response.json()
+    assert data_response.get("token") is not None
+    assert data_response.get("user") == user.email
+    assert data_response.get("role") == user.role
+    assert data_response.get("token_type") == "bearer"
+    
+def test_login_fail(client, user_factory):
+    """ Test para verificar que un usuario no inicia sesión con credenciales incorrectas """
+    user = user_factory(password="password")
+    data = {
+        "email": user.email,
+        "password": "password123"
+    }
+    response = client.post("/auth/login", data=data)
+
+    assert response.status_code == 401
+    data_response = response.json()
+    assert data_response.get("detail") == "Credenciales incorrectas"
