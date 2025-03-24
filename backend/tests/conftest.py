@@ -18,14 +18,14 @@ Assistant = models.assistant.Assistant
 @pytest.fixture
 def user_factory(db):
     """ Fixture para crear un usuario en la base de datos """
-    def create_user(role: RoleEnum = RoleEnum.ORGANIZADOR) -> User:
+    def create_user(role: RoleEnum = RoleEnum.ORGANIZADOR, email: str = fake.email(), password: str = '123456') -> User:
         """ Función para crear un usuario en la base de datos """
         user = User(
             name=fake.name(),
             phone=fake.phone_number(),
-            email=fake.email(),
+            email=email,
             role=role,
-            password="123456",
+            password=password,
         )
         db.add(user)
         db.commit()
