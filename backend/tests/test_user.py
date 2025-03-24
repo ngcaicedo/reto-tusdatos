@@ -1,8 +1,9 @@
 from sqlalchemy import inspect
-from app.models.user import User, RoleEnum
-from app.models.assistant import Assistant
+from app.models.user import RoleEnum
 import faker
-import pytest
+
+
+fake = faker.Faker()
 
 
 def test_model_user(db):
@@ -16,11 +17,62 @@ def test_user_has_not_assistant(db, user_factory):
     """ Test para verificar que el modelo User no tiene un asistente """
     user = user_factory(role=RoleEnum.ADMIN)
     assert user.assistant is None
-    
+
+
 def test_assistant_has_user(db, user_factory, assistant_factory):
     """ Test para verificar que el modelo Assistant tiene un usuario """
     user = user_factory(role=RoleEnum.ASISTENTE)
     assistant = assistant_factory(user=user)
-    
+
     assert assistant.user_id is not None
     assert user.assistant.id == assistant.id
+
+
+def test_register_organization_user(client, db, user_factory):
+    """ Test para verificar el registro de un usuario de organización """
+    data = {
+        'name': fake.name(),
+        'phone': fake.phone_number(),
+        'email': fake.email(),
+        'password': fake.password(),
+        'role': 'ORGANIZADOR'
+    }
+
+    response = client.post('/users/register', json=data)
+    assert response.status_code == 201
+    response_data = response.json()
+    assert response_data['name'] == data['name']
+    assert response_data['phone'] == data['phone']
+    assert response_data['email'] == data['email']
+    assert response_data['role'] == data['role']
+
+
+def test_register_duplicate_user(client, db, user_factory):
+    """ Test para verificar el registro de un usuario duplicado """
+    fake_password = fake.password()
+    user = user_factory(password=fake_password)
+    data = {
+        'name': user.name,
+        'phone': user.phone,
+        'email': user.email,
+        'password': fake_password,
+        'role': user.role
+    }
+
+    response = client.post('/users/register', json=data)
+    assert response.status_code == 400
+    response_data = response.json()
+    assert response_data['detail'] == 'El usuario ya se encuentra registrado'
+
+
+def test_register_user_invalid_data(client, db, user_factory):
+    """ Test para verificar el registro de un usuario con datos inválidos """
+    data = {
+        'name': fake.name(),
+        'phone': fake.phone_number(),
+    }
+
+    response = client.post('/users/register', json=data)
+    assert response.status_code == 422
+    response_data = response.json()
+    assert response_data['detail'][0]['msg'] == 'field required'
