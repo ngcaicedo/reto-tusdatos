@@ -5,6 +5,8 @@ from sqlalchemy.pool import StaticPool
 from app.db.base import Base
 import app.models as models
 import faker
+from app.core.authenticator.security import hash_password
+
 
 fake = faker.Faker()
 RoleEnum = models.user.RoleEnum
@@ -25,7 +27,7 @@ def user_factory(db):
             phone=fake.phone_number(),
             email=email,
             role=role,
-            password=password,
+            password=hash_password(password),
         )
         db.add(user)
         db.commit()

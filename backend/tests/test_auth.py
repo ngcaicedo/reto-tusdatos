@@ -1,5 +1,6 @@
 from app.core.authenticator.security import hash_password, verify_password
 from app.core.authenticator.jwt_utils import create_access_token, decode_access_token
+from app.core.authenticator.auth import authenticate_user
 from datetime import timedelta
 
 
@@ -49,9 +50,9 @@ def test_decode_access_token_expired(user_factory):
 
 def test_authenticate_user(db, user_factory):
     """ Test para verificar que se autentica un usuario """
-    user = user_factory()
+    user = user_factory(password="password")
 
-    user_auth = authenticate_user(db, user.email, user.password)
+    user_auth = authenticate_user(db, user.email, 'password')
 
     assert user_auth is not None
     assert user_auth.email == user.email
