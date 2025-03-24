@@ -42,6 +42,17 @@ def test_decode_access_token_expired(user_factory):
         "sub": user.email
     }
     token = create_access_token(data=data, expires_delta=timedelta(seconds=-1))
-    
+
     decoded_token = decode_access_token(token)
     assert decoded_token == {}
+
+
+def test_authenticate_user(db, user_factory):
+    """ Test para verificar que se autentica un usuario """
+    user = user_factory()
+
+    user_auth = authenticate_user(db, user.email, user.password)
+
+    assert user_auth is not None
+    assert user_auth.email == user.email
+    assert user_auth.role == user.role
