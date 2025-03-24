@@ -33,3 +33,15 @@ def test_decode_access_token(user_factory):
     decoded_token = decode_access_token(token)
     assert isinstance(decoded_token, dict)
     assert decoded_token.get("sub") == user.email
+
+
+def test_decode_access_token_expired(user_factory):
+    """ Test para verificar que se decodifica un token de acceso expirado """
+    user = user_factory()
+    data = {
+        "sub": user.email
+    }
+    token = create_access_token(data=data, expires_delta=timedelta(seconds=-1))
+    
+    decoded_token = decode_access_token(token)
+    assert decoded_token == {}
