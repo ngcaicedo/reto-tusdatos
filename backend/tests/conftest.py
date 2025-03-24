@@ -7,7 +7,6 @@ import app.models as models
 import faker
 from app.core.authenticator.security import hash_password
 from fastapi.testclient import TestClient
-from app.main import app
 
 
 fake = faker.Faker()
@@ -135,6 +134,7 @@ def db():
 @pytest.fixture
 def client(db):
     """ Fixture para crear un cliente de pruebas """
+    from app.main import app
     from app.db.session import get_db
 
     def override_get_db():

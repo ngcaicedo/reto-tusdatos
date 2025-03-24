@@ -1,4 +1,5 @@
 from .security import verify_password
+from .jwt_utils import create_access_token
 from app.models import User
 from sqlalchemy.orm import Session
 from app.schemas.user import UserLogin
@@ -17,7 +18,12 @@ def authenticate_user(db: Session, login_data: UserLogin) -> User | None:
         User | None: Usuario autenticado
     """
     
-    user = db.query(User).filter(User.email == login_data.email).first()
+    user = db.query(User).filter(User.email == login_data.username).first()
     if user and verify_password(user.password, login_data.password):
         return user
     return None
+
+
+def generate_token(data):
+    """ Función para crear un token de acceso """
+    return create_access_token(data=data)

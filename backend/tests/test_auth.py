@@ -52,7 +52,7 @@ def test_decode_access_token_expired(user_factory):
 def test_authenticate_user(db, user_factory):
     """ Test para verificar que se autentica un usuario """
     user = user_factory(password="password")
-    user_login = UserLogin(email=user.email, password="password")
+    user_login = UserLogin(username=user.email, password="password")
     user_auth = authenticate_user(db, user_login)
 
     assert user_auth is not None
@@ -64,7 +64,7 @@ def test_login_success(client, user_factory):
     """ Test para verificar que un usuario inicia sesión correctamente """
     user = user_factory(password="password")
     data = {
-        "email": user.email,
+        "username": user.email,
         "password": "password"
     }
     response = client.post("/auth/login", data=data)
@@ -73,14 +73,14 @@ def test_login_success(client, user_factory):
     data_response = response.json()
     assert data_response.get("token") is not None
     assert data_response.get("user") == user.email
-    assert data_response.get("role") == user.role
+    assert data_response.get("role") == user.role.value
     assert data_response.get("token_type") == "bearer"
     
 def test_login_fail(client, user_factory):
     """ Test para verificar que un usuario no inicia sesión con credenciales incorrectas """
     user = user_factory(password="password")
     data = {
-        "email": user.email,
+        "username": user.email,
         "password": "password123"
     }
     response = client.post("/auth/login", data=data)
