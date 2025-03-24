@@ -1,10 +1,10 @@
-from .security import hash_password, verify_password
-from .jwt_utils import create_access_token, decode_access_token
+from .security import verify_password
 from app.models import User
 from sqlalchemy.orm import Session
+from app.schemas.user import UserLogin
 
 
-def authenticate_user(db: Session, email: str, password: str) -> User | None:
+def authenticate_user(db: Session, login_data: UserLogin) -> User | None:
     """ 
     Función para autenticar un usuario 
     
@@ -17,8 +17,7 @@ def authenticate_user(db: Session, email: str, password: str) -> User | None:
         User | None: Usuario autenticado
     """
     
-    user = db.query(User).filter(User.email == email).first()
-    print(user.password, password)
-    if user and verify_password(user.password, password):
+    user = db.query(User).filter(User.email == login_data.email).first()
+    if user and verify_password(user.password, login_data.password):
         return user
     return None
