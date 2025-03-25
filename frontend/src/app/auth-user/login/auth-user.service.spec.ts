@@ -38,13 +38,15 @@ describe('AuthUserService', () => {
       password: '123456',
     };
 
-    const responseMock ={
+    const responseMock = {
       user_id: 1,
       token: 'token',
       token_type: 'Bearer',
-      user:'test',
+      user: 'test',
       role: 'ASISTENTE',
-    }
+    };
+
+    const expectedBody = `grant_type=password&username=${user.email}&password=${user.password}&client_id=string&client_secret=string`;
 
     service.login(user).subscribe({
       next: (res) => {
@@ -55,12 +57,11 @@ describe('AuthUserService', () => {
       },
     });
 
-    const req = httpMock.expectOne(
-      `${environment.apiUrl}/auth/login`
-    );
+    const req = httpMock.expectOne(`${environment.apiUrl}/auth/login`);
 
     expect(req.request.method).toBe('POST');
-    expect(req.request.body).toEqual(user);
+    expect(req.request.body.toString()).toEqual(expectedBody);
 
+    req.flush(responseMock);
   });
 });

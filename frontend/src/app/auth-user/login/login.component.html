@@ -4,7 +4,7 @@
 </div>
 
 <div class="modal-body">
-  <form [formGroup]="loginForm">
+  <form [formGroup]="loginForm" (ngSubmit)="!loginForm.invalid && login()">
     <div class="mb-3">
       <label class="form-label">Correo electrónico</label>
       <input type="email" class="form-control" formControlName="email" placeholder="usuario@correo.com">
@@ -20,10 +20,10 @@
         La contraseña es obligatoria
       </div> -->
     </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" (click)="cancel()">Cancelar</button>
+      <button class="btn btn-primary" [disabled]="!loginForm.valid" >Iniciar sesión</button>
+    </div>
   </form>
 </div>
 
-<div class="modal-footer">
-  <button class="btn btn-secondary" (click)="cancel()">Cancelar</button>
-  <button class="btn btn-primary" >Iniciar sesión</button>
-</div>

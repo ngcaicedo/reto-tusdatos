@@ -6,23 +6,48 @@ import { DebugElement } from '@angular/core';
 import { LoginComponent } from './login.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { NotificationService } from '../../shared/services/notification.service';
+import { AuthUserService } from './auth-user.service';
+import { of } from 'rxjs';
 
 describe('LoginComponent', () => {
   let component: LoginComponent;
   let fixture: ComponentFixture<LoginComponent>;
   let activeModalSpy: jasmine.SpyObj<NgbActiveModal>;
+  let mockNotificationService: jasmine.SpyObj<NotificationService>;
+  let mockAuthUserService: jasmine.SpyObj<AuthUserService>;
 
   beforeEach(waitForAsync(() => {
     activeModalSpy = jasmine.createSpyObj('NgbActiveModal', ['dismiss']);
+    mockNotificationService = jasmine.createSpyObj('NotificationService', [
+      'success',
+      'error',
+      'info',
+      'warning',
+    ]);
+    mockAuthUserService = jasmine.createSpyObj('AuthUserService', ['login']);
     TestBed.configureTestingModule({
       imports: [LoginComponent, ReactiveFormsModule],
-      providers: [{ provide: NgbActiveModal, useValue: activeModalSpy }],
+      providers: [
+        { provide: NgbActiveModal, useValue: activeModalSpy },
+        { provide: NotificationService, useValue: mockNotificationService },
+        { provide: AuthUserService, useValue: mockAuthUserService },
+        provideHttpClient(),
+        provideHttpClientTesting(),
+      ],
     }).compileComponents();
   }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(LoginComponent);
     component = fixture.componentInstance;
+    component.ngOnInit();
+    component.loginForm.setValue({
+      email: 'test@gmail.com',
+      password: '123456',
+    });
     fixture.detectChanges();
   });
 
