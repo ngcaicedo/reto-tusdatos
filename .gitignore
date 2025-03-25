@@ -35,12 +35,26 @@ backend/.env.*
 backend/htmlcov/
 backend/.coverage
 
-# ───── Angular / React / Vue Project (frontend) ─────
+# ───── Angular (frontend) ─────
 frontend/node_modules/
+frontend/npm-debug.log
+frontend/yarn-error.log
 frontend/dist/
+frontend/tmp
+frontend/out-tsc
+frontend/bazel-out
 frontend/build/
 frontend/.env
 frontend/.env.*
+
+# Miscellaneous
+frontend/.angular/cache
+frontend/.sass-cache/
+frontend/connect.lock
+frontend/coverage
+frontend/libpeerconnection.log
+frontend/testem.log
+frontend/typings
 
 # ───── Docker ─────
 pgdata/
