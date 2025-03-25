@@ -1,0 +1,27 @@
+.btn-login {
+  background-color: #ccb0d2;
+  color: white;
+  font-weight: 500;
+  border: none;
+}
+
+.btn-login:hover {
+  background-color: #c69bd7;
+  color: black;
+}
+
+.btn-register {
+  background-color: #c3e8f0;
+  color: white;
+  font-weight: 500;
+  border: none;
+}
+
+.btn-register:hover {
+  background-color: #90d4f3;
+  color: black;
+}
+
+.search-box {
+  max-width: 500px;
+}
