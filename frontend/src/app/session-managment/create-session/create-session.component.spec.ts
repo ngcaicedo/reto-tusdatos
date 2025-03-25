@@ -29,21 +29,21 @@ describe('CreateSessionComponent', () => {
   it('should have show name input', () => {
     const compiled = fixture.nativeElement as HTMLElement;
     expect(
-      compiled.querySelector('input[formControlName="speakerName"]')
+      compiled.querySelector('input[formControlName="sessionName"]')
     ).toBeTruthy();
   });
 
   it('should have show description input', () => {
     const compiled = fixture.nativeElement as HTMLElement;
     expect(
-      compiled.querySelector('textarea[formControlName="description"]')
+      compiled.querySelector('textarea[formControlName="sessionDescription"]')
     ).toBeTruthy();
   });
 
   it('should have show duration input', () => {
     const compiled = fixture.nativeElement as HTMLElement;
     expect(
-      compiled.querySelector('input[formControlName="description"]')
+      compiled.querySelector('input[formControlName="sessionDuration"]')
     ).toBeTruthy();
   });
 
