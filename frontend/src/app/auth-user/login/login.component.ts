@@ -34,9 +34,17 @@ export class LoginComponent implements OnInit {
   }
 
   login() {
+    sessionStorage.setItem('token', '');
+    sessionStorage.setItem('role', '');
+    sessionStorage.setItem('user', '');
+    sessionStorage.setItem('user_id', '');
+
     this.authService.login(this.loginForm.value).subscribe({
       next: (response) => {
-        console.log(JSON.stringify(response));
+        sessionStorage.setItem('token', response.token);
+        sessionStorage.setItem('role', response.role);
+        sessionStorage.setItem('user', response.user);
+        sessionStorage.setItem('user_id', response.user_id);
         this.notify.success('Inicio de sesión exitoso');
         this.activeModal.dismiss();
       },
