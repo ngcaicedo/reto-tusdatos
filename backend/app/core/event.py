@@ -60,7 +60,7 @@ def update_event(db: Session, event_id: id, event_data: EventUpdate):
             headers={"WWW-Authenticate": "Bearer"},
         )
         
-    events = db.query(Event).filter(Event.name == event_data.name).all()
+    events = db.query(Event).filter(Event.name == event_data.name, Event.id != event_id).all()
     if len(events) > 1:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,

@@ -1,6 +1,7 @@
 from app.core.authenticator.auth import login_user
 from app.core.user import create_user
 from app.core.event import create_event, update_event, get_events, get_event
+from app.core.assistant import create_assistant, get_assistants, get_assistant, update_assistant
 
 class Managment:
     """ Clase para gestionar las operaciones de la API """
@@ -24,3 +25,15 @@ class Managment:
     
     def get_event(self, db, event_id):
         return get_event(db, event_id)
+    
+    def create_assistant(self, db, assistant_data):
+        return create_assistant(db, assistant_data)
+    
+    def update_assistant(self, db, assistant_id, assistant_data):
+        return update_assistant(db, assistant_id, assistant_data)
+    
+    def get_assistants(self, db):
+        return get_assistants(db)
+    
+    def get_assistant(self, db, assistant_id):
+        return get_assistant(db, assistant_id)
