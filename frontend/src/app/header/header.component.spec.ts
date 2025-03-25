@@ -6,6 +6,7 @@ import { DebugElement } from '@angular/core';
 import { HeaderComponent } from './header.component';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { LoginComponent } from '../auth-user/login/login.component';
+import { RegisterComponent } from '../auth-user/register/register.component';
 
 describe('HeaderComponent', () => {
   let component: HeaderComponent;
@@ -70,5 +71,10 @@ describe('HeaderComponent', () => {
   it('should open login modal', () => {
     component.openLoginModal();
     expect(modalServiceSpy.open).toHaveBeenCalledWith(LoginComponent, { centered: true });
+  });
+
+  it('should open register modal', () => {
+    component.openRegisterModal();
+    expect(modalServiceSpy.open).toHaveBeenCalledWith(RegisterComponent, { centered: true });
   });
 });

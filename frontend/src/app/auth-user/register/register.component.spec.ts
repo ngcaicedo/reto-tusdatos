@@ -55,4 +55,9 @@ describe('RegisterComponent', () => {
     const compiled = fixture.debugElement.nativeElement;
     expect(compiled.querySelector('input[formControlName="password"]')).toBeTruthy();
   });
+
+  it('should close modal', () => {
+    component.cancel();
+    expect(activeModalSpy.dismiss).toHaveBeenCalled();
+  });
 });
