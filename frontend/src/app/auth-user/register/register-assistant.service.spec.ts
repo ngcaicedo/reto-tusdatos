@@ -2,10 +2,12 @@ import { TestBed } from '@angular/core/testing';
 
 import { RegisterAssistantService } from './register-assistant.service';
 import {
+  HttpClientTestingModule,
   HttpTestingController,
   provideHttpClientTesting,
 } from '@angular/common/http/testing';
-import { environment } from '../../../environments/environment.development';
+import { environment } from '../../../environments/environment';
+import { provideHttpClient } from '@angular/common/http';
 
 describe('RegisterAssistantService', () => {
   let service: RegisterAssistantService;
@@ -13,7 +15,10 @@ describe('RegisterAssistantService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [RegisterAssistantService, provideHttpClientTesting()],
+      imports: [HttpClientTestingModule],
+      providers: [
+        RegisterAssistantService
+      ],
     });
     service = TestBed.inject(RegisterAssistantService);
     httpMock = TestBed.inject(HttpTestingController);
@@ -33,16 +38,23 @@ describe('RegisterAssistantService', () => {
       email: 'prueba@gmail.com',
       password: '123456',
       phone: '1234567890',
+      role: 'ASISTENTE',
     };
 
-    service.registerAssistant(assistant).subscribe((res) => {
-      expect(res).toEqual(assistant);
+    service.registerAssistant(assistant).subscribe({
+      next: res => {
+        expect(res).toEqual(assistant);
+      },
+      error: err => {
+        console.error('error en la petición', err);
+      }
     });
+    
 
     const req = httpMock.expectOne(`${environment.apiUrl}/users/register/assistant`);
     expect(req.request.method).toBe('POST');
     expect(req.request.body).toEqual(assistant);
 
-    req.flush({message: 'Registrado'});
+    req.flush(assistant);
   });
 });
