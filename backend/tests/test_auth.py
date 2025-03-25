@@ -149,3 +149,64 @@ def test_register_user_with_invalid_role(client):
     data_response = response.json()
     assert data_response.get(
         "detail") == "Solo los usuarios con rol ASISTENTE pueden registrarse como asistentes."
+    
+    
+def test_register_assistant_to_event(client, db, user_factory, event_factory):
+    """ Test para verificar el registro de un asistente a un evento """
+    data = {
+        "name": faker.name(),
+        "email": faker.email(),
+        "password": faker.password(),
+        "phone": faker.phone_number(),
+        "role": "ASISTENTE"
+    }
+    response = client.post("/users/register/assistant", json=data)
+    assert response.status_code == 201
+
+    response_login = client.post("/auth/login", data={
+        "username": data["email"],
+        "password": data["password"]
+    })
+    token = response_login.json()["token"]
+    headers = {"Authorization": f"Bearer {token}"}
+
+    organizador = user_factory.create_user(role=RoleEnum.ORGANIZADOR)
+    event = event_factory.create_event(user=organizador)
+
+    response = client.post(f"/events/{event.id}/register", headers=headers)
+    assert response.status_code == 201
+
+    response_data = response.json()
+    assert response_data["event_id"] == event.id
+    assert response_data["message"] == "Registro exitoso"
+
+
+def test_register_assistant_again_to_event(client, db, user_factory, event_factory):
+    """ Test para verificar el registro de un asistente a un evento ya registrado """
+    data = {
+        "name": faker.name(),
+        "email": faker.email(),
+        "password": faker.password(),
+        "phone": faker.phone_number(),
+        "role": "ASISTENTE"
+    }
+    response = client.post("/users/register/assistant", json=data)
+    assert response.status_code == 201
+
+    response_login = client.post("/auth/login", data={
+        "username": data["email"],
+        "password": data["password"]
+    })
+    token = response_login.json()["token"]
+    headers = {"Authorization": f"Bearer {token}"}
+
+    organizador = user_factory.create_user(role=RoleEnum.ORGANIZADOR)
+    event = event_factory.create_event(user=organizador)
+
+    response = client.post(f"/events/{event.id}/register", headers=headers)
+    assert response.status_code == 201
+
+    response = client.post(f"/events/{event.id}/register", headers=headers)
+    assert response.status_code == 400
+    response_data = response.json()
+    assert response_data["detail"] == "El asistente ya se encuentra registrado en el evento"
