@@ -1,5 +1,5 @@
 from sqlalchemy import inspect
-from app.models.user import RoleEnum
+from app.models.user import RoleEnum, User
 import faker
 
 
@@ -19,11 +19,11 @@ def test_user_has_not_assistant(user_factory):
     assert user.assistant is None
 
 
-def test_assistant_has_user(user_factory, assistant_factory):
+def test_assistant_has_user(db, user_factory, assistant_factory):
     """ Test para verificar que el modelo Assistant tiene un usuario """
-    user = user_factory.create_user(role=RoleEnum.ASISTENTE)
-    assistant = assistant_factory(user=user)
-
+    assistant = assistant_factory()
+    print(assistant.user_id)
+    user = db.get(User, assistant.user_id)
     assert assistant.user_id is not None
     assert user.assistant.id == assistant.id
 

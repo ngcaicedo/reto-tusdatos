@@ -53,12 +53,29 @@ def session_factory(db):
 @pytest.fixture
 def assistant_factory(db):
     """ Fixture para crear un asistente en la base de datos"""
-    def create_assistant(user: User) -> Assistant:
+    def create_assistant() -> Assistant:
         """ Función para crear un asistente en la base de datos """
+        name = fake.name()
+        email = fake.email()
+        password = fake.password()
+        phone = fake.phone_number()
+        role = RoleEnum.ASISTENTE
+        user = User(
+            name=name,
+            email=email,
+            password=password,
+            phone=phone,
+            role=role,
+        )
+        
+        db.add(user)
+        db.commit()
+        db.refresh(user)
+        
         assistant = Assistant(
-            name=fake.name(),
-            email=fake.email(),
-            phone=fake.phone_number(),
+            name=name,
+            email=email,
+            phone=phone,
             user_id=user.id,
         )
         db.add(assistant)
