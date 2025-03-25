@@ -38,7 +38,7 @@ describe('SessionService', () => {
     const session = {
       sessionName: 'test',
       sessionDescription: 'test',
-      sessionDuration: 'test',
+      sessionDuration: 100,
       speaker: speaker.id,
     };
 

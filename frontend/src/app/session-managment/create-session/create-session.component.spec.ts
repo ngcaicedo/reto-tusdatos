@@ -2,14 +2,24 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { CreateSessionComponent } from './create-session.component';
 import { of, throwError } from 'rxjs';
+import { SessionService } from '../session.service';
+import { NotificationService } from '../../shared/services/notification.service';
 
 describe('CreateSessionComponent', () => {
   let component: CreateSessionComponent;
   let fixture: ComponentFixture<CreateSessionComponent>;
+  let mockCreateSessionService: jasmine.SpyObj<SessionService>;
+  let mockNotifyService: jasmine.SpyObj<NotificationService>;
 
   beforeEach(async () => {
+    mockCreateSessionService = jasmine.createSpyObj('SessionService', ['createSession']);
+    mockNotifyService = jasmine.createSpyObj('NotificationService', ['success', 'error', 'info', 'warning']);
     await TestBed.configureTestingModule({
-      imports: [CreateSessionComponent]
+      imports: [CreateSessionComponent],
+      providers: [
+        { provide: SessionService, useValue: mockCreateSessionService },
+        { provide: NotificationService, useValue: mockNotifyService }
+      ]
     })
     .compileComponents();
 
