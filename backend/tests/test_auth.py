@@ -8,6 +8,7 @@ from app.models.user import User, RoleEnum
 
 faker = Faker()
 
+
 def test_hash_password():
     """ Test para verificar que la contraseña se encripta correctamente """
     password = "password"
@@ -79,7 +80,8 @@ def test_login_success(client, user_factory):
     assert data_response.get("role") == user.role.value
     assert data_response.get("token_type") == "bearer"
     assert data_response.get("user_id") == user.id
-    
+
+
 def test_login_fail(client, user_factory):
     """ Test para verificar que un usuario no inicia sesión con credenciales incorrectas """
     user = user_factory.create_user(password="password")
@@ -92,7 +94,7 @@ def test_login_fail(client, user_factory):
     assert response.status_code == 401
     data_response = response.json()
     assert data_response.get("detail") == "Credenciales incorrectas"
-    
+
 
 def test_register_user_with_assistant_role(client, db):
     """ Test para verificar que un usuario se registra con el rol de asistente """
@@ -112,7 +114,8 @@ def test_register_user_with_assistant_role(client, db):
     assert user.role == RoleEnum.ASISTENTE
     assert user.assistant is not None
     assert user.assistant.email == user.email
-    
+
+
 def test_register_duplicate_user_assistant(client, user_factory):
     """ Test para verificar el registro de un usuario duplicado con el rol de asistente """
     data = {
@@ -127,4 +130,22 @@ def test_register_duplicate_user_assistant(client, user_factory):
     response = client.post("/users/register/assistant", json=data)
     assert response.status_code == 400
     data_response = response.json()
-    assert data_response.get("detail") == "El usuario ya se encuentra registrado"
+    assert data_response.get(
+        "detail") == "El usuario ya se encuentra registrado"
+
+
+def test_register_user_with_invalid_role(client):
+    """ Test para verificar el registro de un usuario con un rol inválido """
+    data = {
+        "name": faker.name(),
+        "email": faker.email(),
+        "password": faker.password(),
+        "phone": faker.phone_number(),
+        "role": "ORGANIZADOR"
+    }
+
+    response = client.post("/users/register/assistant", json=data)
+    assert response.status_code == 400
+    data_response = response.json()
+    assert data_response.get(
+        "detail") == "Solo los usuarios con rol ASISTENTE pueden registrarse como asistentes."
