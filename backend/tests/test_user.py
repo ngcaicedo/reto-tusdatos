@@ -15,13 +15,13 @@ def test_model_user(db):
 
 def test_user_has_not_assistant(user_factory):
     """ Test para verificar que el modelo User no tiene un asistente """
-    user = user_factory(role=RoleEnum.ADMIN)
+    user = user_factory.create_user(role=RoleEnum.ADMIN)
     assert user.assistant is None
 
 
 def test_assistant_has_user(user_factory, assistant_factory):
     """ Test para verificar que el modelo Assistant tiene un usuario """
-    user = user_factory(role=RoleEnum.ASISTENTE)
+    user = user_factory.create_user(role=RoleEnum.ASISTENTE)
     assistant = assistant_factory(user=user)
 
     assert assistant.user_id is not None
@@ -50,7 +50,7 @@ def test_register_organization_user(client):
 def test_register_duplicate_user(client, user_factory):
     """ Test para verificar el registro de un usuario duplicado """
     fake_password = fake.password()
-    user = user_factory(password=fake_password)
+    user = user_factory.create_user(password=fake_password)
     data = {
         'name': user.name,
         'phone': user.phone,

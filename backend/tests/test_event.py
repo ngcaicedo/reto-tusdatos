@@ -14,7 +14,7 @@ def test_model_event(db):
 
 def test_event_has_session(db, user_factory, event_factory, speaker_factory, session_factory):
     """ Test para verificar que el modelo Event tiene una relación con el modelo Session """
-    user = user_factory()
+    user = user_factory.create_user()
     event = event_factory(user=user)
     speaker = speaker_factory()
     session = session_factory(event=event, speaker=speaker)
@@ -25,7 +25,7 @@ def test_event_has_session(db, user_factory, event_factory, speaker_factory, ses
 
 def test_event_created_by_user(db, user_factory, event_factory):
     """ Test para verificar que el evento fue creado por un usuario """
-    user = user_factory()
+    user = user_factory.create_user()
     event = event_factory(user=user)
 
     assert event.user_created_id == user.id
@@ -33,8 +33,7 @@ def test_event_created_by_user(db, user_factory, event_factory):
 
 
 def test_create_event_without_auth(client, user_factory):
-    create_user, _ = user_factory
-    user = create_user()
+    user = user_factory.create_user()
     """ Test para verificar la creación de un evento sin autenticación """
     data = {
         'name': faker.Faker().name(),
@@ -54,9 +53,8 @@ def test_create_event_without_auth(client, user_factory):
 
 def test_create_event(client, user_factory):
     """ Test para verificar la creación de un evento """
-    _, login_user = user_factory
     role = [RoleEnum.ADMIN, RoleEnum.ORGANIZADOR]
-    user_logged = login_user(role=faker.Faker().random_element(elements=role))
+    user_logged = user_factory.login_user(role=faker.Faker().random_element(elements=role))
     data = {
         'name': faker.Faker().name(),
         'description': faker.Faker().sentence(),
@@ -79,9 +77,8 @@ def test_create_event(client, user_factory):
 
 def test_create_event_without_data(client, user_factory):
     """ Test para verificar la creación de un evento sin"""
-    _, login_user = user_factory
     role = [RoleEnum.ADMIN, RoleEnum.ORGANIZADOR]
-    user_logged = login_user(role=faker.Faker().random_element(elements=role))
+    user_logged = user_factory.login_user(role=faker.Faker().random_element(elements=role))
     data = {
         'name': '',
         'description': '',

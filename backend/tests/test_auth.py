@@ -14,7 +14,7 @@ def test_hash_password():
 
 def test_create_access_token(user_factory):
     """ Test para verificar que se crea un token de acceso """
-    user = user_factory()
+    user = user_factory.create_user()
     data = {
         "sub": user.email
     }
@@ -26,7 +26,7 @@ def test_create_access_token(user_factory):
 
 def test_decode_access_token(user_factory):
     """ Test para verificar que se decodifica un token de acceso """
-    user = user_factory()
+    user = user_factory.create_user()
     data = {
         "sub": user.email
     }
@@ -39,7 +39,7 @@ def test_decode_access_token(user_factory):
 
 def test_decode_access_token_expired(user_factory):
     """ Test para verificar que se decodifica un token de acceso expirado """
-    user = user_factory()
+    user = user_factory.create_user()
     data = {
         "sub": user.email
     }
@@ -51,7 +51,7 @@ def test_decode_access_token_expired(user_factory):
 
 def test_authenticate_user(db, user_factory):
     """ Test para verificar que se autentica un usuario """
-    user = user_factory(password="password")
+    user = user_factory.create_user(password="password")
     user_login = UserLogin(username=user.email, password="password")
     user_auth = authenticate_user(db, user_login)
 
@@ -62,7 +62,7 @@ def test_authenticate_user(db, user_factory):
 
 def test_login_success(client, user_factory):
     """ Test para verificar que un usuario inicia sesión correctamente """
-    user = user_factory(password="password")
+    user = user_factory.create_user(password="password")
     data = {
         "username": user.email,
         "password": "password"
@@ -78,7 +78,7 @@ def test_login_success(client, user_factory):
     
 def test_login_fail(client, user_factory):
     """ Test para verificar que un usuario no inicia sesión con credenciales incorrectas """
-    user = user_factory(password="password")
+    user = user_factory.create_user(password="password")
     data = {
         "username": user.email,
         "password": "password123"
