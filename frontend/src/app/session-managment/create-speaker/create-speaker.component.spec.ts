@@ -53,6 +53,7 @@ describe('CreateSpeakerComponent', () => {
     mockSessionService.createSpeaker.and.returnValue(of({ name: 'test' }));
     component.createSpeaker();
     expect(mockSessionService.createSpeaker).toHaveBeenCalledWith(component.speakerForm.value);
+    expect(mockNotifyService.success).toHaveBeenCalledWith('Ponente creado correctamente');
   });
 
   it('should create speaker error', () => {
@@ -60,6 +61,6 @@ describe('CreateSpeakerComponent', () => {
     mockSessionService.createSpeaker.and.returnValue(throwError(() => error));
     component.createSpeaker();
     expect(mockSessionService.createSpeaker).toHaveBeenCalledWith(component.speakerForm.value);
-    expect(mockNotifyService.error).toHaveBeenCalledWith(`Error al crear speaker: error`);
+    expect(mockNotifyService.error).toHaveBeenCalledWith(`Error al crear ponente: error`);
   });
 });
