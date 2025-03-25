@@ -1,0 +1,21 @@
+<h5 class="fw-bold mx-sm-3 mb-4">Crear ponente</h5>
+
+<form class="w-100" style="max-width: 400px;">
+  <div class="mb-3 ms-sm-3">
+    <label for="speakerName" class="form-label">Nombre</label>
+    <input
+      type="text"
+      id="speakerName"
+      formControlName="speakerName"
+      class="form-control"
+      placeholder="Ej. Pepito Pérez Gonalez"
+    />
+    <!-- <div *ngIf="form.controls.speakerName.touched && form.controls.speakerName.invalid" class="text-danger small">
+      El nombre es obligatorio
+    </div> -->
+  </div>
+
+  <div class="ms-sm-3">
+    <button type="submit" class="btn btn-primary">Guardar</button>
+  </div>
+</form>
