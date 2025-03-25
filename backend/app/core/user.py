@@ -1,6 +1,8 @@
 from sqlalchemy.orm import Session
 from app.models.user import User
-from app.schemas.user import UserCreate
+from app.schemas.user import UserCreate, RoleEnum
+from app.schemas.assistant import AssistantCreate
+from app.models.assistant import Assistant
 from app.core.authenticator.security import hash_password
 from fastapi import HTTPException, status
 
@@ -32,3 +34,49 @@ def create_user(db: Session, user_data: UserCreate):
     db.commit()
     db.refresh(db_user)
     return db_user
+
+def register_user_assistant(db: Session, assistant_data: AssistantCreate) -> Assistant:
+    """Registra un usuario con rol ASISTENTE y crea su perfil de asistente.
+    
+    Args:
+        db (Session): Sesión de la base de datos
+        assistant_data (AssistantCreate): Datos del asistente a registrar
+    Returns:
+        Assistant: Asistente registrado
+    """
+
+    if assistant_data.role != RoleEnum.ASISTENTE:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Solo los usuarios con rol ASISTENTE pueden registrarse como asistentes.",
+        )
+
+    existing_user = db.query(User).filter(User.email == assistant_data.email).first()
+    if existing_user:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="El usuario ya se encuentra registrado",
+        )
+
+    user = User(
+        name=assistant_data.name,
+        email=assistant_data.email,
+        phone=assistant_data.phone,
+        password=hash_password(assistant_data.password),
+        role=RoleEnum.ASISTENTE,
+    )
+    db.add(user)
+    db.commit()
+    db.refresh(user)
+
+    assistant = Assistant(
+        name=assistant_data.name,
+        email=assistant_data.email,
+        phone=assistant_data.phone,
+        user_id=user.id,
+    )
+    db.add(assistant)
+    db.commit()
+    db.refresh(assistant)
+
+    return assistant

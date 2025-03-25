@@ -104,7 +104,7 @@ def test_register_user_with_assistant_role(client, db):
         "role": "ASISTENTE"
     }
 
-    response = client.post("/auth/register", json=data)
+    response = client.post("/users/register/assistant", json=data)
     assert response.status_code == 201
     user_data = response.json()
 
@@ -123,8 +123,8 @@ def test_register_duplicate_user_assistant(client, user_factory):
         "role": "ASISTENTE"
     }
 
-    response = client.post("/auth/register", json=data)
-    response = client.post("/auth/register", json=data)
+    response = client.post("/users/register/assistant", json=data)
+    response = client.post("/users/register/assistant", json=data)
     assert response.status_code == 400
     data_response = response.json()
     assert data_response.get("detail") == "El usuario ya se encuentra registrado"
