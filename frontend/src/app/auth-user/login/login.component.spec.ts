@@ -84,10 +84,22 @@ describe('LoginComponent', () => {
   });
 
   it('should login show error message', () => {
-    const error = new Error('Inicio de sesión no exitoso');
-    mockAuthUserService.login.and.returnValue(throwError(() => error));
+    const errorResponse = {
+      status: 401,
+      error: {
+        detail: 'Inicio de sesión no exitoso'
+      }
+    };
+    mockAuthUserService.login.and.returnValue(throwError(() => errorResponse));
     component.login();
     expect(mockAuthUserService.login).toHaveBeenCalledWith(component.loginForm.value);
     expect(mockNotificationService.error).toHaveBeenCalledWith('Error en inicio de sesión: Inicio de sesión no exitoso');
+  });
+
+  it('should session storage empty', () => {
+    expect(sessionStorage.getItem('token')).toBeNull();
+    expect(sessionStorage.getItem('user')).toBeNull();
+    expect(sessionStorage.getItem('role')).toBeNull();
+    expect(sessionStorage.getItem('user_id')).toBeNull();
   });
 });

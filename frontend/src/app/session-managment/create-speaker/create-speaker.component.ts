@@ -36,7 +36,7 @@ export class CreateSpeakerComponent {
         this.notify.success('Ponente creado correctamente');
       },
       error: (error) => {
-        this.notify.error(`Error al crear ponente: ${JSON.stringify(error.error.detail)}`);
+        this.notify.error(`Error al crear ponente: ${error.error.detail}`);
       },
     });
   }

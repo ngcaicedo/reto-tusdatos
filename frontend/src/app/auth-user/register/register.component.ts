@@ -42,7 +42,7 @@ export class RegisterComponent implements OnInit {
         this.activeModal.dismiss();
       },
       error: (error) => {
-        this.notify.error(`Error al registrar: ${JSON.stringify(error.error.detail)}`);
+        this.notify.error(`Error al registrar: ${error.error.detail}`);
       },
     });
   }

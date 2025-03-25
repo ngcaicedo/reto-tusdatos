@@ -41,7 +41,7 @@ export class LoginComponent implements OnInit {
         this.activeModal.dismiss();
       },
       error: (error) => {
-        this.notify.error(`Error en inicio de sesión: ${JSON.stringify(error.error.detail)}`);
+        this.notify.error(`Error en inicio de sesión: ${error.error.detail}`);
       },
     });
   }

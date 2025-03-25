@@ -33,7 +33,7 @@ export class CreateSessionComponent {
         this.speakers = response as Speaker[];
       },
       error: (error) => {
-        this.notify.error(`Error al obtener ponentes: ${JSON.stringify(error.error.detail)}`);
+        this.notify.error(`Error al obtener ponentes: ${error.error.detail}`);
       },
     });
 
@@ -51,7 +51,7 @@ export class CreateSessionComponent {
         this.notify.success('Sesión creada');
       },
       error: (error) => {
-        this.notify.error(`Error al crear sesión: ${JSON.stringify(error.error.detail)}`);
+        this.notify.error(`Error al crear sesión: ${JSON.stringify(error.error.detail).toString()}`);
       },
     });
   }

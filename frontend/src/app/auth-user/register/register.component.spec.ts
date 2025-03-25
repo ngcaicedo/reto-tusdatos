@@ -100,8 +100,13 @@ describe('RegisterComponent', () => {
   });
 
   it('should show error message', () => {
-    const error = new Error('Registro fallido');
-    mockRegisterAssistantService.registerAssistant.and.returnValue(throwError(() => error));
+    const errorResponse = {
+      status: 401,
+      error: {
+        detail: 'Registro fallido'
+      }
+    };
+    mockRegisterAssistantService.registerAssistant.and.returnValue(throwError(() => errorResponse));
     component.registerAssistant();
     expect(mockRegisterAssistantService.registerAssistant).toHaveBeenCalledWith(component.registerForm.value);
     expect(activeModalSpy.dismiss).not.toHaveBeenCalled();

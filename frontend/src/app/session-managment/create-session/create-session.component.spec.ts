@@ -8,16 +8,17 @@ import { NotificationService } from '../../shared/services/notification.service'
 describe('CreateSessionComponent', () => {
   let component: CreateSessionComponent;
   let fixture: ComponentFixture<CreateSessionComponent>;
-  let mockCreateSessionService: jasmine.SpyObj<SessionService>;
+  let mockSessionService: jasmine.SpyObj<SessionService>;
   let mockNotifyService: jasmine.SpyObj<NotificationService>;
 
   beforeEach(async () => {
-    mockCreateSessionService = jasmine.createSpyObj('SessionService', ['createSession']);
+    mockSessionService = jasmine.createSpyObj('SessionService', ['createSession', 'getSpeakers']);
+    mockSessionService.getSpeakers.and.returnValue(of([]));
     mockNotifyService = jasmine.createSpyObj('NotificationService', ['success', 'error', 'info', 'warning']);
     await TestBed.configureTestingModule({
       imports: [CreateSessionComponent],
       providers: [
-        { provide: SessionService, useValue: mockCreateSessionService },
+        { provide: SessionService, useValue: mockSessionService },
         { provide: NotificationService, useValue: mockNotifyService }
       ]
     })
@@ -66,16 +67,21 @@ describe('CreateSessionComponent', () => {
   });
 
   it('should register session', () => {
-    mockCreateSessionService.createSession.and.returnValue(of({message: 'Sesión creada'}));
+    mockSessionService.createSession.and.returnValue(of({message: 'Sesión creada'}));
     component.createSession();
-    expect(mockCreateSessionService.createSession).toHaveBeenCalledWith(component.sessionForm.value);
+    expect(mockSessionService.createSession).toHaveBeenCalledWith(component.sessionForm.value);
   });
 
   it('should register error', () => {
-    const error = new Error('Error');
-    mockCreateSessionService.createSession.and.returnValue(throwError(() => error));
+    const errorResponse = {
+      status: 401,
+      error: {
+        detail: 'Creacion de sesion no exitosa'
+      }
+    };
+    mockSessionService.createSession.and.returnValue(throwError(() => errorResponse));
     component.createSession();
-    expect(mockCreateSessionService.createSession).toHaveBeenCalledWith(component.sessionForm.value);
+    expect(mockSessionService.createSession).toHaveBeenCalledWith(component.sessionForm.value);
     expect(mockNotifyService.error).toHaveBeenCalled();
   });
   

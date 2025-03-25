@@ -57,8 +57,13 @@ describe('CreateSpeakerComponent', () => {
   });
 
   it('should create speaker error', () => {
-    let error = new Error('error');
-    mockSessionService.createSpeaker.and.returnValue(throwError(() => error));
+    const errorResponse = {
+      status: 401,
+      error: {
+        detail: 'error'
+      }
+    };
+    mockSessionService.createSpeaker.and.returnValue(throwError(() => errorResponse));
     component.createSpeaker();
     expect(mockSessionService.createSpeaker).toHaveBeenCalledWith(component.speakerForm.value);
     expect(mockNotifyService.error).toHaveBeenCalledWith(`Error al crear ponente: error`);
