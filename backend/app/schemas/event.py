@@ -1,6 +1,7 @@
-from pydantic import BaseModel, EmailStr, ConfigDict
+from pydantic import BaseModel, EmailStr, ConfigDict, Field
 from app.models.event import StateEnum
 from datetime import datetime
+from app.schemas.session import SessionResponse
 
 
 class EventCreate(BaseModel):
@@ -12,6 +13,7 @@ class EventCreate(BaseModel):
     date_end: datetime
     location: str
     user_created_id: int
+    session_ids: list[int] = Field(min_items=1)
 
 
 class EventUpdate(BaseModel):
@@ -22,6 +24,7 @@ class EventUpdate(BaseModel):
     date_start: datetime
     date_end: datetime
     location: str
+    session_ids: list[int] = Field(min_items=1)
 
 
 class EventResponse(BaseModel):
@@ -34,5 +37,6 @@ class EventResponse(BaseModel):
     date_end: datetime
     location: str
     user_created_id: int
+    sessions: list[SessionResponse] = []  # <-- Aquí incluyes las sesiones asociadas
 
     model_config = ConfigDict(from_attributes=True)

@@ -5,11 +5,12 @@ from app.models.event import Event
 from app.schemas.event import EventCreate, EventUpdate
 from app.core.authenticator.security import hash_password
 from fastapi import HTTPException, status
+from app.models.session import Session as SessionModel
 
 
 def create_event(db: Session, event_data: EventCreate, current_user: User):
     """
-    Crea un evento en la base de datos.
+    Crea un evento en la base de datos, lo asocia a un usuario y a las sesiones.
 
     Args:
         db (Session): Sesión de la base de datos
@@ -40,10 +41,24 @@ def create_event(db: Session, event_data: EventCreate, current_user: User):
     db.add(db_event)
     db.commit()
     db.refresh(db_event)
+    
+    sessions = db.query(SessionModel).filter(SessionModel.id.in_(event_data.session_ids)).all()
+    
+    if len(sessions) != len(event_data.session_ids):
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="No se encontraron todas las sesiones",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+    
+    for session in sessions:
+        session.event_id = db_event.id
+    
+    db.commit()
     return db_event
 
 
-def update_event(db: Session, event_id: id, event_data: EventUpdate):
+def update_event(db: Session, event_id: int, event_data: EventUpdate):
     """
     Actualiza un evento en la base de datos.
 
@@ -68,6 +83,7 @@ def update_event(db: Session, event_id: id, event_data: EventUpdate):
             detail="El evento ya se encuentra registrado",
             headers={"WWW-Authenticate": "Bearer"},
         )
+        
 
     event.name = event_data.name
     event.description = event_data.description
@@ -76,6 +92,23 @@ def update_event(db: Session, event_id: id, event_data: EventUpdate):
     event.date_start = event_data.date_start
     event.date_end = event_data.date_end
     event.location = event_data.location
+    
+    
+    sessions = db.query(SessionModel).filter(SessionModel.id.in_(event_data.session_ids)).all()
+    
+    if len(sessions) != len(event_data.session_ids):
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="No se encontraron todas las sesiones",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+    
+    for session in db.query(SessionModel).filter(SessionModel.event_id == event_id).all():
+        session.event_id = None
+    
+    for session in sessions:
+        session.event_id = event_id
+        
     db.commit()
     db.refresh(event)
     return event

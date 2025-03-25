@@ -8,6 +8,7 @@ import faker
 from fastapi.testclient import TestClient
 from .factories.user_factory import UserFactory
 from .factories.event_factory import EventFactory
+from .factories.session_factory import SessionFactory
 
 RoleEnum = models.user.RoleEnum
 StateEnum = models.event.StateEnum
@@ -56,20 +57,7 @@ def event_factory(db):
 @pytest.fixture
 def session_factory(db):
     """ Fixture para crear una sesión en la base de datos """
-    def create_session(event: Event, speaker: Speaker) -> Session:
-        """ Función para crear una sesión en la base de datos """
-        session = Session(
-            name=fake.name(),
-            description=fake.text(),
-            duration=1,
-            speaker_id=speaker.id,
-            event_id=event.id,
-        )
-        db.add(session)
-        db.commit()
-        db.refresh(session)
-        return session
-    return create_session
+    return SessionFactory(db)
 
 
 @pytest.fixture
