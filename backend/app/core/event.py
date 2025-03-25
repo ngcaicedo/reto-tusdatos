@@ -1,5 +1,6 @@
 from sqlalchemy.orm import Session
-from app.models.user import User
+from app.models.user import User, RoleEnum
+from app.models.event_assistant import EventAssistant
 from app.models.event import Event
 from app.schemas.event import EventCreate, EventUpdate
 from app.core.authenticator.security import hash_password
@@ -104,3 +105,61 @@ def get_event(db: Session, event_id: int):
         Event: Evento registrado
     """
     return db.query(Event).filter(Event.id == event_id).first()
+
+
+def register_to_event(db: Session, event_id: int, current_user: User):
+    """ Se registra un assistente a un evento.
+    
+    Args:
+        db (Session): Sesión de la base de datos
+        event_id (int): Identificador del evento
+        current_user (User): Usuario autenticado
+    
+    Returns:
+        event_assistant: Asistente registrado
+    """
+    if current_user.role != RoleEnum.ASISTENTE:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Solo los asistentes pueden registrarse a eventos."
+        )
+
+    event = db.query(Event).filter(Event.id == event_id).first()
+    if not event:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Evento no encontrado."
+        )
+
+    # Validar estado del evento (si aplica)
+    if event.state == "CANCELLED":  # o enum
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Este evento ha sido cancelado."
+        )
+
+    # Verificar capacidad
+    current_attendees = db.query(EventAssistant).filter(EventAssistant.event_id == event_id).count()
+    if current_attendees >= event.capacity:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Este evento ya está lleno."
+        )
+
+    # Verificar si ya está registrado
+    already_registered = db.query(EventAssistant).filter(
+        EventAssistant.assistant_id == current_user.assistant.id,
+        EventAssistant.event_id == event_id
+    ).first()
+    if already_registered:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="El asistente ya se encuentra registrado en el evento"
+        )
+
+    # Registrar
+    attendee = EventAssistant(assistant_id=current_user.assistant.id, event_id=event_id)
+    db.add(attendee)
+    db.commit()
+    db.refresh(attendee)
+    return attendee

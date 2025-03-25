@@ -5,6 +5,7 @@ from datetime import timedelta
 from app.schemas.user import UserLogin
 from faker import Faker
 from app.models.user import User, RoleEnum
+from app.models.event import StateEnum
 
 faker = Faker()
 
@@ -171,9 +172,9 @@ def test_register_assistant_to_event(client, db, user_factory, event_factory):
     headers = {"Authorization": f"Bearer {token}"}
 
     organizador = user_factory.create_user(role=RoleEnum.ORGANIZADOR)
-    event = event_factory.create_event(user=organizador)
+    event = event_factory.create_event(user_id=organizador.id, state=StateEnum.CREADO)
 
-    response = client.post(f"/events/{event.id}/register", headers=headers)
+    response = client.post(f"/events/register/{event.id}", headers=headers)
     assert response.status_code == 201
 
     response_data = response.json()
@@ -201,12 +202,12 @@ def test_register_assistant_again_to_event(client, db, user_factory, event_facto
     headers = {"Authorization": f"Bearer {token}"}
 
     organizador = user_factory.create_user(role=RoleEnum.ORGANIZADOR)
-    event = event_factory.create_event(user=organizador)
+    event = event_factory.create_event(user_id=organizador.id, state=StateEnum.CREADO)
 
-    response = client.post(f"/events/{event.id}/register", headers=headers)
+    response = client.post(f"/events/register/{event.id}", headers=headers)
     assert response.status_code == 201
 
-    response = client.post(f"/events/{event.id}/register", headers=headers)
+    response = client.post(f"/events/register/{event.id}", headers=headers)
     assert response.status_code == 400
     response_data = response.json()
     assert response_data["detail"] == "El asistente ya se encuentra registrado en el evento"

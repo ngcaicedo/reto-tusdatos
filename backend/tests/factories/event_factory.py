@@ -13,7 +13,7 @@ class EventFactory:
         data = {
             'name': self.fake.name(),
             'description': self.fake.sentence(),
-            'capacity': self.fake.random_int(min=1, max=100),
+            'capacity': self.fake.random_int(min=5, max=100),
             'state': state.value,
             'date_start': self.fake.date_time_this_year().isoformat(),
             'date_end': self.fake.date_time_this_year().isoformat(),

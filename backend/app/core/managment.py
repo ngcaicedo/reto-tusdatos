@@ -1,6 +1,6 @@
 from app.core.authenticator.auth import login_user
 from app.core.user import create_user, register_user_assistant
-from app.core.event import create_event, update_event, get_events, get_event
+from app.core.event import create_event, update_event, get_events, get_event, register_to_event
 from app.core.assistant import create_assistant, get_assistants, get_assistant, update_assistant
 
 class Managment:
@@ -28,6 +28,9 @@ class Managment:
     
     def get_event(self, db, event_id):
         return get_event(db, event_id)
+    
+    def register_to_event(self, db, event_id, current_user):
+        return register_to_event(db, event_id, current_user)
     
     def create_assistant(self, db, assistant_data):
         return create_assistant(db, assistant_data)
