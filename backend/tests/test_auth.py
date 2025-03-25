@@ -3,7 +3,10 @@ from app.core.authenticator.jwt_utils import create_access_token, decode_access_
 from app.core.authenticator.auth import authenticate_user
 from datetime import timedelta
 from app.schemas.user import UserLogin
+from faker import Faker
+from app.models.user import User, RoleEnum
 
+faker = Faker()
 
 def test_hash_password():
     """ Test para verificar que la contraseña se encripta correctamente """
@@ -89,3 +92,39 @@ def test_login_fail(client, user_factory):
     assert response.status_code == 401
     data_response = response.json()
     assert data_response.get("detail") == "Credenciales incorrectas"
+    
+
+def test_register_user_with_assistant_role(client, db):
+    """ Test para verificar que un usuario se registra con el rol de asistente """
+    data = {
+        "name": faker.name(),
+        "email": faker.email(),
+        "password": faker.password(),
+        "phone": faker.phone_number(),
+        "role": "ASISTENTE"
+    }
+
+    response = client.post("/auth/register", json=data)
+    assert response.status_code == 201
+    user_data = response.json()
+
+    user = db.get(User, user_data["id"])
+    assert user.role == RoleEnum.ASISTENTE
+    assert user.assistant is not None
+    assert user.assistant.email == user.email
+    
+def test_register_duplicate_user_assistant(client, user_factory):
+    """ Test para verificar el registro de un usuario duplicado con el rol de asistente """
+    data = {
+        "name": faker.name(),
+        "email": faker.email(),
+        "password": faker.password(),
+        "phone": faker.phone_number(),
+        "role": "ASISTENTE"
+    }
+
+    response = client.post("/auth/register", json=data)
+    response = client.post("/auth/register", json=data)
+    assert response.status_code == 400
+    data_response = response.json()
+    assert data_response.get("detail") == "El usuario ya se encuentra registrado"
