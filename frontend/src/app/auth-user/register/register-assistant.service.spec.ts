@@ -2,7 +2,6 @@ import { TestBed } from '@angular/core/testing';
 
 import { RegisterAssistantService } from './register-assistant.service';
 import {
-  HttpClientTestingModule,
   HttpTestingController,
   provideHttpClientTesting,
 } from '@angular/common/http/testing';
@@ -15,9 +14,10 @@ describe('RegisterAssistantService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
       providers: [
-        RegisterAssistantService
+        RegisterAssistantService,
+        provideHttpClient(),
+        provideHttpClientTesting(),
       ],
     });
     service = TestBed.inject(RegisterAssistantService);
@@ -42,16 +42,17 @@ describe('RegisterAssistantService', () => {
     };
 
     service.registerAssistant(assistant).subscribe({
-      next: res => {
+      next: (res) => {
         expect(res).toEqual(assistant);
       },
-      error: err => {
+      error: (err) => {
         console.error('error en la petición', err);
-      }
+      },
     });
-    
 
-    const req = httpMock.expectOne(`${environment.apiUrl}/users/register/assistant`);
+    const req = httpMock.expectOne(
+      `${environment.apiUrl}/users/register/assistant`
+    );
     expect(req.request.method).toBe('POST');
     expect(req.request.body).toEqual(assistant);
 

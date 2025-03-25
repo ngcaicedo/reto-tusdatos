@@ -7,6 +7,8 @@ import {
   FormGroup,
 } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { RegisterAssistantService } from './register-assistant.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-register',
@@ -18,7 +20,9 @@ export class RegisterComponent implements OnInit {
   registerForm!: FormGroup;
   constructor(
     public activeModal: NgbActiveModal,
-    private formBuilde: FormBuilder
+    private formBuilde: FormBuilder,
+    private regiserService: RegisterAssistantService,
+    private toastr: ToastrService
   ) {}
 
   ngOnInit() {
@@ -27,6 +31,18 @@ export class RegisterComponent implements OnInit {
       phone: ['', [Validators.required]],
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(6)]],
+    });
+  }
+
+  registerAssistant() {
+    this.regiserService.registerAssistant(this.registerForm.value).subscribe({
+      next: (response) => {
+        this.toastr.success('Registro exitoso');
+        this.activeModal.dismiss();
+      },
+      error: (error) => {
+        this.toastr.error(`Error al registrar: ${error.message}`);
+      },
     });
   }
 
