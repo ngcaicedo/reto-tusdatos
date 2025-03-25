@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { CreateSessionComponent } from './create-session.component';
+import { of, throwError } from 'rxjs';
 
 describe('CreateSessionComponent', () => {
   let component: CreateSessionComponent;
@@ -52,6 +53,20 @@ describe('CreateSessionComponent', () => {
     expect(
       compiled.querySelector('select[formControlName="speaker"]')
     ).toBeTruthy();
+  });
+
+  it('should register session', () => {
+    mockCreateSessionService.createSession.and.returnValue(of({message: 'Sesión creada'}));
+    component.createSession();
+    expect(mockCreateSessionService.createSession).toHaveBeenCalledWith(component.sessionForm.value);
+  });
+
+  it('should register error', () => {
+    const error = new Error('Error');
+    mockCreateSessionService.createSession.and.returnValue(throwError(() => error));
+    component.createSession();
+    expect(mockCreateSessionService.createSession).toHaveBeenCalledWith(component.sessionForm.value);
+    expect(mockNotifyService.error).toHaveBeenCalled();
   });
   
 });
