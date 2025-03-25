@@ -128,7 +128,7 @@ def register_to_event(db: Session, event_id: int, current_user: User):
     if not event:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
-            detail="Evento no encontrado."
+            detail="Evento no encontrado"
         )
 
     # Validar estado del evento (si aplica)
@@ -143,7 +143,7 @@ def register_to_event(db: Session, event_id: int, current_user: User):
     if current_attendees >= event.capacity:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Este evento ya está lleno."
+            detail="La capacidad del evento está llena"
         )
 
     # Verificar si ya está registrado

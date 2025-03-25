@@ -36,6 +36,7 @@ def assistant_payload():
             'email': overrides.get('email', fake.email()),
             'password': overrides.get('password', fake.password()),
             'phone': overrides.get('phone', fake.phone_number()),
+            'role': RoleEnum.ASISTENTE.value,
         }
     return _payload
 

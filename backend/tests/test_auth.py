@@ -117,15 +117,9 @@ def test_register_user_with_assistant_role(client, db):
     assert user.assistant.email == user.email
 
 
-def test_register_duplicate_user_assistant(client, user_factory):
+def test_register_duplicate_user_assistant(client, user_factory, assistant_payload):
     """ Test para verificar el registro de un usuario duplicado con el rol de asistente """
-    data = {
-        "name": faker.name(),
-        "email": faker.email(),
-        "password": faker.password(),
-        "phone": faker.phone_number(),
-        "role": "ASISTENTE"
-    }
+    data = assistant_payload()
 
     response = client.post("/users/register/assistant", json=data)
     response = client.post("/users/register/assistant", json=data)
@@ -152,15 +146,9 @@ def test_register_user_with_invalid_role(client):
         "detail") == "Solo los usuarios con rol ASISTENTE pueden registrarse como asistentes."
     
     
-def test_register_assistant_to_event(client, db, user_factory, event_factory):
+def test_register_assistant_to_event(client, db, user_factory, event_factory, assistant_payload):
     """ Test para verificar el registro de un asistente a un evento """
-    data = {
-        "name": faker.name(),
-        "email": faker.email(),
-        "password": faker.password(),
-        "phone": faker.phone_number(),
-        "role": "ASISTENTE"
-    }
+    data = assistant_payload()
     response = client.post("/users/register/assistant", json=data)
     assert response.status_code == 201
 
@@ -182,15 +170,9 @@ def test_register_assistant_to_event(client, db, user_factory, event_factory):
     assert response_data["message"] == "Registro exitoso"
 
 
-def test_register_assistant_again_to_event(client, db, user_factory, event_factory):
+def test_register_assistant_again_to_event(client, db, user_factory, event_factory, assistant_payload):
     """ Test para verificar el registro de un asistente a un evento ya registrado """
-    data = {
-        "name": faker.name(),
-        "email": faker.email(),
-        "password": faker.password(),
-        "phone": faker.phone_number(),
-        "role": "ASISTENTE"
-    }
+    data = assistant_payload()
     response = client.post("/users/register/assistant", json=data)
     assert response.status_code == 201
 
@@ -211,3 +193,46 @@ def test_register_assistant_again_to_event(client, db, user_factory, event_facto
     assert response.status_code == 400
     response_data = response.json()
     assert response_data["detail"] == "El asistente ya se encuentra registrado en el evento"
+    
+def test_register_with_full_capacity(client, db, user_factory, event_factory, assistant_payload):
+    """ Test para verificar el registro de un asistente a un evento con capacidad llena """
+    data = assistant_payload()
+    response = client.post("/users/register/assistant", json=data)
+    assert response.status_code == 201
+
+    response_login = client.post("/auth/login", data={
+        "username": data["email"],
+        "password": data["password"]
+    })
+    token = response_login.json()["token"]
+    headers = {"Authorization": f"Bearer {token}"}
+
+    organizador = user_factory.create_user(role=RoleEnum.ORGANIZADOR)
+    event = event_factory.create_event(user_id=organizador.id, state=StateEnum.CREADO, capacity=1)
+
+    response = client.post(f"/events/register/{event.id}", headers=headers)
+    assert response.status_code == 201
+
+    response = client.post(f"/events/register/{event.id}", headers=headers)
+    assert response.status_code == 400
+    response_data = response.json()
+    assert response_data["detail"] == "La capacidad del evento está llena"
+    
+
+def test_event_not_found(client, db, assistant_payload ):
+    """ Test para verificar el registro de un asistente a un evento no encontrado """
+    data = assistant_payload()
+    response = client.post("/users/register/assistant", json=data)
+    assert response.status_code == 201
+
+    response_login = client.post("/auth/login", data={
+        "username": data["email"],
+        "password": data["password"]
+    })
+    token = response_login.json()["token"]
+    headers = {"Authorization": f"Bearer {token}"}
+
+    response = client.post("/events/register/100", headers=headers)
+    assert response.status_code == 404
+    response_data = response.json()
+    assert response_data["detail"] == "Evento no encontrado"

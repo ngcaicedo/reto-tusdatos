@@ -24,11 +24,12 @@ class EventFactory:
             data.pop('user_created_id')
         return data
     
-    def create_event(self, user_id: int, state: str) -> Event:
+    def create_event(self, user_id: int, state: str, capacity: int = None) -> Event:
         """ Función para crear un evento en la base de datos """
         data = self.generate_data(user_id, state)
         data['date_start'] = datetime.fromisoformat(data['date_start'])
         data['date_end'] = datetime.fromisoformat(data['date_end'])
+        data['capacity'] = capacity if capacity is not None else data['capacity']
         event = Event(**data)
         self.db.add(event)
         self.db.commit()
