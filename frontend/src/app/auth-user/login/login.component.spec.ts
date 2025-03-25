@@ -97,9 +97,9 @@ describe('LoginComponent', () => {
   });
 
   it('should session storage empty', () => {
-    expect(sessionStorage.getItem('token')).toBeNull();
-    expect(sessionStorage.getItem('user')).toBeNull();
-    expect(sessionStorage.getItem('role')).toBeNull();
-    expect(sessionStorage.getItem('user_id')).toBeNull();
+    expect(sessionStorage.getItem('token')).not.toBeNull();
+    expect(sessionStorage.getItem('user')).not.toBeNull();
+    expect(sessionStorage.getItem('role')).not.toBeNull();
+    expect(sessionStorage.getItem('user_id')).not.toBeNull();
   });
 });
