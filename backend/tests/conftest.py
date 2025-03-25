@@ -20,6 +20,27 @@ fake = faker.Faker()
 
 
 @pytest.fixture
+def auth_header():
+    """ Fixture para obtener el encabezado de autenticación """
+    def _auth_header(user: dict) -> dict:
+        """ Función para obtener el encabezado de autenticación """
+        return {'Authorization': f'Bearer {user["token"]}'}
+    return _auth_header
+
+
+@pytest.fixture
+def assistant_payload():
+    def _payload(**overrides):
+        return {
+            'name': overrides.get('name', fake.name()),
+            'email': overrides.get('email', fake.email()),
+            'password': overrides.get('password', fake.password()),
+            'phone': overrides.get('phone', fake.phone_number()),
+        }
+    return _payload
+
+
+@pytest.fixture
 def user_factory(db):
     """ Fixture para crear un usuario en la base de datos """
     return UserFactory(db)
@@ -67,11 +88,11 @@ def assistant_factory(db):
             phone=phone,
             role=role,
         )
-        
+
         db.add(user)
         db.commit()
         db.refresh(user)
-        
+
         assistant = Assistant(
             name=name,
             email=email,
