@@ -11,22 +11,25 @@ import { provideHttpClient } from '@angular/common/http';
 import { RegisterAssistantService } from './register-assistant.service';
 import { of, throwError } from 'rxjs';
 import { provideToastr, Toast, ToastrService } from 'ngx-toastr';
+import { NotificationService } from '../../shared/services/notification.service';
 
 describe('RegisterComponent', () => {
   let component: RegisterComponent;
   let fixture: ComponentFixture<RegisterComponent>;
   let activeModalSpy: jasmine.SpyObj<NgbActiveModal>;
   let mockRegisterAssistantService: jasmine.SpyObj<RegisterAssistantService>;
-  let toastrService: ToastrService
+  let mockNotificationService: jasmine.SpyObj<NotificationService>;
 
   beforeEach(waitForAsync(() => {
     activeModalSpy = jasmine.createSpyObj('NgbActiveModal', ['dismiss']);
     mockRegisterAssistantService = jasmine.createSpyObj('RegisterAssistantService', ['registerAssistant']);
+    mockNotificationService = jasmine.createSpyObj('NotificationService', ['success', 'error', 'info', 'warning']);
     TestBed.configureTestingModule({
       imports: [RegisterComponent, ReactiveFormsModule],
       providers: [
         { provide: NgbActiveModal, useValue: activeModalSpy },
         { provide: RegisterAssistantService, useValue: mockRegisterAssistantService },
+        { provide: NotificationService, useValue: mockNotificationService },
         provideHttpClient(),
         provideHttpClientTesting(),
         provideToastr(),
@@ -36,7 +39,6 @@ describe('RegisterComponent', () => {
 
   beforeEach(() => {
     fixture = TestBed.createComponent(RegisterComponent);
-    toastrService = TestBed.inject(ToastrService);
     component = fixture.componentInstance;
     component.ngOnInit();
     component.registerForm.setValue({
@@ -100,11 +102,10 @@ describe('RegisterComponent', () => {
   it('should show error message', () => {
     const error = new Error('Registro fallido');
     mockRegisterAssistantService.registerAssistant.and.returnValue(throwError(() => error));
-    spyOn(toastrService, 'error');
     component.registerAssistant();
     expect(mockRegisterAssistantService.registerAssistant).toHaveBeenCalledWith(component.registerForm.value);
     expect(activeModalSpy.dismiss).not.toHaveBeenCalled();
-    expect(toastrService.error).toHaveBeenCalledWith(`Error al registrar: Registro fallido`);
+    expect(mockNotificationService.error).toHaveBeenCalledWith(`Error al registrar: Registro fallido`);
   });
 
 });

@@ -9,6 +9,7 @@ import {
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { RegisterAssistantService } from './register-assistant.service';
 import { ToastrService } from 'ngx-toastr';
+import { NotificationService } from '../../shared/services/notification.service';
 
 @Component({
   selector: 'app-register',
@@ -22,7 +23,7 @@ export class RegisterComponent implements OnInit {
     public activeModal: NgbActiveModal,
     private formBuilde: FormBuilder,
     private regiserService: RegisterAssistantService,
-    private toastr: ToastrService
+    private notify: NotificationService
   ) {}
 
   ngOnInit() {
@@ -37,11 +38,11 @@ export class RegisterComponent implements OnInit {
   registerAssistant() {
     this.regiserService.registerAssistant(this.registerForm.value).subscribe({
       next: (response) => {
-        this.toastr.success('Registro exitoso');
+        this.notify.success('Registro exitoso');
         this.activeModal.dismiss();
       },
       error: (error) => {
-        this.toastr.error(`Error al registrar: ${error.message}`);
+        this.notify.error(`Error al registrar: ${error.message}`);
       },
     });
   }
