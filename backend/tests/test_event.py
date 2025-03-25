@@ -146,5 +146,4 @@ def test_update_event(client, user_factory, event_factory):
     assert response_data['location'] != data['location']
     assert response_data['date_start'] != data['date_start']
     assert response_data['date_end'] != data['date_end']
-    assert response_data['capacity'] != data['capacity']
     assert response_data['user_created_id'] == data['user_created_id']

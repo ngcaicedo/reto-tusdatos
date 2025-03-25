@@ -1,6 +1,6 @@
 from app.core.authenticator.auth import login_user
 from app.core.user import create_user
-from app.core.event import create_event
+from app.core.event import create_event, update_event
 
 class Managment:
     """ Clase para gestionar las operaciones de la API """
@@ -15,3 +15,6 @@ class Managment:
     
     def create_event(self, db, event_data, current_user):
         return create_event(db, event_data, current_user)
+    
+    def update_event(self, db, event_id, event_data):
+        return update_event(db, event_id, event_data)
