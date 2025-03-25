@@ -4,14 +4,20 @@ import { By } from '@angular/platform-browser';
 import { DebugElement } from '@angular/core';
 
 import { HeaderComponent } from './header.component';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { LoginComponent } from '../auth-user/login/login.component';
 
 describe('HeaderComponent', () => {
   let component: HeaderComponent;
   let fixture: ComponentFixture<HeaderComponent>;
+  let modalServiceSpy: jasmine.SpyObj<NgbModal>;
 
   beforeEach(waitForAsync(() => {
+    modalServiceSpy = jasmine.createSpyObj('NgbModal', ['open']);
+
     TestBed.configureTestingModule({
       imports: [HeaderComponent],
+      providers: [{ provide: NgbModal, useValue: modalServiceSpy }],
     }).compileComponents();
   }));
 
@@ -45,17 +51,24 @@ describe('HeaderComponent', () => {
     expect(logo).toBeTruthy();
   });
 
-  it(`should have show events`, () =>{
+  it(`should have show events`, () => {
     const compiled = fixture.nativeElement as HTMLElement;
-    const eventosLink = Array.from(compiled.querySelectorAll('.nav-link'))
-    .find(link => link.textContent?.trim() === 'Eventos');
+    const eventosLink = Array.from(compiled.querySelectorAll('.nav-link')).find(
+      (link) => link.textContent?.trim() === 'Eventos'
+    );
     expect(eventosLink).toBeTruthy();
-  })
+  });
 
-  it(`should have show contact`, () =>{
+  it(`should have show contact`, () => {
     const compiled = fixture.nativeElement as HTMLElement;
-    const homeLink = Array.from(compiled.querySelectorAll('.nav-link'))
-    .find(link => link.textContent?.trim() === 'Contacto');
+    const homeLink = Array.from(compiled.querySelectorAll('.nav-link')).find(
+      (link) => link.textContent?.trim() === 'Contacto'
+    );
     expect(homeLink).toBeTruthy();
-  })
+  });
+
+  it('should open login modal', () => {
+    component.openLoginModal();
+    expect(modalServiceSpy.open).toHaveBeenCalledWith(LoginComponent, { centered: true });
+  });
 });

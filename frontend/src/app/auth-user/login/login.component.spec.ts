@@ -10,11 +10,13 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 describe('LoginComponent', () => {
   let component: LoginComponent;
   let fixture: ComponentFixture<LoginComponent>;
+  let activeModalSpy: jasmine.SpyObj<NgbActiveModal>;
 
   beforeEach(waitForAsync(() => {
+    activeModalSpy = jasmine.createSpyObj('NgbActiveModal', ['dismiss']);
     TestBed.configureTestingModule({
       imports: [LoginComponent, ReactiveFormsModule],
-      providers: [NgbActiveModal]
+      providers: [{ provide: NgbActiveModal, useValue: activeModalSpy }],
     }).compileComponents();
   }));
 
@@ -41,5 +43,10 @@ describe('LoginComponent', () => {
   it('should show password input', () => {
     const compiled = fixture.debugElement.nativeElement;
     expect(compiled.querySelector('input[type="password"]')).toBeTruthy();
+  });
+
+  it('should close modal', () => {
+    component.cancel();
+    expect(activeModalSpy.dismiss).toHaveBeenCalled();
   });
 });

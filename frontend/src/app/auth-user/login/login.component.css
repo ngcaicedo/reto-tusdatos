@@ -17,6 +17,7 @@
 .btn-primary:hover {
   background-color: #7ec6e6;
   border-color: #7ec6e6;
+  color: black;
 }
 
 .btn-secondary {
@@ -28,4 +29,5 @@
 .btn-secondary:hover {
   background-color: #b79bc1;
   border-color: #b79bc1;
+  color: black;
 }
