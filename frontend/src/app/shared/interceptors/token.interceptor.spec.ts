@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
-import { HTTP_INTERCEPTORS, HttpClient, HttpHeaders, provideHttpClient } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClient, HttpHeaders, provideHttpClient, withInterceptors } from '@angular/common/http';
 import { HttpClientTestingModule, HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
-import { TokenInterceptor } from './token.interceptor';
+import { tokenInterceptor } from './token.interceptor';
 import { environment } from '../../../environments/environment';
 
 
@@ -14,8 +14,7 @@ describe('TokenInterceptor', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [
-        { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true },
-        provideHttpClient(),
+        provideHttpClient(withInterceptors([tokenInterceptor])),
         provideHttpClientTesting(),
       ]
     });

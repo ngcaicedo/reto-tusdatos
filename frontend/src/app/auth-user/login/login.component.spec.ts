@@ -76,10 +76,14 @@ describe('LoginComponent', () => {
   });
 
   it('should login user', () => {
-    mockAuthUserService.login.and.returnValue(of({message: 'success'}));
+    mockAuthUserService.login.and.returnValue(of({ message: 'success' }));
     component.login();
-    expect(mockAuthUserService.login).toHaveBeenCalledWith(component.loginForm.value);
-    expect(mockNotificationService.success).toHaveBeenCalledWith('Inicio de sesión exitoso');
+    expect(mockAuthUserService.login).toHaveBeenCalledWith(
+      component.loginForm.value
+    );
+    expect(mockNotificationService.success).toHaveBeenCalledWith(
+      'Inicio de sesión exitoso'
+    );
     expect(activeModalSpy.dismiss).toHaveBeenCalled();
   });
 
@@ -87,19 +91,36 @@ describe('LoginComponent', () => {
     const errorResponse = {
       status: 401,
       error: {
-        detail: 'Inicio de sesión no exitoso'
-      }
+        detail: 'Inicio de sesión no exitoso',
+      },
     };
     mockAuthUserService.login.and.returnValue(throwError(() => errorResponse));
     component.login();
-    expect(mockAuthUserService.login).toHaveBeenCalledWith(component.loginForm.value);
-    expect(mockNotificationService.error).toHaveBeenCalledWith('Error en inicio de sesión: Inicio de sesión no exitoso');
+    expect(mockAuthUserService.login).toHaveBeenCalledWith(
+      component.loginForm.value
+    );
+    expect(mockNotificationService.error).toHaveBeenCalledWith(
+      'Error en inicio de sesión: Inicio de sesión no exitoso'
+    );
   });
 
   it('should session storage empty', () => {
-    expect(sessionStorage.getItem('token')).not.toBeNull();
-    expect(sessionStorage.getItem('user')).not.toBeNull();
-    expect(sessionStorage.getItem('role')).not.toBeNull();
-    expect(sessionStorage.getItem('user_id')).not.toBeNull();
+    const mockResponse = {
+      token: 'abc123',
+      user: 'nicolas',
+      role: 'ASISTENTE',
+      user_id: '1',
+    };
+
+    mockAuthUserService.login.and.returnValue(of(mockResponse));
+
+    component.login();
+
+    expect(sessionStorage.getItem('token')).toBe('abc123');
+    expect(sessionStorage.getItem('user')).toBe('nicolas');
+    expect(sessionStorage.getItem('role')).toBe('ASISTENTE');
+    expect(sessionStorage.getItem('user_id')).toBe('1');
+
+    sessionStorage.clear();
   });
 });
