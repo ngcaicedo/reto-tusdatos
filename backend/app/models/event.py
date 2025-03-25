@@ -27,12 +27,12 @@ class Event(BaseModel):
     """
     __tablename__ = "events"
 
-    description = Column(String, index=True)
+    description = Column(String, index=True, nullable=False)
     capacity = Column(Integer, index=True, nullable=False)
     state = Column(Enum(StateEnum, name="state"), index=True, nullable=False)
     date_start = Column(DateTime, nullable=False)
     date_end = Column(DateTime, nullable=False)
-    location = Column(String, index=True)
+    location = Column(String, index=True, nullable=False)
     user_created_id = Column(Integer, ForeignKey("users.id"))
     
     users = relationship("User", back_populates="events")

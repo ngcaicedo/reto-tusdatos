@@ -1,34 +1,40 @@
 from sqlalchemy.orm import Session
 from app.models.user import User
-from app.schemas.user import UserCreate
+from app.models.event import Event
+from app.schemas.event import EventCreate
 from app.core.authenticator.security import hash_password
 from fastapi import HTTPException, status
 
-def create_user(db: Session, user_data: UserCreate):
-    """ Crea un usuario en la base de datos.
+def create_event(db: Session, user_data: EventCreate, current_user: User):
+    """
+    Crea un evento en la base de datos.
+    
     Args:
         db (Session): Sesión de la base de datos
-        user_data (UserCreate): Datos del usuario a crear
-    Returns:
-        User: Usuario creado
+        event_data (EventCreate): Datos del evento a crear
+        current_user (User): Usuario autenticado
     """
-    user_exception = HTTPException(
+    
+    event_exception = HTTPException(
         status_code=status.HTTP_400_BAD_REQUEST,
-        detail="El usuario ya se encuentra registrado",
+        detail="El evento ya se encuentra registrado",
         headers={"WWW-Authenticate": "Bearer"},
     )
-    existing_user = db.query(User).filter(User.email == user_data.email).first()
-    if existing_user:
-        raise user_exception
+    existing_event = db.query(Event).filter(Event.name == user_data.name).first()
+    if existing_event:
+        raise event_exception
     
-    db_user = User(
+    db_event = Event(
         name=user_data.name,
-        phone=user_data.phone,
-        email=user_data.email,
-        password=hash_password(user_data.password),
-        role=user_data.role
+        description=user_data.description,
+        capacity=user_data.capacity,
+        state=user_data.state,
+        date_start=user_data.date_start,
+        date_end=user_data.date_end,
+        location=user_data.location,
+        user_created_id=current_user.id
     )
-    db.add(db_user)
+    db.add(db_event)
     db.commit()
-    db.refresh(db_user)
-    return db_user
+    db.refresh(db_event)
+    return db_event

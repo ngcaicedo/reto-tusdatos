@@ -6,7 +6,6 @@ from app.db.base import Base
 import app.models as models
 import faker
 from fastapi.testclient import TestClient
-from app.core.managment import Managment
 from .factories.user_factory import UserFactory
 
 RoleEnum = models.user.RoleEnum
@@ -17,7 +16,6 @@ Session = models.session.Session
 Speaker = models.session.Speaker
 Assistant = models.assistant.Assistant
 fake = faker.Faker()
-managment = Managment()
 
 
 @pytest.fixture

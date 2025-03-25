@@ -1,11 +1,17 @@
-from fastapi.security import OAuth2PasswordRequestForm
-from fastapi import HTTPException, status
+from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
+from fastapi import Depends, HTTPException, status
+import jwt
+from jwt.exceptions import InvalidTokenError
+
 from .security import verify_password
-from .jwt_utils import create_access_token
+from .jwt_utils import create_access_token, SECRET_KEY, ALGORITHM
 from app.models import User
 from sqlalchemy.orm import Session
 from app.schemas.user import UserLogin
+from app.db.session import get_db
 
+
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/login")
 
 def authenticate_user(db: Session, login_data: UserLogin) -> User | None:
     """ 
@@ -57,5 +63,27 @@ def login_user(form_data: OAuth2PasswordRequestForm, db: Session) -> dict:
         "token": token,
         "token_type": "bearer",
         "user": user.email,
-        "role": user.role
+        "role": user.role,
+        "user_id": user.id
     }
+
+
+def get_current_user(db: Session = Depends(get_db), token: str = Depends(oauth2_scheme)) -> User:
+    credentials_exception = HTTPException(
+        status_code=status.HTTP_401_UNAUTHORIZED,
+        detail="No autorizado",
+        headers={"WWW-Authenticate": "Bearer"},
+    )
+    try:
+        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        email: str = payload.get("sub")
+        if email is None:
+            raise credentials_exception
+    except InvalidTokenError:
+        raise credentials_exception
+
+    user = db.query(User).filter(User.email == email).first()
+    if user is None:
+        raise credentials_exception
+
+    return user

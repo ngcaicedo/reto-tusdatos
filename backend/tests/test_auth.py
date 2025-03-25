@@ -75,6 +75,7 @@ def test_login_success(client, user_factory):
     assert data_response.get("user") == user.email
     assert data_response.get("role") == user.role.value
     assert data_response.get("token_type") == "bearer"
+    assert data_response.get("user_id") == user.id
     
 def test_login_fail(client, user_factory):
     """ Test para verificar que un usuario no inicia sesión con credenciales incorrectas """

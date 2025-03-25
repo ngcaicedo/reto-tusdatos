@@ -1,7 +1,6 @@
 from sqlalchemy import inspect
-from app.models.event import Event, StateEnum
-from app.models.session import Session, Speaker
-from app.models.user import User, RoleEnum
+from app.models.event import StateEnum
+from app.models.user import RoleEnum
 import faker
 
 
@@ -48,7 +47,7 @@ def test_create_event_without_auth(client, user_factory):
     response = client.post('/events/create', json=data, headers=headers)
     assert response.status_code == 401
     response_data = response.json()
-    assert response_data['detail'] == 'Not authenticated'
+    assert response_data['detail'] == 'No autorizado'
 
 
 def test_create_event(client, user_factory):
@@ -59,7 +58,11 @@ def test_create_event(client, user_factory):
         'name': faker.Faker().name(),
         'description': faker.Faker().sentence(),
         'state': StateEnum.CREADO.value,
-        'user_created_id': user_logged['id']
+        'date_start': faker.Faker().date_time_this_year().isoformat(),
+        'date_end': faker.Faker().date_time_this_year().isoformat(),
+        'location': faker.Faker().address(),
+        'capacity': 100,
+        'user_created_id': user_logged['user_id']
     }
 
     headers = {
@@ -69,6 +72,7 @@ def test_create_event(client, user_factory):
     response = client.post('/events/create', json=data, headers=headers)
     assert response.status_code == 201
     response_data = response.json()
+    print(response_data)
     assert response_data['name'] == data['name']
     assert response_data['description'] == data['description']
     assert response_data['state'] == data['state']
@@ -76,15 +80,10 @@ def test_create_event(client, user_factory):
 
 
 def test_create_event_without_data(client, user_factory):
-    """ Test para verificar la creación de un evento sin"""
+    """ Test para verificar la creación de un evento sin datos """
     role = [RoleEnum.ADMIN, RoleEnum.ORGANIZADOR]
     user_logged = user_factory.login_user(role=faker.Faker().random_element(elements=role))
-    data = {
-        'name': '',
-        'description': '',
-        'state': '',
-        'user_created_id': ''
-    }
+    data = {}
 
     headers = {
         'Authorization': f'Bearer {user_logged['token']}'
@@ -93,7 +92,7 @@ def test_create_event_without_data(client, user_factory):
     response = client.post('/events/create', json=data, headers=headers)
     assert response.status_code == 422
     response_data = response.json()
-    fields_required = ['name', 'description', 'state', 'user_created_id']
+    fields_required = ['name', 'description', 'state', 'user_created_id', 'date_start', 'date_end', 'location', 'capacity']
     for error in response_data['detail']:
         assert error['loc'][-1] in fields_required
         assert error['msg'] == 'Field required'

@@ -8,6 +8,7 @@ class UserLogin(BaseModel):
 
 
 class Token(BaseModel):
+    user_id: int
     token: str
     token_type: str = "bearer"
     user: str
