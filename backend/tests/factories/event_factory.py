@@ -8,8 +8,6 @@ class EventFactory:
         self.fake = Faker()
         self.db = db
         
-        Faker.seed(0)
-        
     def generate_data(self, user_id: int, state: StateEnum, update: bool = False) -> dict:
         """ Función para generar los datos de un evento """
         data = {
