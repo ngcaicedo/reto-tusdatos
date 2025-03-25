@@ -119,7 +119,7 @@ def test_create_session(client, auth_header, user_factory):
     data = {
         "name": faker.name(),
         "description": faker.text(),
-        "date": faker.date_time_this_year(),
+        "duration": faker.random_int(min=1, max=60),
         "speaker_id": speaker.get("id"),
     }
     response = client.post("sessions/create/", json=data, headers=headers)
@@ -128,7 +128,7 @@ def test_create_session(client, auth_header, user_factory):
     assert data_response.get("id") is not None
     assert data_response.get("name") == data["name"]
     assert data_response.get("description") == data["description"]
-    assert data_response.get("date") == data["date"]
+    assert data_response.get("duration") == data["duration"]
     assert data_response.get("speaker_id") == speaker.get("id")
     
     
@@ -144,7 +144,7 @@ def test_create_session_duplicate(client, auth_header, user_factory):
     data = {
         "name": faker.name(),
         "description": faker.text(),
-        "date": faker.date_time_this_year(),
+        "duration": faker.random_int(min=1, max=60),
         "speaker_id": speaker.get("id"),
     }
     response = client.post("sessions/create/", json=data, headers=headers)
@@ -165,7 +165,7 @@ def test_update_session(client, auth_header, user_factory):
     data = {
         "name": faker.name(),
         "description": faker.text(),
-        "date": faker.date_time_this_year(),
+        "duration": faker.random_int(min=1, max=60),
         "speaker_id": speaker.get("id"),
     }
     response = client.post("sessions/create/", json=data, headers=headers)
@@ -173,7 +173,7 @@ def test_update_session(client, auth_header, user_factory):
     data2 = {
         "name": faker.name(),
         "description": faker.text(),
-        "date": faker.date_time_this_year(),
+        "duration": faker.random_int(min=1, max=60),
         "speaker_id": speaker.get("id"),
     }
     response = client.put(f"sessions/update/{session.get('id')}", json=data2, headers=headers)
@@ -182,7 +182,7 @@ def test_update_session(client, auth_header, user_factory):
     assert data_response.get("id") == session.get("id")
     assert data_response.get("name") == data2["name"]
     assert data_response.get("description") == data2["description"]
-    assert data_response.get("date") == data2["date"]
+    assert data_response.get("duration") == data2["duration"]
     assert data_response.get("speaker_id") == speaker.get("id")
     
 def test_update_session_not_found(client, auth_header, user_factory):
@@ -197,7 +197,7 @@ def test_update_session_not_found(client, auth_header, user_factory):
     data = {
         "name": faker.name(),
         "description": faker.text(),
-        "date": faker.date_time_this_year(),
+        "duration": faker.random_int(min=1, max=60),
         "speaker_id": speaker.get("id"),
     }
     response = client.put(f"sessions/update/1000", json=data, headers=headers)
@@ -218,7 +218,7 @@ def test_get_sessions(client, auth_header, user_factory):
     data = {
         "name": faker.name(),
         "description": faker.text(),
-        "date": faker.date_time_this_year(),
+        "duration": faker.random_int(min=1, max=60),
         "speaker_id": speaker.get("id"),
     }
     response = client.post("sessions/create/", json=data, headers=headers)
@@ -243,7 +243,7 @@ def test_get_session(client, auth_header, user_factory):
     data = {
         "name": faker.name(),
         "description": faker.text(),
-        "date": faker.date_time_this_year(),
+        "duration": faker.random_int(min=1, max=60),
         "speaker_id": speaker.get("id"),
     }
     response = client.post("sessions/create/", json=data, headers=headers)
@@ -254,5 +254,5 @@ def test_get_session(client, auth_header, user_factory):
     assert data_response.get("id") == session.get("id")
     assert data_response.get("name") == session.get("name")
     assert data_response.get("description") == session.get("description")
-    assert data_response.get("date") == session.get("date")
+    assert data_response.get("duration") == session.get("duration")
     assert data_response.get("speaker_id") == speaker.get("id")

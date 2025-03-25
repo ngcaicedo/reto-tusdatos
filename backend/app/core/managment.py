@@ -2,7 +2,7 @@ from app.core.authenticator.auth import login_user
 from app.core.user import create_user, register_user_assistant
 from app.core.event import create_event, update_event, get_events, get_event, register_to_event
 from app.core.assistant import create_assistant, get_assistants, get_assistant, update_assistant
-from app.core.session import create_speaker, update_speaker, get_speakers, get_speaker
+from app.core.session import create_speaker, update_speaker, get_speakers, get_speaker, create_session, update_session, get_sessions, get_session
 
 class Managment:
     """ Clase para gestionar las operaciones de la API """
@@ -56,3 +56,15 @@ class Managment:
     
     def get_speaker(self, db, speaker_id):
         return get_speaker(db, speaker_id)
+    
+    def create_session(self, db, session_data):
+        return create_session(db, session_data)
+    
+    def update_session(self, db, session_id, session_data):
+        return update_session(db, session_id, session_data)
+    
+    def get_sessions(self, db):
+        return get_sessions(db)
+    
+    def get_session(self, db, session_id):
+        return get_session(db, session_id)

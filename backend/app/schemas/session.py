@@ -1,13 +1,29 @@
 from pydantic import BaseModel
 
-class SpeakerBase(BaseModel):
+class SessionBase(BaseModel):
     name: str
     
-class SpeakerCreate(SpeakerBase):
+class SpeakerCreate(SessionBase):
     pass
 
-class SpeakerUpdate(SpeakerBase):
+class SpeakerUpdate(SessionBase):
     pass
 
-class SpeakerResponse(SpeakerBase):
+class SpeakerResponse(SessionBase):
     id: int
+    
+class SessionCreate(SessionBase):
+    description: str
+    duration: int
+    speaker_id: int
+    
+class SessionUpdate(SessionBase):
+    description: str
+    duration: int
+    speaker_id: int
+    
+class SessionResponse(SessionBase):
+    id: int
+    description: str
+    duration: int
+    speaker_id: int
