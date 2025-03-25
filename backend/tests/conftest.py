@@ -7,6 +7,7 @@ import app.models as models
 import faker
 from fastapi.testclient import TestClient
 from .factories.user_factory import UserFactory
+from .factories.event_factory import EventFactory
 
 RoleEnum = models.user.RoleEnum
 StateEnum = models.event.StateEnum
@@ -27,23 +28,7 @@ def user_factory(db):
 @pytest.fixture
 def event_factory(db):
     """ Fixture para crear un evento en la base de datos """
-    def create_event(user: User, state: StateEnum = StateEnum.CREADO) -> Event:
-        """ Función para crear un evento en la base de datos """
-        event = Event(
-            name=fake.name(),
-            description=fake.text(),
-            capacity=100,
-            state=state,
-            date_start=fake.date_time_this_year(),
-            date_end=fake.date_time_this_year(),
-            location=fake.address(),
-            user_created_id=user.id,
-        )
-        db.add(event)
-        db.commit()
-        db.refresh(event)
-        return event
-    return create_event
+    return EventFactory(db)
 
 
 @pytest.fixture

@@ -15,7 +15,7 @@ def test_table_event_assistant(db):
 def test_event_has_assistant(db, user_factory, event_factory, assistant_factory):
     """ Test para verificar que el modelo Event tiene una relación con el modelo Assistant """
     user = user_factory.create_user()
-    event = event_factory(user=user)
+    event = event_factory.create_event(user_id=user.id, state=StateEnum.CREADO)
     assistant = assistant_factory(user=user)
 
     event.assistants.append(assistant)

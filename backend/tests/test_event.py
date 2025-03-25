@@ -14,7 +14,7 @@ def test_model_event(db):
 def test_event_has_session(db, user_factory, event_factory, speaker_factory, session_factory):
     """ Test para verificar que el modelo Event tiene una relación con el modelo Session """
     user = user_factory.create_user()
-    event = event_factory(user=user)
+    event = event_factory.create_event(user_id=user.id, state=StateEnum.CREADO)
     speaker = speaker_factory()
     session = session_factory(event=event, speaker=speaker)
 
@@ -25,7 +25,7 @@ def test_event_has_session(db, user_factory, event_factory, speaker_factory, ses
 def test_event_created_by_user(db, user_factory, event_factory):
     """ Test para verificar que el evento fue creado por un usuario """
     user = user_factory.create_user()
-    event = event_factory(user=user)
+    event = event_factory.create_event(user_id=user.id, state=StateEnum.CREADO)
 
     assert event.user_created_id == user.id
     assert user.events[0].id == event.id
@@ -50,20 +50,11 @@ def test_create_event_without_auth(client, user_factory):
     assert response_data['detail'] == 'No autorizado'
 
 
-def test_create_event(client, user_factory):
+def test_create_event(client, user_factory, event_factory):
     """ Test para verificar la creación de un evento """
     role = [RoleEnum.ADMIN, RoleEnum.ORGANIZADOR]
     user_logged = user_factory.login_user(role=faker.Faker().random_element(elements=role))
-    data = {
-        'name': faker.Faker().name(),
-        'description': faker.Faker().sentence(),
-        'state': StateEnum.CREADO.value,
-        'date_start': faker.Faker().date_time_this_year().isoformat(),
-        'date_end': faker.Faker().date_time_this_year().isoformat(),
-        'location': faker.Faker().address(),
-        'capacity': 100,
-        'user_created_id': user_logged['user_id']
-    }
+    data = event_factory.generate_data(user_id=user_logged['user_id'], state=StateEnum.CREADO)
 
     headers = {
         'Authorization': f'Bearer {user_logged['token']}'
@@ -96,3 +87,22 @@ def test_create_event_without_data(client, user_factory):
     for error in response_data['detail']:
         assert error['loc'][-1] in fields_required
         assert error['msg'] == 'Field required'
+
+
+def test_create_same_event(client, user_factory, event_factory):
+    """ Test para verificar que no se puede crear un evento con el mismo nombre """
+    role = [RoleEnum.ADMIN, RoleEnum.ORGANIZADOR]
+    user_logged = user_factory.login_user(role=faker.Faker().random_element(elements=role))
+    data = event_factory.generate_data(user_id=user_logged['user_id'], state=StateEnum.CREADO)
+
+    headers = {
+        'Authorization': f'Bearer {user_logged['token']}'
+    }
+
+    response = client.post('/events/create', json=data, headers=headers)
+    assert response.status_code == 201
+
+    response = client.post('/events/create', json=data, headers=headers)
+    assert response.status_code == 400
+    response_data = response.json()
+    assert response_data['detail'] == 'El evento ya se encuentra registrado'
