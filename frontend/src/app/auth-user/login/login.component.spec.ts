@@ -10,7 +10,7 @@ import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { NotificationService } from '../../shared/services/notification.service';
 import { AuthUserService } from './auth-user.service';
-import { of } from 'rxjs';
+import { of, throwError } from 'rxjs';
 
 describe('LoginComponent', () => {
   let component: LoginComponent;
@@ -73,5 +73,21 @@ describe('LoginComponent', () => {
   it('should close modal', () => {
     component.cancel();
     expect(activeModalSpy.dismiss).toHaveBeenCalled();
+  });
+
+  it('should login user', () => {
+    mockAuthUserService.login.and.returnValue(of({message: 'success'}));
+    component.login();
+    expect(mockAuthUserService.login).toHaveBeenCalledWith(component.loginForm.value);
+    expect(mockNotificationService.success).toHaveBeenCalledWith('Inicio de sesión exitoso');
+    expect(activeModalSpy.dismiss).toHaveBeenCalled();
+  });
+
+  it('should login show error message', () => {
+    const error = new Error('Inicio de sesión no exitoso');
+    mockAuthUserService.login.and.returnValue(throwError(() => error));
+    component.login();
+    expect(mockAuthUserService.login).toHaveBeenCalledWith(component.loginForm.value);
+    expect(mockNotificationService.error).toHaveBeenCalledWith('Error en inicio de sesión: Inicio de sesión no exitoso');
   });
 });
