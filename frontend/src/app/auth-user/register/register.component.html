@@ -1,3 +1,45 @@
-<p>
-  register works!
-</p>
+<div class="modal-header">
+  <h5 class="modal-title">Crear cuenta</h5>
+  <button type="button" class="btn-close" aria-label="Close" (click)="cancel()"></button>
+</div>
+
+<div class="modal-body">
+  <form [formGroup]="registerForm">
+    <div class="mb-3">
+      <label class="form-label">Nombre completo</label>
+      <input type="text" class="form-control" formControlName="name" placeholder="Pepito Perez Gonzalez">
+      <!-- <div *ngIf="form.controls.username.invalid && form.controls.username.touched" class="text-danger small">
+        El nombre de usuario es obligatorio
+      </div> -->
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Número de teléfono</label>
+      <input type="tel" class="form-control" formControlName="phone" placeholder="1234567890">
+      <!-- <div *ngIf="form.controls.phone.invalid && form.controls.phone.touched" class="text-danger small">
+        El número de teléfono es obligatorio
+      </div> -->
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Correo electrónico</label>
+      <input type="email" class="form-control" formControlName="email" placeholder="usuario@correo.com">
+      <!-- <div *ngIf="form.controls.email.invalid && form.controls.email.touched" class="text-danger small">
+        Correo inválido
+      </div> -->
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Contraseña</label>
+      <input type="password" class="form-control" formControlName="password" placeholder="********">
+      <!-- <div *ngIf="form.controls.password.invalid && form.controls.password.touched" class="text-danger small">
+        La contraseña es obligatoria
+      </div> -->
+    </div>
+  </form>
+</div>
+
+<div class="modal-footer">
+  <button class="btn btn-secondary" (click)="cancel()">Cancelar</button>
+  <button class="btn btn-primary" >Crear</button>
+</div>

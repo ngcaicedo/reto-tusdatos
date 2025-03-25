@@ -4,14 +4,19 @@ import { By } from '@angular/platform-browser';
 import { DebugElement } from '@angular/core';
 
 import { RegisterComponent } from './register.component';
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { ReactiveFormsModule } from '@angular/forms';
 
 describe('RegisterComponent', () => {
   let component: RegisterComponent;
   let fixture: ComponentFixture<RegisterComponent>;
+  let activeModalSpy: jasmine.SpyObj<NgbActiveModal>;
 
   beforeEach(waitForAsync(() => {
+    activeModalSpy = jasmine.createSpyObj('NgbActiveModal', ['dismiss']);
     TestBed.configureTestingModule({
-      imports: [ RegisterComponent ]
+      imports: [ RegisterComponent, ReactiveFormsModule ],
+      providers: [{ provide: NgbActiveModal, useValue: activeModalSpy }],
     })
     .compileComponents();
   }));

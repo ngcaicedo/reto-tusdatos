@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { LoginComponent } from '../auth-user/login/login.component';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { RegisterComponent } from '../auth-user/register/register.component';
 
 @Component({
   selector: 'app-header',
@@ -16,6 +17,10 @@ export class HeaderComponent implements OnInit {
 
   openLoginModal() {
     this.modalService.open(LoginComponent, { centered: true });
+  }
+
+  openRegisterModal() {
+    this.modalService.open(RegisterComponent, { centered: true });
   }
 
 }
