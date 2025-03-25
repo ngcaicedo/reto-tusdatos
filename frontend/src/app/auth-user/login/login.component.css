@@ -1,0 +1,31 @@
+.modal-content {
+  background-color: #c3e8f0;
+  border: 1px solid #90d4f3;
+}
+
+.modal-title {
+  color: #443a57;
+  font-weight: bold;
+}
+
+.btn-primary {
+  background-color: #90d4f3;
+  border-color: #90d4f3;
+  color: #fff;
+}
+
+.btn-primary:hover {
+  background-color: #7ec6e6;
+  border-color: #7ec6e6;
+}
+
+.btn-secondary {
+  background-color: #ccb0d2;
+  border-color: #ccb0d2;
+  
+}
+
+.btn-secondary:hover {
+  background-color: #b79bc1;
+  border-color: #b79bc1;
+}

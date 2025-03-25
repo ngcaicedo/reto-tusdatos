@@ -1,15 +1,27 @@
+import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
+import { FormBuilder, Validators, ReactiveFormsModule, FormGroup } from '@angular/forms';
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css']
+  styleUrls: ['./login.component.css'],
+  imports: [CommonModule, ReactiveFormsModule]
 })
 export class LoginComponent implements OnInit {
+  loginForm!: FormGroup;
 
-  constructor() { }
+  constructor(public activeModal: NgbActiveModal, private formBuilde: FormBuilder) { }
 
   ngOnInit() {
+    this.loginForm = this.formBuilde.group({
+      email: ['', [Validators.required, Validators.email]],
+      password: ['', [Validators.required, Validators.minLength(6)]]
+    });
   }
 
+  cancel() {
+    this.activeModal.dismiss();
+  }
 }
