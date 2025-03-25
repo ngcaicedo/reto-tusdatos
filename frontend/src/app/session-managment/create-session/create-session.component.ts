@@ -27,6 +27,16 @@ export class CreateSessionComponent {
   ) {}
 
   ngOnInit() {
+
+    this.sessionService.getSpeakers().subscribe({
+      next: (response) => {
+        this.speakers = response as Speaker[];
+      },
+      error: (error) => {
+        this.notify.error(`Error al obtener ponentes: ${error.message}`);
+      },
+    });
+
     this.sessionForm = this.formBuilder.group({
       sessionName: ['', Validators.required],
       sessionDescription: ['', Validators.required],

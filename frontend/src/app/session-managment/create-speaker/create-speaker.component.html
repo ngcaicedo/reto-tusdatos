@@ -1,6 +1,6 @@
 <h5 class="fw-bold mx-sm-3 mb-4">Crear ponente</h5>
 
-<form [formGroup]="speakerForm" class="w-100" style="max-width: 400px;">
+<form [formGroup]="speakerForm" (ngSubmit)="!speakerForm.invalid && createSpeaker()" class="w-100" style="max-width: 400px;">
   <div class="mb-3 ms-sm-3">
     <label for="speakerName" class="form-label">Nombre</label>
     <input
@@ -10,13 +10,13 @@
       class="form-control"
       placeholder="Ej. Pepito Pérez Gonalez"
     />
-    <!-- <div *ngIf="form.controls.speakerName.touched && form.controls.speakerName.invalid" class="text-danger small">
+    <div *ngIf="speakerForm.controls['speakerName'].touched && speakerForm.controls['speakerName'].invalid" class="text-danger small">
       El nombre es obligatorio
-    </div> -->
+    </div>
   </div>
 
   <div class="ms-sm-3">
-    <button type="submit" class="btn btn-primary me-2">Guardar</button>
+    <button type="submit" class="btn btn-primary me-2" [disabled]="!speakerForm.valid">Guardar</button>
     <button type="button" class="btn btn-secondary">Cancelar</button>
   </div>
 </form>
