@@ -78,3 +78,29 @@ def update_event(db: Session, event_id: id, event_data: EventUpdate):
     db.commit()
     db.refresh(event)
     return event
+
+
+def get_events(db: Session):
+    """
+    Obtiene todos los eventos registrados en la base de datos.
+
+    Args:
+        db (Session): Sesión de la base de datos
+    
+    Returns:
+        list[Event]: Lista de eventos registrados
+    """
+    return db.query(Event).all()
+
+def get_event(db: Session, event_id: int):
+    """
+    Obtiene un evento registrado en la base de datos.
+
+    Args:
+        db (Session): Sesión de la base de datos
+        event_id (int): Identificador del evento a obtener
+    
+    Returns:
+        Event: Evento registrado
+    """
+    return db.query(Event).filter(Event.id == event_id).first()

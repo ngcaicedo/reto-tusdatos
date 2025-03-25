@@ -38,3 +38,29 @@ def update_event(event_id: int, event_data: EventUpdate, db: Session = Depends(g
         EventResponse: Evento actualizado
     """
     return managment.update_event(db, event_id, event_data)
+
+
+@event_router.get("/events", response_model=list[EventResponse])
+def get_events(db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
+    """ 
+    Endpoint para obtener la lista de eventos
+    Args:
+        db (Session): Sesión de la base de datos
+        current_user (User): Usuario autenticado
+    Returns:
+        list[EventResponse]: Lista de eventos
+    """
+    return managment.get_events(db)
+
+@event_router.get("/{event_id}", response_model=EventResponse)
+def get_event(event_id: int, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
+    """ 
+    Endpoint para obtener un evento
+    Args:
+        event_id (int): Identificador del evento a obtener
+        db (Session): Sesión de la base de datos
+        current_user (User): Usuario autenticado
+    Returns:
+        EventResponse: Evento obtenido
+    """
+    return managment.get_event(db, event_id)

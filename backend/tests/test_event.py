@@ -156,7 +156,7 @@ def test_get_events_without_auth(client, user_factory, event_factory):
     headers = {
         'Authorization': f'Bearer '}
 
-    response = client.get('/events', headers=headers)
+    response = client.get('/events/events', headers=headers)
     assert response.status_code == 401
     response_data = response.json()
     assert response_data['detail'] == 'No autorizado'
@@ -176,7 +176,7 @@ def test_get_events(client, user_factory, event_factory):
     assert response.status_code == 201
     response_data = response.json()
     
-    response = client.get('/events', headers=headers)
+    response = client.get('/events/events', headers=headers)
     assert response.status_code == 200
     response_data = response.json()
     assert len(response_data) > 0
