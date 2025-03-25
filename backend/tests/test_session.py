@@ -24,7 +24,7 @@ def test_create_speaker(client, auth_header, user_factory):
         "name": faker.name(),
     }
     headers = auth_header(user_login)
-    response = client.post("create/speaker/", json=data, headers=headers)
+    response = client.post("sessions/create/speaker/", json=data, headers=headers)
     assert response.status_code == 201
     data_response = response.json()
     assert data_response.get("id") is not None
@@ -37,8 +37,8 @@ def test_create_duplicated_speaker(client, auth_header, user_factory):
         "name": faker.name(),
     }
     headers = auth_header(user_login)
-    response = client.post("create/speaker/", json=data, headers=headers)
-    response = client.post("create/speaker/", json=data, headers=headers)
+    response = client.post("sessions/create/speaker/", json=data, headers=headers)
+    response = client.post("sessions/create/speaker/", json=data, headers=headers)
     assert response.status_code == 409
     data_response = response.json()
     assert data_response.get("detail") == "El speaker ya se encuentra registrado"
@@ -46,16 +46,20 @@ def test_create_duplicated_speaker(client, auth_header, user_factory):
 def test_update_speaker(client, auth_header, user_factory):
     """ Función para actualizar un speaker """
     user_login = user_factory.login_user(role=RoleEnum.ORGANIZADOR)
-    speaker = user_factory.create_speaker()
     data = {
         "name": faker.name(),
     }
     headers = auth_header(user_login)
-    response = client.put(f"update/speaker/{speaker.id}", json=data, headers=headers)
+    response = client.post("sessions/create/speaker/", json=data, headers=headers)
+    speaker = response.json()
+    data2 = {
+        "name": faker.name(),
+    }
+    response = client.put(f"sessions/update/speaker/{speaker.get('id')}", json=data2, headers=headers)
     assert response.status_code == 200
     data_response = response.json()
-    assert data_response.get("id") == speaker.id
-    assert data_response.get("name") == data["name"]
+    assert data_response.get("id") == speaker.get("id")
+    assert data_response.get("name") == data2["name"]
     
 def test_update_speaker_not_found(client, auth_header, user_factory):
     """ Función para actualizar un speaker no encontrado """
@@ -64,7 +68,7 @@ def test_update_speaker_not_found(client, auth_header, user_factory):
         "name": faker.name(),
     }
     headers = auth_header(user_login)
-    response = client.put(f"update/speaker/1000", json=data, headers=headers)
+    response = client.put(f"sessions/update/speaker/1000", json=data, headers=headers)
     assert response.status_code == 404
     data_response = response.json()
     assert data_response.get("detail") == "El speaker no se encuentra registrado"
@@ -77,10 +81,10 @@ def test_get_speakers(client, auth_header, user_factory):
     }
     headers = auth_header(user_login)
     
-    response = client.post("create/speaker/", json=data, headers=headers)
+    response = client.post("sessions/create/speaker/", json=data, headers=headers)
     assert response.status_code == 201
     
-    response = client.get("speakers/", headers=headers)
+    response = client.get("sessions/speakers/", headers=headers)
     assert response.status_code == 200
     data_response = response.json()
     assert isinstance(data_response, list)
@@ -95,9 +99,9 @@ def test_get_speaker(client, auth_header, user_factory):
         "name": faker.name(),
     }
     headers = auth_header(user_login)
-    response = client.post("create/speaker/", json=data, headers=headers)
+    response = client.post("sessions/create/speaker/", json=data, headers=headers)
     speaker = response.json()
-    response = client.get(f"speaker/{speaker.get('id')}", headers=headers)
+    response = client.get(f"sessions/speaker/{speaker.get('id')}", headers=headers)
     assert response.status_code == 200
     data_response = response.json()
     assert data_response.get("id") == speaker.get("id")
