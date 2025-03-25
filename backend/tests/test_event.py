@@ -106,3 +106,45 @@ def test_create_same_event(client, user_factory, event_factory):
     assert response.status_code == 400
     response_data = response.json()
     assert response_data['detail'] == 'El evento ya se encuentra registrado'
+    
+    
+def test_update_event_without_auth(client, user_factory, event_factory):
+    """ Test para verificar la actualización de un evento sin autenticación """
+    user = user_factory.create_user()
+    event = event_factory.create_event(user_id=user.id, state=StateEnum.CREADO)
+    data = event_factory.generate_data(user_id=user.id, state=StateEnum.PROGRAMADO, update=True)
+
+    headers = {
+        'Authorization': f'Bearer '}
+
+    response = client.put(f'/events/update/{event.id}', json=data, headers=headers)
+    assert response.status_code == 401
+    response_data = response.json()
+    assert response_data['detail'] == 'No autorizado'
+    
+def test_update_event(client, user_factory, event_factory):
+    """ Test para verificar la actualización de un evento """
+    role = [RoleEnum.ADMIN, RoleEnum.ORGANIZADOR]
+    user_logged = user_factory.login_user(role=faker.Faker().random_element(elements=role))
+    data = event_factory.generate_data(user_id=user_logged['user_id'], state=StateEnum.CREADO)
+
+    headers = {
+        'Authorization': f'Bearer {user_logged['token']}'
+    }
+
+    response = client.post('/events/create', json=data, headers=headers)
+    assert response.status_code == 201
+    response_data = response.json()
+    
+    data_update = event_factory.generate_data(user_id=user_logged['user_id'], state=StateEnum.PROGRAMADO, update=True)
+    response = client.put(f'/events/update/{response_data["id"]}', json=data_update, headers=headers)
+    assert response.status_code == 200
+    response_data = response.json()
+    assert response_data['state'] != data['state']
+    assert response_data['name'] != data['name']
+    assert response_data['description'] != data['description']
+    assert response_data['location'] != data['location']
+    assert response_data['date_start'] != data['date_start']
+    assert response_data['date_end'] != data['date_end']
+    assert response_data['capacity'] != data['capacity']
+    assert response_data['user_created_id'] == data['user_created_id']
