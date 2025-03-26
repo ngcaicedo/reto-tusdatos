@@ -63,36 +63,32 @@ def session_factory(db):
 @pytest.fixture
 def assistant_factory(db):
     """ Fixture para crear un asistente en la base de datos"""
-    def create_assistant() -> Assistant:
+    def create_assistant(client) -> Assistant:
         """ Función para crear un asistente en la base de datos """
-        name = fake.name()
-        email = fake.email()
-        password = fake.password()
-        phone = fake.phone_number()
-        role = RoleEnum.ASISTENTE
-        user = User(
-            name=name,
-            email=email,
-            password=password,
-            phone=phone,
-            role=role,
-        )
-
-        db.add(user)
-        db.commit()
-        db.refresh(user)
-
-        assistant = Assistant(
-            name=name,
-            email=email,
-            phone=phone,
-            user_id=user.id,
-        )
-        db.add(assistant)
-        db.commit()
-        db.refresh(assistant)
-        return assistant
+        data ={
+            'name': fake.name(),
+            'email': fake.email(),
+            'password': fake.password(),
+            'phone': fake.phone_number(),
+            'role': RoleEnum.ASISTENTE.value
+        }
+        
+        response = client.post("/users/register/assistant", json=data)
+        assistant = response.json()
+        login = client.post("/auth/login", data={'username': data['email'], 'password': data['password']})
+        login = login.json()
+        return login
     return create_assistant
+
+@pytest.fixture
+def event_assistant_factory(db):
+    """ Fixture para crear un evento con asistentes en la base de datos """
+    def create_event_assistant(client, event_id: int, headers) -> dict:
+        """ Función para crear un evento con asistentes en la base de datos """
+        response = client.post(f"/events/register/{event_id}", json={}, headers=headers)
+        event_assistant = response.json()
+        return event_assistant
+    return create_event_assistant
 
 
 @pytest.fixture

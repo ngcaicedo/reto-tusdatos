@@ -228,3 +228,25 @@ def test_event_detail_with_registered_user_returns_registered(client, user_facto
     response = client.get(f"/events/{response_data['id']}", headers=headers)
     assert response.status_code == 200
     assert response.json()["is_registered"] is True
+    
+    
+    
+def test_get_events_assistant_register(client, assistant_factory, user_factory, event_factory, event_assistant_factory):
+    """ Test para verificar la obtención de eventos registrados por un asistente """
+    user_org = user_factory.create_user(role=RoleEnum.ORGANIZADOR)
+    assistant = assistant_factory(client)
+    event1 = event_factory.create_event(user_id=user_org.id, state=StateEnum.CREADO)
+    event2 = event_factory.create_event(user_id=user_org.id, state=StateEnum.CREADO)
+    
+    headers = {"Authorization": f"Bearer {assistant['access_token']}"}
+    
+    event_assistant1 = event_assistant_factory(client, event1.id, headers)
+    event_assistant2 = event_assistant_factory(client, event2.id, headers)
+    
+    response = client.get("/events/register", headers=headers)
+    assert response.status_code == 200
+    response_data = response.json()
+    assert len(response_data) == 2
+    assert response_data[0]["name"] == event1["name"]
+    assert response_data[1]["name"] == event2["name"]
+    
