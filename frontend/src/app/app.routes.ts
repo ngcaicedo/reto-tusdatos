@@ -5,13 +5,14 @@ import { CreateEventComponent } from './event-managment/create-event/create-even
 import { ListEventComponent } from './event-managment/list-event/list-event.component';
 import { DetailEventComponent } from './event-managment/detail-event/detail-event.component';
 import { DetailEventAssistantComponent } from './event-managment/detail-event-assistant/detail-event-assistant.component';
+import { authGuard } from './shared/guard/auth.guard';
 
 export const routes: Routes = [
     {path: '', redirectTo: 'events', pathMatch: 'full'},
     {path: 'events', component: ListEventComponent, pathMatch: 'full'},
     {path: 'events/assistant/register', component: DetailEventAssistantComponent, pathMatch: 'full'},
     {path: 'events/:event_id', component: DetailEventComponent, pathMatch: 'full'},
-    {path: 'sessions/speaker/create', component: CreateSpeakerComponent, pathMatch: 'full'},
+    {path: 'sessions/speaker/create', component: CreateSpeakerComponent, pathMatch: 'full', canActivate: [authGuard]},
     {path: 'sessions/create', component: CreateSessionComponent, pathMatch: 'full'},
-    {path: 'create/events', component: CreateEventComponent, pathMatch: 'full'},
+    {path: 'create/events', component: CreateEventComponent, pathMatch: 'full', canActivate: [authGuard]},
 ];

@@ -1,55 +1,50 @@
 import { TestBed } from '@angular/core/testing';
-import { CanActivateFn } from '@angular/router';
-
+import { CanActivateFn, Router } from '@angular/router';
 import { authGuard } from './auth.guard';
-import { of } from 'rxjs';
+import { AuthStateService } from '../states/auth-state.service';
+import { Observable } from 'rxjs';
 
-describe('authGuard', () => {
+describe('authGuard (Observable)', () => {
   let authServiceMock: any;
   let routerMock: any;
 
   beforeEach(() => {
     authServiceMock = {
-      isAuthenticated$: of(true),
+      isLoggedIn: jasmine.createSpy(),
     };
 
     routerMock = {
       navigate: jasmine.createSpy('navigate'),
     };
+
     TestBed.configureTestingModule({
       providers: [
-        { provide: 'AuthService', useValue: authServiceMock },
-        { provide: 'Router', useValue: routerMock },
+        { provide: AuthStateService, useValue: authServiceMock },
+        { provide: Router, useValue: routerMock },
       ],
     });
   });
 
-  const executeGuard: CanActivateFn = (...guardParameters) =>
-    TestBed.runInInjectionContext(() => authGuard(...guardParameters));
+  const executeGuard = (...params: Parameters<CanActivateFn>): Observable<boolean> =>
+    TestBed.runInInjectionContext(() => authGuard(...params)) as Observable<boolean>;  
 
-  it('should be created', () => {
-    expect(executeGuard).toBeTruthy();
-  });
-
-  
   it('should return true if the user is authenticated', (done) => {
-    authServiceMock.isAuthenticated$ = of(true);
+    authServiceMock.isLoggedIn.and.returnValue(true);
 
     executeGuard({} as any, {} as any).subscribe(result => {
-      expect(result).toBe(true);
+      expect(result).toBeTrue();
+      expect(routerMock.navigate).not.toHaveBeenCalled();
       done();
     });
   });
 
-  it('should return false if the user is not authenticated', (done) => {
-    authServiceMock.isAuthenticated$ = of(false);
+  it('should return false and navigate to events if not authenticated', (done) => {
+    authServiceMock.isLoggedIn.and.returnValue(false);
 
     executeGuard({} as any, {} as any).subscribe(result => {
-      expect(result).toBe(false);
-      expect(routerMock.navigate).toHaveBeenCalledWith(['/login']);
+      expect(result).toBeFalse();
+      expect(routerMock.navigate).toHaveBeenCalledWith(['/events']);
       done();
     });
   });
-
-
 });
