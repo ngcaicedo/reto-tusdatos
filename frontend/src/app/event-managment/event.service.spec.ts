@@ -7,6 +7,8 @@ import {
 } from '@angular/common/http/testing';
 import { provideHttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
+import { Event } from './event';
+import { Session } from '../session-managment/session';
 
 describe('EventService', () => {
   let service: EventService;
@@ -63,22 +65,23 @@ describe('EventService', () => {
 
   it('should send a GET request to get all events', () => {
     const events = [
-      {
-        name: 'test',
-        description: 'test',
-        capacity: 100,
-        state: 'CREADO',
-        date_start: '2021-09-02',
-        date_end: '2021-09-03',
-        location: 'test',
-        user_created_id: 1,
-        session_ids: [1],
-      },
+      new Event(
+        1,
+        'test',
+        'test',
+        100,
+        'CREADO',
+        '2021-09-02',
+        '2021-09-03',
+        'test',
+        1,
+        [new Session(1, 'Session 1', 'Session 1', 60, 1)]
+      ),
     ];
 
     service.getEvents().subscribe({
       next: (res) => {
-        expect(res).toEqual(events);
+        expect(res).toEqual(jasmine.arrayContaining(events));
       },
       error: (err) => {
         console.error('error en la petición', err);

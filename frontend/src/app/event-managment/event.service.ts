@@ -23,4 +23,8 @@ export class EventService {
   }): Observable<any> {
     return this.http.post(`${this.apiUrl}/events/create`, event);
   }
+
+  getEvents(): Observable<Event[]> {
+    return this.http.get<Event[]>(`${this.apiUrl}/events`);
+  }
 }
