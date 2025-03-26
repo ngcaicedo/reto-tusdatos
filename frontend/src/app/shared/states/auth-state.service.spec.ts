@@ -7,7 +7,7 @@ describe('AuthStateService', () => {
     token: 'abc123',
     user: 'test',
     role: 'ADMIN',
-    user_id: 1,
+    user_id: '1',
   };
 
   beforeEach(() => {
@@ -33,7 +33,7 @@ describe('AuthStateService', () => {
     expect(sessionStorage.getItem('token')).toBe(mockUser.token);
     expect(sessionStorage.getItem('user')).toBe(mockUser.user);
     expect(sessionStorage.getItem('role')).toBe(mockUser.role);
-    expect(sessionStorage.getItem('user_id')).toBe(mockUser.user_id.toString());
+    expect(sessionStorage.getItem('user_id')).toBe(mockUser.user_id);
   });
 
   it('should clear data in sessionStorage when logout', () => {
@@ -47,7 +47,7 @@ describe('AuthStateService', () => {
     sessionStorage.setItem('token', mockUser.token);
     sessionStorage.setItem('user', mockUser.user);
     sessionStorage.setItem('role', mockUser.role);
-    sessionStorage.setItem('user_id', mockUser.user_id.toString());
+    sessionStorage.setItem('user_id', mockUser.user_id);
 
     service = new AuthStateService();
     expect(service.user()).toEqual(mockUser);
