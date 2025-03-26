@@ -7,6 +7,7 @@ import { Event } from '../event';
 import { Session } from '../../session-managment/session';
 import { of } from 'rxjs';
 import { provideRouter } from '@angular/router';
+import { AuthStateService } from '../../shared/states/auth-state.service';
 
 describe('DetailEventComponent', () => {
   let component: DetailEventComponent;
@@ -24,19 +25,29 @@ describe('DetailEventComponent', () => {
     '2021-09-03',
     'test',
     1,
-    [new Session(1, 'Session 1', 'Session 1', new Date().toString(), 60, 1, {id: 1, name: 'test'})]
+    [
+      new Session(1, 'Session 1', 'Session 1', new Date().toString(), 60, 1, {
+        id: 1,
+        name: 'test',
+      }),
+    ]
   );
 
   beforeEach(async () => {
     mockEventService = jasmine.createSpyObj('EventService', ['getEvent']);
     mockEventService.getEvent.and.returnValue(of(mockEvent));
-    mockNotifyService = jasmine.createSpyObj('NotificationService', [ 'success', 'error', 'info', 'warning' ]);
+    mockNotifyService = jasmine.createSpyObj('NotificationService', [
+      'success',
+      'error',
+      'info',
+      'warning',
+    ]);
     await TestBed.configureTestingModule({
       imports: [DetailEventComponent],
       providers: [
         { provide: EventService, useValue: mockEventService },
         { provide: NotificationService, useValue: mockNotifyService },
-        provideRouter([])
+        provideRouter([]),
       ],
     }).compileComponents();
 
@@ -69,4 +80,12 @@ describe('DetailEventComponent', () => {
     expect(mockEventService.getEvent).toHaveBeenCalled();
   });
 
+  it('should loggin to register to event', () => {
+    const authStateMock = TestBed.inject(AuthStateService);
+    authStateMock.clearUser();
+    fixture.detectChanges();
+    component.openRegister();
+    expect(component.openRegister).toHaveBeenCalled();
+  });
+  
 });
