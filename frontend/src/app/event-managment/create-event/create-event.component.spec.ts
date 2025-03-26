@@ -4,11 +4,13 @@ import { CreateEventComponent } from './create-event.component';
 import { NotificationService } from '../../shared/services/notification.service';
 import { EventService } from '../event.service';
 import { of, throwError } from 'rxjs';
+import { SessionService } from '../../session-managment/session.service';
 
 describe('CreateEventComponent', () => {
   let component: CreateEventComponent;
   let fixture: ComponentFixture<CreateEventComponent>;
   let mockEventService: jasmine.SpyObj<EventService>;
+  let mockSessionService: jasmine.SpyObj<SessionService>;
   let mockNotifyService: jasmine.SpyObj<NotificationService>;
 
   beforeEach(async () => {
@@ -19,11 +21,14 @@ describe('CreateEventComponent', () => {
       'info',
       'warning',
     ]);
+    mockSessionService = jasmine.createSpyObj('SessionService', ['getSessions']);
+    mockSessionService.getSessions.and.returnValue(of([]));
     await TestBed.configureTestingModule({
       imports: [CreateEventComponent],
       providers: [
         { provide: EventService, useValue: mockEventService },
         { provide: NotificationService, useValue: mockNotifyService },
+        { provide: SessionService, useValue: mockSessionService },
       ],
     }).compileComponents();
 

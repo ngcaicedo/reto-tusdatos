@@ -9,6 +9,8 @@ import {
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { AuthUserService } from './auth-user.service';
 import { NotificationService } from '../../shared/services/notification.service';
+import { AuthStateService } from '../../shared/states/auth-state.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -23,7 +25,9 @@ export class LoginComponent implements OnInit {
     public activeModal: NgbActiveModal,
     private formBuilde: FormBuilder,
     private authService: AuthUserService,
-    private notify: NotificationService
+    private notify: NotificationService,
+    private authState: AuthStateService,
+    private router: Router
   ) {}
 
   ngOnInit() {
@@ -41,12 +45,16 @@ export class LoginComponent implements OnInit {
 
     this.authService.login(this.loginForm.value).subscribe({
       next: (response) => {
-        sessionStorage.setItem('token', response.token);
-        sessionStorage.setItem('role', response.role);
-        sessionStorage.setItem('user', response.user);
-        sessionStorage.setItem('user_id', response.user_id);
+        const userState = {
+          token: response.token,
+          user: response.user,
+          role: response.role,
+          user_id: response.user_id
+        };
+        this.authState.setUser(userState);
         this.notify.success('Inicio de sesión exitoso');
         this.activeModal.dismiss();
+        this.router.navigate(['/']);
       },
       error: (error) => {
         this.notify.error(`Error en inicio de sesión: ${error.error.detail}`);
