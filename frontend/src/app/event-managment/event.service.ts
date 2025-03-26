@@ -32,4 +32,8 @@ export class EventService {
   getEvent(event_id: number): Observable<Event> {
     return this.http.get<Event>(`${this.apiUrl}/events/${event_id}`);
   }
+
+  registerUserToEvent(event_id: number): Observable<any> {
+    return this.http.post(`${this.apiUrl}/events/register/${event_id}`, {});
+  }
 }

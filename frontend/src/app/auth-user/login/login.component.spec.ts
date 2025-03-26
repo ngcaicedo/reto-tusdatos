@@ -106,7 +106,7 @@ describe('LoginComponent', () => {
 
   it('should session storage empty', () => {
     const mockResponse = {
-      token: 'abc123',
+      access_token: 'abc123',
       user: 'nicolas',
       role: 'ASISTENTE',
       user_id: '1',

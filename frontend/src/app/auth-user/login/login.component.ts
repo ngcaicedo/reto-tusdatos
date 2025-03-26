@@ -46,7 +46,7 @@ export class LoginComponent implements OnInit {
     this.authService.login(this.loginForm.value).subscribe({
       next: (response) => {
         const userState = {
-          token: response.token,
+          token: response.access_token,
           user: response.user,
           role: response.role,
           user_id: response.user_id
