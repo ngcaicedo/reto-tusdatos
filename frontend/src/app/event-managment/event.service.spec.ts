@@ -93,4 +93,34 @@ describe('EventService', () => {
 
     req.flush(events);
   });
+
+  it('should send a GET request to get event by id', () => {
+    const event = new Event(
+      1,
+      'test',
+      'test',
+      100,
+      'CREADO',
+      '2021-09-02',
+      '2021-09-03',
+      'test',
+      1,
+      [new Session(1, 'Session 1', 'Session 1', new Date().toString(), 60, 1)]
+    );
+
+    service.getEvent(1).subscribe({
+      next: (res) => {
+        expect(res).toEqual(event);
+      },
+      error: (err) => {
+        console.error('error en la petición', err);
+      },
+    });
+
+    const req = httpMock.expectOne(`${environment.apiUrl}/events/event/1`);
+    expect(req.request.method).toBe('GET');
+
+    req.flush(event);
+  });
+
 });
