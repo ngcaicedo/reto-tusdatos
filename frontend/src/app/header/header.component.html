@@ -15,6 +15,12 @@
                     <li class="nav-item" *ngIf="user()?.role !== 'ASSISTENTE'">
                         <a class="nav-link fw-semibold" [routerLink]="'/events'">Eventos</a>
                     </li>
+                    <li class="nav-item" *ngIf="user()?.role === 'ADMIN' || user()?.role === 'ORGANIZADOR'">
+                        <a class="nav-link fw-semibold" [routerLink]="'/sessions/create'">Crear Sesión</a>
+                    </li>
+                    <li class="nav-item" *ngIf="user()?.role === 'ADMIN' || user()?.role === 'ORGANIZADOR'">
+                        <a class="nav-link fw-semibold" [routerLink]="'/sessions/speaker/create'">Crear ponente</a>
+                    </li>
                     <li class="nav-item" *ngIf="user()?.role === 'ASISTENTE'">
                         <a class="nav-link fw-semibold" href="#">Contacto</a>
                     </li>
@@ -70,7 +76,7 @@
         </ul>
 
         <!-- Botón a la derecha -->
-        <a *ngIf="user()?.role == 'ADMIN' || user()?.role == 'ORGANIZADOR'" class="btn btn-info fw-semibold text-white" routerLink="/events/create">
+        <a *ngIf="user()?.role == 'ADMIN' || user()?.role == 'ORGANIZADOR'" class="btn btn-info fw-semibold text-white" routerLink="create/events">
             Crear nuevo +
         </a>
     </div>

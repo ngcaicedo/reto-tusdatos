@@ -13,5 +13,5 @@ export const routes: Routes = [
     {path: 'events/:event_id', component: DetailEventComponent, pathMatch: 'full'},
     {path: 'sessions/speaker/create', component: CreateSpeakerComponent, pathMatch: 'full'},
     {path: 'sessions/create', component: CreateSessionComponent, pathMatch: 'full'},
-    {path: 'events/create', component: CreateEventComponent, pathMatch: 'full'},
+    {path: 'create/events', component: CreateEventComponent, pathMatch: 'full'},
 ];

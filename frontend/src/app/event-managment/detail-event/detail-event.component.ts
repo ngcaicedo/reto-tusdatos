@@ -19,13 +19,14 @@ export class DetailEventComponent {
   constructor(
     private eventService: EventService,
     private notify: NotificationService,
-    private router: ActivatedRoute,
+    private activeRouter: ActivatedRoute,
+    private router: Router,
     private authState: AuthStateService
   ) {}
 
   ngOnInit() {
     this.user = this.authState.user;
-    const id = Number(this.router.snapshot.paramMap.get('event_id'));
+    const id = Number(this.activeRouter.snapshot.paramMap.get('event_id'));
     this.eventService.getEvent(id).subscribe({
       next: (response) => {
         this.event = response;
@@ -56,6 +57,7 @@ export class DetailEventComponent {
     this.eventService.registerUserToEvent(this.event.id).subscribe({
       next: (response) => {
         this.notify.success('Registrado correctamente');
+        this.router.navigate(['/events/assistant/register']);
       },
       error: (error) => {
         this.notify.error(`Error al registrarte: ${error.error.detail}`);
