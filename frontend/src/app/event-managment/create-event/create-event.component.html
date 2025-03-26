@@ -1,12 +1,11 @@
-<h5 class="fw-bold mx-sm-3 mb-4">Crear sesión</h5>
+<h5 class="fw-bold mx-sm-3 mb-4">Crear evento</h5>
 
 <form [formGroup]="eventForm" (ngSubmit)="!eventForm.invalid && createEvent()" class="w-100" style="max-width: 400px;">
     <div class="mb-3 ms-sm-3">
         <label for="name" class="form-label">Nombre</label>
         <input type="text" id="name" formControlName="name" class="form-control"
             placeholder="Ej. Pepito Pérez Gonalez" />
-        <div *ngIf="eventForm.controls['name'].touched && eventForm.controls['name'].invalid"
-            class="text-danger small">
+        <div *ngIf="eventForm.controls['name'].touched && eventForm.controls['name'].invalid" class="text-danger small">
             El nombre es obligatorio
         </div>
     </div>
@@ -23,8 +22,7 @@
 
     <div class="mb-3 ms-sm-3">
         <label for="capacity" class="form-label">Capacidad del evento</label>
-        <input id="capacity" type="number" min="1" formControlName="capacity" class="form-control"
-            placeholder="100" />
+        <input id="capacity" type="number" min="1" formControlName="capacity" class="form-control" placeholder="100" />
         <div *ngIf="eventForm.controls['capacity'].touched && eventForm.controls['capacity'].invalid"
             class="text-danger small">
             La capacidad del evento es obligatoria
@@ -53,16 +51,38 @@
 
     <div class="mb-3 ms-sm-3">
         <label for="location" class="form-label">Lugar del evento</label>
-        <input id="location" type="datetime-local" min="1" formControlName="location" class="form-control"
-            placeholder="100" />
+        <input id="location" type="text" min="1" formControlName="location" class="form-control" placeholder="Bogotá" />
         <div *ngIf="eventForm.controls['location'].touched && eventForm.controls['location'].invalid"
             class="text-danger small">
             El lugar del evento es obligatorio
         </div>
     </div>
+    <div class="mb-3 ms-sm-3">
+        <button class="btn btn-secondary mb-3" type="button" (click)="addSession()">+ Agregar Sesión</button>
+        <div formArrayName="session_ids">
+            @for (session of session_ids.controls; track session; let i = $index) {
+            <div>
+                <div class="form-group">
+                    <label for="{{'session-'+(i+1)}}">Sesión asignada # {{ i + 1}}</label>
+                </div>
+                <div class="row">
+                    <div class="col col-10">
+                        <select id="{{'session-'+(i+1)}}" class="form-control" formControlName="{{i}}">
+                            <option [ngValue]="null">Elija una sesión</option>
+                            <option *ngFor="let session of sessions" [ngValue]="session.id">{{ session.name }}</option>
+                        </select>
+                    </div>
+                    <div class="col col-2">
+                        <button class="btn btn-danger" type="button" (click)="removeSession(i)">Eliminar</button>
+                    </div>
+                </div>
+            </div>
+            }
+        </div>
+    </div>
 
     <div class="ms-sm-3">
-        <button type="submit" class="btn btn-primary me-2" [disabled]="!eventForm.valid">Guardar</button>
+        <button type="submit" class="btn btn-primary me-2" [disabled]="!eventForm.valid || !validarSession()">Guardar</button>
         <button type="button" class="btn btn-secondary">Cancelar</button>
     </div>
 </form>

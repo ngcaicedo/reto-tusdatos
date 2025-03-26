@@ -1,8 +1,10 @@
 import { Routes } from '@angular/router';
 import { CreateSpeakerComponent } from './session-managment/create-speaker/create-speaker.component';
 import { CreateSessionComponent } from './session-managment/create-session/create-session.component';
+import { CreateEventComponent } from './event-managment/create-event/create-event.component';
 
 export const routes: Routes = [
     {path: 'sessions/speaker/create', component: CreateSpeakerComponent, pathMatch: 'full'},
     {path: 'sessions/create', component: CreateSessionComponent, pathMatch: 'full'},
+    {path: 'events/create', component: CreateEventComponent, pathMatch: 'full'},
 ];
