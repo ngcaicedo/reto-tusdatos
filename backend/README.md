@@ -8,21 +8,51 @@ Este backend está desarrollado en FastAPI y gestiona usuarios, eventos, sesione
 Crea un archivo `.env`:
 
 ```env
-DATABASE_URL=postgresql://postgres:postgres@db:5432/mis_eventos
-SECRET_KEY=clave-super-secreta
+DATABASE_USER=
+DATABASE_PASSWORD=
+DATABASE_NAME=
+DATABASE_HOST=
+DATABASE_PORT=
+SECRETE_KEY=
 ```
+- Puede generar una SECRETE_KEY:  
+
+``` bash
+openssl rand -hex 32
+```   
 
 ## 📦 Estructura del backend
 
 ```bash
 app/
-├── api/         # Rutas
+├── api/         # Rutas 
 ├── db/          # Config DB y sesiones
 ├── models/      # Modelos con SQLModel
 ├── schemas/     # Esquemas Pydantic
 ├── core/        # Configuraciones y seguridad
 ├── main.py      # Entrada principal
 ```
+
+## Funcionalidades implementadas
+
+- **Autenticación de usuarios**
+  - Registro y login con validación
+  - Manejo de token e inyeccion de dependencia de usuario, tanto obligatoria como opcional
+
+- **Gestión de eventos**
+  - Listado de eventos 
+  - Detalle de evento 
+  - Creación y edición de eventos (sólo autenticados)
+  - Registro de usuarios a eventos 
+
+- **Sesiones**
+  - Visualización de sesiones por evento
+  - Creación y edición para organizadores
+
+- **Perfil**
+  - Visualización de eventos registrados
+  - CRUD de asistentes para gestionar su información.
+
 
 ## 🧪 Tests
 

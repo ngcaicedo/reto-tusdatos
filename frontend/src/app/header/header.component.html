@@ -1,7 +1,7 @@
 <div class="container-fluid">
     <nav class="navbar navbar-expand-lg bg-light  py-3">
         <div class="container-fluid">
-            <a class="navbar-brand fw-bold" href="#">
+            <a class="navbar-brand fw-bold" [routerLink]="'/events'">
                 <img src="assets/logo.png" alt="Logo" width="40" height="40" class="d-inline-block align-text-top">
             </a>
 
@@ -25,7 +25,7 @@
                         <a class="nav-link fw-semibold" [routerLink]="'/users/register'">Crear usuario</a>
                     </li>
                     <li class="nav-item" *ngIf="user()?.role === 'ASISTENTE'">
-                        <a class="nav-link fw-semibold" href="#">Contacto</a>
+                        <a class="nav-link fw-semibold" [routerLink]="'/events'">Contacto</a>
                     </li>
                 </ul>
 

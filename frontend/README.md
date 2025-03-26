@@ -1,59 +1,95 @@
-# Frontend
+# Frontend - Aplicación "Mis Eventos"
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.2.1.
+Este documento describe la arquitectura, configuración y principales decisiones técnicas tomadas para el desarrollo del **frontend** de la aplicación "Mis Eventos", desarrollada como parte del reto técnico de TusDatos.co.
 
-## Development server
+## Tecnologías utilizadas
 
-To start a local development server, run:
+- **Framework**: Angular 19
+- **Node.js**: v20
+- **Librerías adicionales**:
+  - @angular/router (enrutamiento)
+  - RxJS (programación reactiva)
+  - ng Bootstrap 
+  - ngx-toastr (notificaciones)
 
-```bash
-ng serve
-```
-
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
-
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+## Estructura del proyecto
 
 ```bash
-ng generate component component-name
+src/
+├── app/
+│   ├── auth-user/         # login y registro de usuarios
+│   ├── event-managment/   # Manejador de las acciones de los eventos
+│   ├── header/            # Estrucutura común
+│   ├── session-managment/ # Manejador de las acciones de las sesiones y ponentes
+│   ├── shared             # compartido como guard, interceptors, spinner etc..
+│   └── app.component.ts   # Componente principal
+│   └── app.routes.ts      # Rutas de las páginas
 ```
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+## Funcionalidades implementadas
+
+- **Autenticación de usuarios**
+  - Registro y login con validación
+  - Manejo de token y persistencia en localStorage
+  - Protección de rutas con `AuthGuard` y `RoleGuard`
+
+- **Gestión de eventos**
+  - Listado de eventos
+  - Detalle de evento (incluye sesiones)
+  - Creación de eventos (sólo autenticados)
+  - Registro de usuarios a eventos 
+
+- **Sesiones**
+  - Visualización de sesiones por evento
+  - Creación para organizadores
+
+- **Perfil**
+  - Visualización de eventos registrados
+
+
+
+## Seguridad
+
+- Las rutas protegidas usan `AuthGuard` para validar autenticación
+- `RoleGuard` verifica los roles para acceso a funcionalidades específicas
+- El token JWT se adjunta a cada petición usando un `HttpInterceptor`
+- Validaciones de formularios (front y backend)
+
+## Buenas prácticas
+
+- Arquitectura basada en features + core/shared
+- Componentes standalone para mayor reutilización
+- Lazy loading para mejorar el rendimiento
+- Naming consistente y uso de tipado fuerte (TypeScript)
+
+## Tests
+
+- Se implementaron pruebas unitarias con `@angular/core/testing`
+- Cobertura para componentes, servicios y guards
+- Mocking de servicios HTTP con `HttpTestingController`
+
+## Instalación y ejecución
 
 ```bash
-ng generate --help
+npm install
+npm run start
 ```
 
-## Building
+## Variables de entorno
 
-To build the project run:
+Las variables necesarias se encuentran en `environment.ts`, incluyendo:
 
-```bash
-ng build
-```
+- `API_BASE_URL`: URL base del backend
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+## Mejoras futuras
 
-## Running unit tests
+- Integrar cache con SWR o Apollo
+- Mejorar cobertura de pruebas
+- Implementar accesibilidad (a11y)
+- Implementar paginación de los eventos
 
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
+---
 
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+**Autor**: Nicolas Caicedo  
+**Fecha**: Marzo 2025  
+**Proyecto**: Reto técnico TusDatos.co

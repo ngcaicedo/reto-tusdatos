@@ -7,7 +7,7 @@ Proyecto Full Stack desarrollado como prueba técnica para TusDatos.co. Esta pla
 ```bash
 reto-eventos/
 ├── backend/   # FastAPI + PostgreSQL + Alembic + TDD
-├── frontend/  # Angular
+├── frontend/  # Angular + TDD
 ├── docker-compose.yml
 └── README.md
 ```
@@ -22,7 +22,12 @@ docker-compose up --build
 
 La aplicación estará disponible en:
 - API: http://localhost:8000/docs
-- Frontend: http://localhost:4200 
+- Frontend: http://localhost:4200/events
+- Se tiene un usuario por defecto que puede crear usuario organizadores y también crear eventos, sesiones y ponentes:
+    - username: admin@gmail.com
+    - password: admin
+- No olvidar crear el archivo .env en el backend como el env_example, para poder guardar variables de conexion de base de datos
+
 
 ## 📁 Documentación por módulo
 
@@ -31,10 +36,10 @@ La aplicación estará disponible en:
 
 ## ✅ Funcionalidades principales
 
-- Gestión de eventos y sesiones
+- Creación de eventos y sesiones
 - Registro y autenticación de usuarios
 - Inscripción de asistentes a eventos
-- Validación de capacidad y horarios
+- Ver eventos y su respectivo detalle
 
 ## 🧪 Tests
 
@@ -44,10 +49,16 @@ cd backend
 poetry run pytest --cov=app
 ```
 
+```bash
+# Ejecutar solo los tests del backend
+cd frontend
+ng test --watch=false --browsers=ChromeHeadless 
+```
+
 ## 🧠 Tecnologías usadas
 
 - FastAPI, SQLModel, PostgreSQL, Alembic
-- Angular, RxJS, Angular Router
+- Angular, Bootstrap
 - Docker, Docker Compose
 - Pytest, Faker, Poetry
 
