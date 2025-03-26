@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { CardEventComponent } from './card-event.component';
+import { provideRouter } from '@angular/router';
 
 describe('CardEventComponent', () => {
   let component: CardEventComponent;
@@ -8,7 +9,10 @@ describe('CardEventComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [CardEventComponent]
+      imports: [CardEventComponent],
+      providers: [
+        provideRouter([])
+      ]
     })
     .compileComponents();
 
