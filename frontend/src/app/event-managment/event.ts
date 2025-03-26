@@ -11,6 +11,7 @@ export class Event {
   location: string;
   user_created_id: number;
   sessions: Session[];
+  is_registered: boolean;
 
   constructor(
     id: number,
@@ -22,7 +23,8 @@ export class Event {
     date_end: string,
     location: string,
     user_created_id: number,
-    sessions: Session[]
+    sessions: Session[],
+    is_registered: boolean
   ) {
     this.id = id;
     this.name = name;
@@ -34,5 +36,6 @@ export class Event {
     this.location = location;
     this.user_created_id = user_created_id;
     this.sessions = sessions;
+    this.is_registered = is_registered
   }
 }

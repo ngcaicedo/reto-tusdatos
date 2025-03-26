@@ -30,7 +30,8 @@ describe('DetailEventComponent', () => {
         id: 1,
         name: 'test',
       }),
-    ]
+    ],
+    false,
   );
 
   beforeEach(async () => {

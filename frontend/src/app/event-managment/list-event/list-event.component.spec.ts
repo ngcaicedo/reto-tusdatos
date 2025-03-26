@@ -28,7 +28,8 @@ describe('ListEventComponent', () => {
       '2021-10-11',
       'Location 1',
       1,
-      [new Session(1, 'Session 1', 'Description 1', new Date().toString(), 1, 1, {id: 1, name: 'test'})]
+      [new Session(1, 'Session 1', 'Description 1', new Date().toString(), 1, 1, {id: 1, name: 'test'})],
+      false
     ),
     new Event(
       2,
@@ -40,7 +41,8 @@ describe('ListEventComponent', () => {
       '2021-10-13',
       'Location 2',
       2,
-      [new Session(2, 'Session 2', 'Description 2', new Date().toString(), 2, 2, {id: 1, name: 'test'})]
+      [new Session(2, 'Session 2', 'Description 2', new Date().toString(), 2, 2, {id: 1, name: 'test'})],
+      true
     ),
   ];
 
