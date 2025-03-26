@@ -184,3 +184,37 @@ def test_get_event(client, user_factory, event_factory, session_factory, auth_he
     assert response_data['description'] == data['description']
     assert response_data['state'] == data['state']
     assert response_data['user_created_id'] == data['user_created_id']
+    
+    
+def test_event_detail_without_auth_returns_not_registered(client, user_factory, event_factory, session_factory, auth_header):
+    role = [RoleEnum.ADMIN, RoleEnum.ORGANIZADOR]
+    user_logged = user_factory.login_user(role=faker.Faker().random_element(elements=role))
+    data = event_factory.generate_data(user_id=user_logged['user_id'], state=StateEnum.CREADO)
+    session = session_factory.create_session(client, auth_header)
+    data['session_ids'] = [session['id']]
+
+    response = client.post('/events/create', json=data)
+    assert response.status_code == 201
+    response_data = response.json()
+    response = client.get(f"/events/{response_data['id']}")
+    assert response.status_code == 200
+    assert response.json()["is_registered"] is False
+
+def test_event_detail_with_registered_user_returns_registered(client, user_factory, event_factory, session_factory, auth_header):
+    role = [RoleEnum.ADMIN, RoleEnum.ORGANIZADOR]
+    user_logged = user_factory.login_user(role=faker.Faker().random_element(elements=role))
+    data = event_factory.generate_data(user_id=user_logged['user_id'], state=StateEnum.CREADO)
+    session = session_factory.create_session(client, auth_header)
+    data['session_ids'] = [session['id']]
+    response = client.post('/events/create', json=data)
+    assert response.status_code == 201
+    response_data = response.json()
+    
+    assistant = user_factory.login_user(role=RoleEnum.ASISTENTE)
+    headers = auth_header(assistant)
+
+    response = client.post(f"/events/register/{response_data['id']}", headers=headers)
+    assert response.status_code == 201
+    response = client.get(f"/events/{response_data['id']}", headers=auth_header)
+    assert response.status_code == 200
+    assert response.json()["is_registered"] is True

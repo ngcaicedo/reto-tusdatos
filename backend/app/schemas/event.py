@@ -38,5 +38,6 @@ class EventResponse(BaseModel):
     location: str
     user_created_id: int
     sessions: list[SessionResponse] = []  # <-- Aquí incluyes las sesiones asociadas
+    is_registered: bool = False
 
     model_config = ConfigDict(from_attributes=True)
