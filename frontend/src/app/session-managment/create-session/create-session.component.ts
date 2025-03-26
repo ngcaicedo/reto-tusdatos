@@ -40,6 +40,7 @@ export class CreateSessionComponent {
     this.sessionForm = this.formBuilder.group({
       name: ['', Validators.required],
       description: ['', Validators.required],
+      date_start: ['', Validators.required],
       duration: ['', Validators.required],
       speaker_id: ['', Validators.required],
     });

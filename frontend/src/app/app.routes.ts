@@ -5,6 +5,8 @@ import { CreateEventComponent } from './event-managment/create-event/create-even
 import { ListEventComponent } from './event-managment/list-event/list-event.component';
 
 export const routes: Routes = [
+    {path: '', redirectTo: 'events', pathMatch: 'full'},
+    {path: 'events', component: ListEventComponent, pathMatch: 'full'},
     {path: 'sessions/speaker/create', component: CreateSpeakerComponent, pathMatch: 'full'},
     {path: 'sessions/create', component: CreateSessionComponent, pathMatch: 'full'},
     {path: 'events/create', component: CreateEventComponent, pathMatch: 'full'},
