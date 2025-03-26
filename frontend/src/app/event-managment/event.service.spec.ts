@@ -60,4 +60,34 @@ describe('EventService', () => {
 
     req.flush(event);
   });
+
+  it('should send a GET request to get all events', () => {
+    const events = [
+      {
+        name: 'test',
+        description: 'test',
+        capacity: 100,
+        state: 'CREADO',
+        date_start: '2021-09-02',
+        date_end: '2021-09-03',
+        location: 'test',
+        user_created_id: 1,
+        session_ids: [1],
+      },
+    ];
+
+    service.getEvents().subscribe({
+      next: (res) => {
+        expect(res).toEqual(events);
+      },
+      error: (err) => {
+        console.error('error en la petición', err);
+      },
+    });
+
+    const req = httpMock.expectOne(`${environment.apiUrl}/events`);
+    expect(req.request.method).toBe('GET');
+
+    req.flush(events);
+  });
 });
