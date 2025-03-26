@@ -22,7 +22,7 @@
 
     <div class="mb-3 ms-sm-3">
         <label for="phone" class="form-label">Número de telefono</label>
-        <input id="phone" type="number" min="1" formControlName="phone" class="form-control" placeholder="1234567" />
+        <input id="phone" type="text" formControlName="phone" class="form-control" placeholder="1234567" />
         <div *ngIf="userForm.controls['phone']?.touched && userForm.controls['phone']?.invalid"
             class="text-danger small">
             El numero de teléfono es obligatorio.
@@ -31,12 +31,12 @@
 
     <div class="mb-3 ms-sm-3">
         <label for="role" class="form-label">Rol del usuario</label>
-        <select formControlName="role" id="role" class="from-control">
+        <select formControlName="role" id="role" class="form-select">
             <option value="">Elija un rol</option>
             <option value="ADMIN">Administrador</option>
             <option value="ORGANIZADOR">Organizador</option>
         </select>
-        <div *ngIf="userForm.controls['date_end']?.touched && userForm.controls['date_end']?.invalid"
+        <div *ngIf="userForm.controls['role']?.touched && userForm.controls['role']?.invalid"
             class="text-danger small">
             El rol es obligatorio
         </div>
@@ -53,6 +53,6 @@
 
     <div class="ms-sm-3">
         <button type="submit" class="btn btn-primary me-2" [disabled]="!userForm.valid">Guardar</button>
-        <button type="button" class="btn btn-secondary">Cancelar</button>
+        <button type="button" class="btn btn-secondary" (click)="userForm.reset()">Cancelar</button>
     </div>
 </form>

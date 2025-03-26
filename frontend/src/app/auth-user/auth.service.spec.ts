@@ -46,7 +46,7 @@ describe('AuthService', () => {
         console.error('error en la petición', err);
       },
     });
-    const req = httpMock.expectOne(`${environment.apiUrl}/auth/register`);
+    const req = httpMock.expectOne(`${environment.apiUrl}/users/register`);
     expect(req.request.method).toBe('POST');
     req.flush(user);
   });

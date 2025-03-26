@@ -19,6 +19,6 @@ export class AuthService {
     password: string;
     role: string;
   }) {
-    return this.http.post(`${this.apiUrl}/auth/register`, user);
+    return this.http.post(`${this.apiUrl}/users/register`, user);
   }
 }

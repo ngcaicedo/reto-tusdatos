@@ -21,6 +21,9 @@
                     <li class="nav-item" *ngIf="user()?.role === 'ADMIN' || user()?.role === 'ORGANIZADOR'">
                         <a class="nav-link fw-semibold" [routerLink]="'/sessions/speaker/create'">Crear ponente</a>
                     </li>
+                    <li class="nav-item" *ngIf="user()?.role === 'ADMIN' || user()?.role === 'ORGANIZADOR'">
+                        <a class="nav-link fw-semibold" [routerLink]="'/users/register'">Crear usuario</a>
+                    </li>
                     <li class="nav-item" *ngIf="user()?.role === 'ASISTENTE'">
                         <a class="nav-link fw-semibold" href="#">Contacto</a>
                     </li>

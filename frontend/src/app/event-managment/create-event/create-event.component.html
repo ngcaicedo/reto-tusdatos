@@ -83,6 +83,6 @@
 
     <div class="ms-sm-3">
         <button type="submit" class="btn btn-primary me-2" [disabled]="!eventForm.valid || !validarSession()">Guardar</button>
-        <button type="button" class="btn btn-secondary">Cancelar</button>
+        <button type="button" class="btn btn-secondary" (click)="eventForm.reset()">Cancelar</button>
     </div>
 </form>

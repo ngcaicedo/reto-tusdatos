@@ -1,7 +1,13 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import { NotificationService } from '../../shared/services/notification.service';
+import { AuthService } from '../auth.service';
 
 @Component({
   selector: 'app-register-organization',
@@ -14,6 +20,7 @@ export class RegisterOrganizationComponent {
   constructor(
     private formBuilder: FormBuilder,
     private notify: NotificationService,
+    private authService: AuthService
   ) {}
 
   ngOnInit(): void {
@@ -27,6 +34,13 @@ export class RegisterOrganizationComponent {
   }
 
   createUser() {
-    this.notify.success('Usuario creado correctamente');
+    this.authService.registerUser(this.userForm.value).subscribe({
+      next: (response) => {
+        this.notify.success('Usuario creado correctamente');
+      },
+      error: (error) => {
+        this.notify.error(`Error al crear usuario: ${error.error.detail}`);
+      },
+    });
   }
 }

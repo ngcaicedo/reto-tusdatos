@@ -46,5 +46,13 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./event-managment/create-event/create-event.component').then(m => m.CreateEventComponent),
     pathMatch: 'full',
+  },
+
+  {
+    path: 'users/register',
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import('./auth-user/register-organization/register-organization.component').then(m => m.RegisterOrganizationComponent),
+    pathMatch: 'full',
   }
 ];

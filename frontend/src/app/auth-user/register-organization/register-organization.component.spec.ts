@@ -3,6 +3,8 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { RegisterOrganizationComponent } from './register-organization.component';
 import { NotificationService } from '../../shared/services/notification.service';
 import { ReactiveFormsModule } from '@angular/forms';
+import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 
 describe('RegisterOrganizationComponent', () => {
   let component: RegisterOrganizationComponent;
@@ -20,6 +22,8 @@ describe('RegisterOrganizationComponent', () => {
       imports: [RegisterOrganizationComponent],
       providers: [
         { provide: NotificationService, useValue: mockNotifyService },
+        provideHttpClient(),
+        provideHttpClientTesting()
       ]
     })
     .compileComponents();
