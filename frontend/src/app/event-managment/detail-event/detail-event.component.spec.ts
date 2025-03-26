@@ -6,6 +6,7 @@ import { NotificationService } from '../../shared/services/notification.service'
 import { Event } from '../event';
 import { Session } from '../../session-managment/session';
 import { of } from 'rxjs';
+import { provideRouter } from '@angular/router';
 
 describe('DetailEventComponent', () => {
   let component: DetailEventComponent;
@@ -35,6 +36,7 @@ describe('DetailEventComponent', () => {
       providers: [
         { provide: EventService, useValue: mockEventService },
         { provide: NotificationService, useValue: mockNotifyService },
+        provideRouter([])
       ],
     }).compileComponents();
 
