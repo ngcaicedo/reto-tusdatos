@@ -1,4 +1,5 @@
 from pydantic import BaseModel
+from datetime import datetime
 
 class SessionBase(BaseModel):
     name: str
@@ -15,15 +16,18 @@ class SpeakerResponse(SessionBase):
 class SessionCreate(SessionBase):
     description: str
     duration: int
+    date_start: datetime
     speaker_id: int
     
 class SessionUpdate(SessionBase):
     description: str
     duration: int
+    date_start: datetime
     speaker_id: int
     
 class SessionResponse(SessionBase):
     id: int
     description: str
     duration: int
+    date_start: datetime
     speaker_id: int

@@ -24,6 +24,7 @@ class SessionFactory:
         data_session = {
             'name': self.fake.name(),
             'description': self.fake.text(),
+            "date_start": self.fake.date_time().isoformat(),
             'duration': self.fake.random_int(min=2, max=60),
             'speaker_id': speaker.get('id'),
         }

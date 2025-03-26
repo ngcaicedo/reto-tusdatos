@@ -1,5 +1,5 @@
 from app.db.base import BaseModel
-from sqlalchemy import Column, Integer, String, ForeignKey
+from sqlalchemy import Column, Integer, String, ForeignKey, DateTime
 from sqlalchemy.orm import relationship
 
 
@@ -31,6 +31,7 @@ class Session(BaseModel):
 
     description = Column(String, index=True, nullable=False)
     duration = Column(Integer, index=True, nullable=False)
+    date_start = Column(DateTime, index=True, nullable=False)
     event_id = Column(Integer, ForeignKey("events.id"))
     speaker_id = Column(Integer, ForeignKey("speakers.id"), nullable=False)
 

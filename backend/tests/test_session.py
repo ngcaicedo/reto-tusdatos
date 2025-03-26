@@ -119,6 +119,7 @@ def test_create_session(client, auth_header, user_factory):
     data = {
         "name": faker.name(),
         "description": faker.text(),
+        "date_start": faker.date_time().isoformat(),
         "duration": faker.random_int(min=1, max=60),
         "speaker_id": speaker.get("id"),
     }
@@ -144,6 +145,7 @@ def test_create_session_duplicate(client, auth_header, user_factory):
     data = {
         "name": faker.name(),
         "description": faker.text(),
+        "date_start": faker.date_time().isoformat(),
         "duration": faker.random_int(min=1, max=60),
         "speaker_id": speaker.get("id"),
     }
@@ -165,6 +167,7 @@ def test_update_session(client, auth_header, user_factory):
     data = {
         "name": faker.name(),
         "description": faker.text(),
+        "date_start": faker.date_time().isoformat(),
         "duration": faker.random_int(min=1, max=60),
         "speaker_id": speaker.get("id"),
     }
@@ -173,6 +176,7 @@ def test_update_session(client, auth_header, user_factory):
     data2 = {
         "name": faker.name(),
         "description": faker.text(),
+        "date_start": faker.date_time().isoformat(),
         "duration": faker.random_int(min=1, max=60),
         "speaker_id": speaker.get("id"),
     }
@@ -197,6 +201,7 @@ def test_update_session_not_found(client, auth_header, user_factory):
     data = {
         "name": faker.name(),
         "description": faker.text(),
+        "date_start": faker.date_time().isoformat(),
         "duration": faker.random_int(min=1, max=60),
         "speaker_id": speaker.get("id"),
     }
@@ -218,6 +223,7 @@ def test_get_sessions(client, auth_header, user_factory):
     data = {
         "name": faker.name(),
         "description": faker.text(),
+        "date_start": faker.date_time().isoformat(),
         "duration": faker.random_int(min=1, max=60),
         "speaker_id": speaker.get("id"),
     }
@@ -243,6 +249,7 @@ def test_get_session(client, auth_header, user_factory):
     data = {
         "name": faker.name(),
         "description": faker.text(),
+        "date_start": faker.date_time().isoformat(),
         "duration": faker.random_int(min=1, max=60),
         "speaker_id": speaker.get("id"),
     }
