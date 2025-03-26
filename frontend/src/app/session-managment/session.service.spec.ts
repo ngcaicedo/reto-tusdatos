@@ -39,6 +39,7 @@ describe('SessionService', () => {
     const session = {
       name: 'test',
       description: 'test',
+      date_start: new Date().toString(),
       duration: 100,
       speaker_id: speaker.id,
     };
@@ -61,8 +62,8 @@ describe('SessionService', () => {
 
   it('should send a GET request to get sessions', () => {
     const sessions =[
-      new Session(1, 'test1', 'test1', 100, 1),
-      new Session(2, 'test2', 'test2', 200, 2),
+      new Session(1, 'test1', 'test1', new Date().toString(), 100, 1),
+      new Session(2, 'test2', 'test2', new Date().toString(), 200, 2),
     ]
 
     service.getSessions().subscribe({
