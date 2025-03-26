@@ -123,4 +123,20 @@ describe('EventService', () => {
     req.flush(event);
   });
 
+  it('should send a POST request to register user to event', () => {
+    service.registerUserToEvent(1).subscribe({
+      next: (res) => {
+        expect(res).toEqual({"message": "Registro exitoso", "event_id": 1});
+      },
+      error: (err) => {
+        console.error('error en la petición', err);
+      },
+    });
+
+    const req = httpMock.expectOne(`${environment.apiUrl}/events/register/1`);
+    expect(req.request.method).toBe('POST');
+
+    req.flush({"message": "Registro exitoso", "event_id": 1});
+  });
+
 });
