@@ -8,6 +8,7 @@ import {
 import { provideHttpClient } from '@angular/common/http';
 import { Speaker } from './speaker';
 import { environment } from '../../environments/environment';
+import { Session } from './session';
 
 describe('SessionService', () => {
   let service: SessionService;
@@ -56,6 +57,26 @@ describe('SessionService', () => {
     expect(req.request.body).toEqual(session);
 
     req.flush(session);
+  });
+
+  it('should send a GET request to get sessions', () => {
+    const sessions =[
+      new Session(1, 'test1', 'test1', 100, 1),
+      new Session(2, 'test2', 'test2', 200, 2),
+    ]
+
+    service.getSessions().subscribe({
+      next: (res) => {
+        expect(res).toEqual(sessions);
+      },
+      error: (err) => {
+        console.error('error en la petición', err);
+      },
+    });
+
+    const req = httpMock.expectOne(`${environment.apiUrl}/sessions`);
+    expect(req.request.method).toBe('GET');
+    req.flush(sessions);
   });
 
   it('should send a POST request to create Speaker', () => {
