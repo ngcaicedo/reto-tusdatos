@@ -1,1 +1,68 @@
-<p>create-event works!</p>
+<h5 class="fw-bold mx-sm-3 mb-4">Crear sesión</h5>
+
+<form [formGroup]="eventForm" (ngSubmit)="!eventForm.invalid && createEvent()" class="w-100" style="max-width: 400px;">
+    <div class="mb-3 ms-sm-3">
+        <label for="name" class="form-label">Nombre</label>
+        <input type="text" id="name" formControlName="name" class="form-control"
+            placeholder="Ej. Pepito Pérez Gonalez" />
+        <div *ngIf="eventForm.controls['name'].touched && eventForm.controls['name'].invalid"
+            class="text-danger small">
+            El nombre es obligatorio
+        </div>
+    </div>
+
+    <div class="mb-3 ms-sm-3">
+        <label for="description" class="form-label">Descripción</label>
+        <textarea id="description" formControlName="description" class="form-control"
+            placeholder="Descripción de la sesión"></textarea>
+        <div *ngIf="eventForm.controls['description'].touched && eventForm.controls['description'].invalid"
+            class="text-danger small">
+            La descripción es obligatoria
+        </div>
+    </div>
+
+    <div class="mb-3 ms-sm-3">
+        <label for="capacity" class="form-label">Capacidad del evento</label>
+        <input id="capacity" type="number" min="1" formControlName="capacity" class="form-control"
+            placeholder="100" />
+        <div *ngIf="eventForm.controls['capacity'].touched && eventForm.controls['capacity'].invalid"
+            class="text-danger small">
+            La capacidad del evento es obligatoria
+        </div>
+    </div>
+
+    <div class="mb-3 ms-sm-3">
+        <label for="date_start" class="form-label">Fecha de inicio del evento</label>
+        <input id="date_start" type="datetime-local" min="1" formControlName="date_start" class="form-control"
+            placeholder="100" />
+        <div *ngIf="eventForm.controls['date_start'].touched && eventForm.controls['date_start'].invalid"
+            class="text-danger small">
+            La fecha de inicio es obligatoria
+        </div>
+    </div>
+
+    <div class="mb-3 ms-sm-3">
+        <label for="date_end" class="form-label">Fecha fin del evento</label>
+        <input id="date_end" type="datetime-local" min="1" formControlName="date_end" class="form-control"
+            placeholder="100" />
+        <div *ngIf="eventForm.controls['date_end'].touched && eventForm.controls['date_end'].invalid"
+            class="text-danger small">
+            La fecha de fin es obligatoria
+        </div>
+    </div>
+
+    <div class="mb-3 ms-sm-3">
+        <label for="location" class="form-label">Lugar del evento</label>
+        <input id="location" type="datetime-local" min="1" formControlName="location" class="form-control"
+            placeholder="100" />
+        <div *ngIf="eventForm.controls['location'].touched && eventForm.controls['location'].invalid"
+            class="text-danger small">
+            El lugar del evento es obligatorio
+        </div>
+    </div>
+
+    <div class="ms-sm-3">
+        <button type="submit" class="btn btn-primary me-2" [disabled]="!eventForm.valid">Guardar</button>
+        <button type="button" class="btn btn-secondary">Cancelar</button>
+    </div>
+</form>
