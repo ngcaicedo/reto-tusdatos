@@ -138,7 +138,7 @@ def get_event(db: Session, event_id: int):
     Returns:
         Event: Evento registrado
     """
-    return db.query(Event).options(joinedload(Event.sessions).joinedload(SessionModel.speaker)).filter(Event.id == event_id).first()
+    return db.query(Event).options(joinedload(Event.sessions).joinedload(SessionModel.speaker), joinedload(Event.assistants)).filter(Event.id == event_id).first()
 
 
 def register_to_event(db: Session, event_id: int, current_user: User):

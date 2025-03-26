@@ -192,29 +192,39 @@ def test_event_detail_without_auth_returns_not_registered(client, user_factory, 
     data = event_factory.generate_data(user_id=user_logged['user_id'], state=StateEnum.CREADO)
     session = session_factory.create_session(client, auth_header)
     data['session_ids'] = [session['id']]
-
-    response = client.post('/events/create', json=data)
+    headers = auth_header(user_logged)
+    response = client.post('/events/create', json=data, headers=headers)
     assert response.status_code == 201
+    
     response_data = response.json()
     response = client.get(f"/events/{response_data['id']}")
     assert response.status_code == 200
     assert response.json()["is_registered"] is False
 
-def test_event_detail_with_registered_user_returns_registered(client, user_factory, event_factory, session_factory, auth_header):
+def test_event_detail_with_registered_user_returns_registered(client, user_factory, event_factory, session_factory, auth_header, assistant_payload):
     role = [RoleEnum.ADMIN, RoleEnum.ORGANIZADOR]
     user_logged = user_factory.login_user(role=faker.Faker().random_element(elements=role))
     data = event_factory.generate_data(user_id=user_logged['user_id'], state=StateEnum.CREADO)
     session = session_factory.create_session(client, auth_header)
     data['session_ids'] = [session['id']]
-    response = client.post('/events/create', json=data)
+    headers = auth_header(user_logged)
+    response = client.post('/events/create', json=data, headers=headers)
     assert response.status_code == 201
     response_data = response.json()
     
-    assistant = user_factory.login_user(role=RoleEnum.ASISTENTE)
-    headers = auth_header(assistant)
+    data = assistant_payload()
+    response = client.post("/users/register/assistant", json=data)
+    assert response.status_code == 201
+
+    response_login = client.post("/auth/login", data={
+        "username": data["email"],
+        "password": data["password"]
+    })
+    token = response_login.json()["access_token"]
+    headers = {"Authorization": f"Bearer {token}"}
 
     response = client.post(f"/events/register/{response_data['id']}", headers=headers)
     assert response.status_code == 201
-    response = client.get(f"/events/{response_data['id']}", headers=auth_header)
+    response = client.get(f"/events/{response_data['id']}", headers=headers)
     assert response.status_code == 200
     assert response.json()["is_registered"] is True

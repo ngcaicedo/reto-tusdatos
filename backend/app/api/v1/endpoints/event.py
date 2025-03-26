@@ -1,10 +1,12 @@
+from typing import Optional
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 from app.db.session import get_db
 from app.core.managment import Managment
 from app.schemas.event import EventCreate, EventResponse, EventUpdate
 from app.models.user import User
-from app.core.authenticator.auth import get_current_user
+from app.core.authenticator.auth import get_current_user, get_current_user_optional
+from app.models.assistant import Assistant
 
 managment = Managment()
 
@@ -53,7 +55,7 @@ def get_events(db: Session = Depends(get_db)):
     return managment.get_events(db)
 
 @event_router.get("/{event_id}", response_model=EventResponse)
-def get_event(event_id: int, db: Session = Depends(get_db)):
+def get_event(event_id: int, db: Session = Depends(get_db), current_user: Optional[Assistant] = Depends(get_current_user_optional)):
     """ 
     Endpoint para obtener un evento
     Args:
@@ -63,7 +65,16 @@ def get_event(event_id: int, db: Session = Depends(get_db)):
     Returns:
         EventResponse: Evento obtenido
     """
-    return managment.get_event(db, event_id)
+    event = managment.get_event(db, event_id)
+    is_registered = (
+        any(assistant.id == current_user.id for assistant in event.assistants)
+        if current_user
+        else False
+    )
+    
+    evnt_mod = EventResponse.model_validate(event).model_dump()
+    evnt_mod["is_registered"] = is_registered
+    return evnt_mod
 
 
 @event_router.post("/register/{event_id}", status_code=201)

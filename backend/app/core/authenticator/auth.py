@@ -1,17 +1,20 @@
+from typing import Optional
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
-from fastapi import Depends, HTTPException, status
+from fastapi import Depends, HTTPException, status, Security
 import jwt
 from jwt.exceptions import InvalidTokenError
 
 from .security import verify_password
 from .jwt_utils import create_access_token, SECRET_KEY, ALGORITHM
-from app.models import User
+from app.models import User, Assistant
 from sqlalchemy.orm import Session
 from app.schemas.user import UserLogin
 from app.db.session import get_db
 
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/login")
+oauth2_scheme_optional = OAuth2PasswordBearer(tokenUrl="auth/login", auto_error=False)
+
 
 def authenticate_user(db: Session, login_data: UserLogin) -> User | None:
     """ 
@@ -69,6 +72,7 @@ def login_user(form_data: OAuth2PasswordRequestForm, db: Session) -> dict:
 
 
 def get_current_user(db: Session = Depends(get_db), token: str = Depends(oauth2_scheme)) -> User:
+    """  """
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail="No autorizado",
@@ -87,3 +91,16 @@ def get_current_user(db: Session = Depends(get_db), token: str = Depends(oauth2_
         raise credentials_exception
 
     return user
+
+def get_current_user_optional(
+    token: Optional[str] = Security(oauth2_scheme_optional),
+    db: Session = Depends(get_db)
+) -> Optional[Assistant]:
+    """ Función para obtener el usuario autenticado pero opcional """
+    try:
+        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        email: str = payload.get("sub")
+        user = db.query(Assistant).filter(Assistant.email == email).first()
+        return user
+    except Exception:
+        return None
