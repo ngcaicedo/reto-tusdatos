@@ -62,6 +62,14 @@ ng test --watch=false --browsers=ChromeHeadless
 - Docker, Docker Compose
 - Pytest, Faker, Poetry
 
+# Cobertura de pruebas Backend
+![image](https://github.com/user-attachments/assets/901f971f-488e-4913-b69f-5c6fd0f6c2f8)
+
+# Cobertura de pruebas FrontEnd
+![image](https://github.com/user-attachments/assets/91c8b22f-83b9-4a8c-81d1-0bb2b54906ed)
+
+
+
 # Arquitectura 
 ## Diagrama de componentes
 ![reto-tusdatos drawio (1)](https://github.com/user-attachments/assets/181af085-5fdf-4ab0-8efe-fdb617a5ef23)
