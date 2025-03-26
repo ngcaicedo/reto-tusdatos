@@ -62,6 +62,20 @@ ng test --watch=false --browsers=ChromeHeadless
 - Docker, Docker Compose
 - Pytest, Faker, Poetry
 
+# Arquitectura 
+## Diagrama de componentes
+![reto-tusdatos drawio (1)](https://github.com/user-attachments/assets/181af085-5fdf-4ab0-8efe-fdb617a5ef23)
+
+## Diagrama de clases
+![image](https://github.com/user-attachments/assets/20e14714-83fa-44d2-97df-3a26ea9cd5d5)
+
+# User Story Map
+![USM - TusDatos (1)](https://github.com/user-attachments/assets/f49c3859-333c-4b03-b44d-294c06182512)
+
+# Mockups
+![UI Diseño Mis eventos RETO](https://github.com/user-attachments/assets/0ef2706d-d33d-476c-9118-a03b0b2006c4)
+
+
 ## 📌 Autor
 
 **Nicolás Caicedo** – Desarrollador Full Stack
