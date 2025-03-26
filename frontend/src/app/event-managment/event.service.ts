@@ -38,6 +38,6 @@ export class EventService {
   }
 
   getEventsRegistedAssistant(): Observable<Event[]> {
-    return this.http.get<Event[]>(`${this.apiUrl}/events/register`);
+    return this.http.get<Event[]>(`${this.apiUrl}/events/assistant/register`);
   }
 }

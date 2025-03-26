@@ -167,7 +167,7 @@ describe('EventService', () => {
       },
     });
 
-    const req = httpMock.expectOne(`${environment.apiUrl}/events/register`);
+    const req = httpMock.expectOne(`${environment.apiUrl}/events/assistant/register`);
     expect(req.request.method).toBe('GET');
 
     req.flush(events);

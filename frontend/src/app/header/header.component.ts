@@ -6,12 +6,13 @@ import { AuthStateService } from '../shared/states/auth-state.service';
 import { CommonModule } from '@angular/common';
 import { ListEventComponent } from '../event-managment/list-event/list-event.component';
 import { RouterModule } from '@angular/router';
+import { NgbNavModule } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.css'],
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, NgbNavModule, RouterModule],
 })
 export class HeaderComponent implements OnInit {
   user: any;

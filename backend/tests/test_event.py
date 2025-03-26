@@ -243,7 +243,7 @@ def test_get_events_assistant_register(client, assistant_factory, user_factory, 
     event_assistant1 = event_assistant_factory(client, event1.id, headers)
     event_assistant2 = event_assistant_factory(client, event2.id, headers)
     
-    response = client.get("/events/register", headers=headers)
+    response = client.get("/events/assistant/register", headers=headers)
     assert response.status_code == 200
     response_data = response.json()
     assert len(response_data) == 2

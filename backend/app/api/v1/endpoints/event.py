@@ -41,6 +41,18 @@ def update_event(event_id: int, event_data: EventUpdate, db: Session = Depends(g
     """
     return managment.update_event(db, event_id, event_data)
 
+@event_router.get("/assistant/register", response_model=list[EventResponse])
+def get_events_register_by_assistant(db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
+    """ 
+    Endpoint para obtener la lista de eventos registrados por un asistente
+    Args:
+        db (Session): Sesión de la base de datos
+        current_user (User): Usuario autenticado
+    Returns:
+        list[EventResponse]: Lista de eventos registrados por el asistente
+    """
+    return managment.get_events_register_by_assistant(db, current_user)
+
 
 @event_router.get("/events", response_model=list[EventResponse])
 def get_events(db: Session = Depends(get_db)):
@@ -54,17 +66,6 @@ def get_events(db: Session = Depends(get_db)):
     """
     return managment.get_events(db)
 
-@event_router.get("/register", response_model=list[EventResponse])
-def get_events_register_by_assistant(db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
-    """ 
-    Endpoint para obtener la lista de eventos registrados por un asistente
-    Args:
-        db (Session): Sesión de la base de datos
-        current_user (User): Usuario autenticado
-    Returns:
-        list[EventResponse]: Lista de eventos registrados por el asistente
-    """
-    return managment.get_events_register_by_assistant(db, current_user)
 
 @event_router.get("/{event_id}", response_model=EventResponse)
 def get_event(event_id: int, db: Session = Depends(get_db), current_user: Optional[Assistant] = Depends(get_current_user_optional)):

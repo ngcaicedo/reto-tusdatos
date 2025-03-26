@@ -53,4 +53,28 @@
             </div>
         </div>
     </nav>
+    <div class="d-flex justify-content-between align-items-center border-bottom pb-2 mb-3">
+        <!-- Tabs centradas -->
+        <ul ngbNav class="nav nav-tabs border-0 mx-auto custom-tabs">
+            <li ngbNavItem>
+                <a ngbNavLink routerLink="/events" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }"
+                    class="nav-link">
+                    Próximos eventos
+                </a>
+            </li>
+            <li ngbNavItem *ngIf="user()?.role === 'ASISTENTE'">
+                <a ngbNavLink routerLink="/events/assistant/register" routerLinkActive="active" class="nav-link">
+                    Tus eventos
+                </a>
+            </li>
+        </ul>
+
+        <!-- Botón a la derecha -->
+        <a *ngIf="user()?.role == 'ADMIN' || user()?.role == 'ORGANIZADOR'" class="btn btn-info fw-semibold text-white" routerLink="/events/create">
+            Crear nuevo +
+        </a>
+    </div>
+
+
+
 </div>

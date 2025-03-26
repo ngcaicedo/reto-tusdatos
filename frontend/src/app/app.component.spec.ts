@@ -3,6 +3,7 @@ import { AppComponent } from './app.component';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { NotificationService } from './shared/services/notification.service';
+import { provideRouter } from '@angular/router';
 
 describe('AppComponent', () => {
   let mockNotifyService: jasmine.SpyObj<NotificationService>;
@@ -13,7 +14,8 @@ describe('AppComponent', () => {
       providers: [
         { provide: NotificationService, useValue: mockNotifyService },
         provideHttpClient(),
-        provideHttpClientTesting()
+        provideHttpClientTesting(),
+        provideRouter([])
       ]
     }).compileComponents();
   });

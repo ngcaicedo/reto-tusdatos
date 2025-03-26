@@ -96,19 +96,19 @@ describe('DetailEventAssistantComponent', () => {
 
   it('should show message when there are no events', () => {
     mockEventService.getEventsRegistedAssistant.and.returnValue(of([]));
-    fixture = TestBed.createComponent(ListEventComponent);
+    fixture = TestBed.createComponent(DetailEventAssistantComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
 
     const msg =
       fixture.debugElement.nativeElement.querySelector('.empty-message');
-    expect(msg.textContent).toContain('No hay eventos disponibles');
+    expect(msg.textContent).toContain('No hay eventos registrados');
   });
 
   it('should load events on init', fakeAsync(() => {
     mockEventService.getEventsRegistedAssistant.and.returnValue(of(mockEvents));
   
-    fixture = TestBed.createComponent(ListEventComponent);
+    fixture = TestBed.createComponent(DetailEventAssistantComponent);
     const component = fixture.componentInstance;
     component.ngOnInit();
     tick();
@@ -123,7 +123,7 @@ describe('DetailEventAssistantComponent', () => {
   
     mockEventService.getEventsRegistedAssistant.and.returnValue(throwError(() => mockError));
   
-    fixture = TestBed.createComponent(ListEventComponent);
+    fixture = TestBed.createComponent(DetailEventAssistantComponent);
     const component = fixture.componentInstance;
     fixture.detectChanges();
     tick();

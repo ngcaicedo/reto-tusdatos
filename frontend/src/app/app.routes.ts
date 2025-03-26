@@ -4,10 +4,12 @@ import { CreateSessionComponent } from './session-managment/create-session/creat
 import { CreateEventComponent } from './event-managment/create-event/create-event.component';
 import { ListEventComponent } from './event-managment/list-event/list-event.component';
 import { DetailEventComponent } from './event-managment/detail-event/detail-event.component';
+import { DetailEventAssistantComponent } from './event-managment/detail-event-assistant/detail-event-assistant.component';
 
 export const routes: Routes = [
     {path: '', redirectTo: 'events', pathMatch: 'full'},
     {path: 'events', component: ListEventComponent, pathMatch: 'full'},
+    {path: 'events/assistant/register', component: DetailEventAssistantComponent, pathMatch: 'full'},
     {path: 'events/:event_id', component: DetailEventComponent, pathMatch: 'full'},
     {path: 'sessions/speaker/create', component: CreateSpeakerComponent, pathMatch: 'full'},
     {path: 'sessions/create', component: CreateSessionComponent, pathMatch: 'full'},

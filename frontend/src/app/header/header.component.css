@@ -25,3 +25,13 @@
 .dropdown-menu {
   background-color: #c3e8f0;
 }
+
+.custom-tabs .nav-link {
+  color: #666; /* gris oscuro */
+  font-weight: 500;
+}
+
+.custom-tabs .nav-link.active {
+  color: #000;
+  border-bottom: 2px solid #000;
+}
