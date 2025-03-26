@@ -1,54 +1,62 @@
-<nav class="navbar navbar-expand-lg bg-light  py-3">
-    <div class="container-fluid">
-        <a class="navbar-brand fw-bold" href="#">
-            <img src="assets/logo.png" alt="Logo" width="40" height="40" class="d-inline-block align-text-top">
-        </a>
+<div class="container-fluid">
+    <nav class="navbar navbar-expand-lg bg-light  py-3">
+        <div class="container-fluid">
+            <a class="navbar-brand fw-bold" href="#">
+                <img src="assets/logo.png" alt="Logo" width="40" height="40" class="d-inline-block align-text-top">
+            </a>
 
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
-            <span class="navbar-toggler-icon"></span>
-        </button>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
+                <span class="navbar-toggler-icon"></span>
+            </button>
 
-        <div class="collapse navbar-collapse justify-content-between" id="navbarContent">
-            <!-- Menú -->
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                <li class="nav-item" *ngIf="user()?.role !== 'ASSISTENTE'">
-                    <a class="nav-link fw-semibold" href="/events/events">Eventos</a>
-                </li>
-                <li class="nav-item" *ngIf="user()?.role === 'ASISTENTE'">
-                    <a class="nav-link fw-semibold" href="#">Contacto</a>
-                </li>
-            </ul>
+            <div class="collapse navbar-collapse justify-content-between" id="navbarContent">
+                <!-- Menú -->
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item" *ngIf="user()?.role !== 'ASSISTENTE'">
+                        <a class="nav-link fw-semibold" href="/events/events">Eventos</a>
+                    </li>
+                    <li class="nav-item" *ngIf="user()?.role === 'ASISTENTE'">
+                        <a class="nav-link fw-semibold" href="#">Contacto</a>
+                    </li>
+                </ul>
 
-            <!-- Botones -->
-            <div class="d-flex gap-2" *ngIf="!user(); else loggedIn">
-                <a class="btn btn-login" (click)="openLoginModal()">Iniciar sesión</a>
-                <a class="btn btn-register" (click)="openRegisterModal()">Crear cuenta</a>
-            </div>
-
-            <ng-template #loggedIn>
-                <!-- Menú de usuario responsivo -->
-                <div class="dropdown d-flex align-items-center">
-                    <button class="btn btn-login dropdown-toggle " type="button" id="userDropdown"
-                        data-bs-toggle="dropdown" aria-expanded="false">
-                        <i class="bi bi-person-circle me-1"></i> <!-- Icono opcional -->
-                        {{ user()?.user }}
-                    </button>
-
-                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-                        <li>
-                            <a class="dropdown-item" href="#">
-                                <i class="bi bi-person-fill me-2"></i> Mi perfil
-                            </a>
-                        </li>
-                        <li>
-                            <a class="dropdown-item" (click)="logout()">
-                                <i class="bi bi-box-arrow-right me-2"></i> Cerrar sesión
-                            </a>
-                        </li>
-                    </ul>
+                <!-- Botones -->
+                <div class="d-flex gap-2" *ngIf="!user(); else loggedIn">
+                    <a class="btn btn-login" (click)="openLoginModal()">Iniciar sesión</a>
+                    <a class="btn btn-register" (click)="openRegisterModal()">Crear cuenta</a>
                 </div>
 
-            </ng-template>
+                <ng-template #loggedIn>
+                    <!-- Menú de usuario responsivo -->
+                    <div class="dropdown d-flex align-items-center">
+                        <button class="btn btn-login dropdown-toggle " type="button" id="userDropdown"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="bi bi-person-circle me-1"></i> <!-- Icono opcional -->
+                            {{ user()?.user }}
+                        </button>
+
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                            <li>
+                                <a class="dropdown-item" href="#">
+                                    <i class="bi bi-person-fill me-2"></i> Mi perfil
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" (click)="logout()">
+                                    <i class="bi bi-box-arrow-right me-2"></i> Cerrar sesión
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+
+                </ng-template>
+            </div>
+        </div>
+    </nav>
+    <div class="row">
+        <div class="col-12">
+            <h1 class="fw-bold text-center">Eventos</h1>
         </div>
     </div>
-</nav>
+    <app-list-event></app-list-event>
+</div>

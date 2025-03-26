@@ -1,1 +1,9 @@
-<p>list-event works!</p>
+<div *ngIf="events.length === 0" class="empty-message text-center text-muted">
+    No hay eventos disponibles
+</div>
+
+<div class="d-flex flex-wrap gap-3 justify-content-start">
+    <app-card-event *ngFor="let event of events" [title]="event.name" [location]="event.location"
+        [date]="event.date_start" [state]="event.state">
+    </app-card-event>
+</div>

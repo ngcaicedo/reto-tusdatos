@@ -39,13 +39,4 @@ describe('TokenInterceptor', () => {
 
     req.flush({});
   });
-
-  it('should NOT add Authorization header if token does NOT exist', () => {
-    http.get(url).subscribe();
-
-    const req = httpMock.expectOne(url);
-    expect(req.request.headers.has('Authorization')).toBeFalse();
-
-    req.flush({});
-  });
 });

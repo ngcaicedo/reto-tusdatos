@@ -9,7 +9,7 @@ export const tokenInterceptor: HttpInterceptorFn = (
 ): Observable<HttpEvent<any>> => {
   const token = sessionStorage.getItem('token');
 
-  const excludedUrls = ['/auth/login', '/users/register/assistant'];
+  const excludedUrls = ['/auth/login', '/users/register/assistant', '/events/events'];
 
   const isExcluded = excludedUrls.some((url) => req.url.includes(url));
 

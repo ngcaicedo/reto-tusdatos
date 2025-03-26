@@ -8,18 +8,28 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { LoginComponent } from '../auth-user/login/login.component';
 import { RegisterComponent } from '../auth-user/register/register.component';
 import { AuthStateService } from '../shared/states/auth-state.service';
+import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { NotificationService } from '../shared/services/notification.service';
 
 describe('HeaderComponent', () => {
   let component: HeaderComponent;
   let fixture: ComponentFixture<HeaderComponent>;
   let modalServiceSpy: jasmine.SpyObj<NgbModal>;
+  let mockNotifyService: jasmine.SpyObj<NotificationService>;
 
   beforeEach(waitForAsync(() => {
     modalServiceSpy = jasmine.createSpyObj('NgbModal', ['open']);
+    mockNotifyService = jasmine.createSpyObj('NotificationService', ['success', 'error', 'info', 'warning']);
 
     TestBed.configureTestingModule({
       imports: [HeaderComponent],
-      providers: [{ provide: NgbModal, useValue: modalServiceSpy }],
+      providers: [
+        { provide: NgbModal, useValue: modalServiceSpy },
+        { provide: NotificationService, useValue: mockNotifyService },
+        provideHttpClient(),
+        provideHttpClientTesting()
+      ],
     }).compileComponents();
   }));
 
