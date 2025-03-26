@@ -11,6 +11,7 @@ import { AuthStateService } from '../shared/states/auth-state.service';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { NotificationService } from '../shared/services/notification.service';
+import { provideRouter } from '@angular/router';
 
 describe('HeaderComponent', () => {
   let component: HeaderComponent;
@@ -28,7 +29,8 @@ describe('HeaderComponent', () => {
         { provide: NgbModal, useValue: modalServiceSpy },
         { provide: NotificationService, useValue: mockNotifyService },
         provideHttpClient(),
-        provideHttpClientTesting()
+        provideHttpClientTesting(),
+        provideRouter([])
       ],
     }).compileComponents();
   }));

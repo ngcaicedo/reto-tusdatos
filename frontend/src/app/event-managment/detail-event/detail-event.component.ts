@@ -29,7 +29,6 @@ export class DetailEventComponent {
     this.eventService.getEvent(id).subscribe({
       next: (response) => {
         this.event = response;
-        console.log(this.event.is_registered);
       },
       error: (error) => {
         this.notify.error(`Error al obtener evento: ${error.error.detail}`);
