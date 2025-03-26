@@ -59,6 +59,13 @@ describe('CreateSessionComponent', () => {
     ).toBeTruthy();
   });
 
+  it('should have date start input', () => {
+    const compiled = fixture.nativeElement as HTMLElement;
+    expect(
+      compiled.querySelector('input[formControlName="date_start"]')
+    ).toBeTruthy();
+  });
+
   it('should have show speaker input', () => {
     const compiled = fixture.nativeElement as HTMLElement;
     expect(
