@@ -76,7 +76,7 @@ def test_login_success(client, user_factory):
 
     assert response.status_code == 200
     data_response = response.json()
-    assert data_response.get("token") is not None
+    assert data_response.get("access_token") is not None
     assert data_response.get("user") == user.name
     assert data_response.get("role") == user.role.value
     assert data_response.get("token_type") == "bearer"
@@ -156,7 +156,7 @@ def test_register_assistant_to_event(client, db, user_factory, event_factory, as
         "username": data["email"],
         "password": data["password"]
     })
-    token = response_login.json()["token"]
+    token = response_login.json()["access_token"]
     headers = {"Authorization": f"Bearer {token}"}
 
     organizador = user_factory.create_user(role=RoleEnum.ORGANIZADOR)
@@ -180,7 +180,7 @@ def test_register_assistant_again_to_event(client, db, user_factory, event_facto
         "username": data["email"],
         "password": data["password"]
     })
-    token = response_login.json()["token"]
+    token = response_login.json()["access_token"]
     headers = {"Authorization": f"Bearer {token}"}
 
     organizador = user_factory.create_user(role=RoleEnum.ORGANIZADOR)
@@ -204,7 +204,7 @@ def test_register_with_full_capacity(client, db, user_factory, event_factory, as
         "username": data["email"],
         "password": data["password"]
     })
-    token = response_login.json()["token"]
+    token = response_login.json()["access_token"]
     headers = {"Authorization": f"Bearer {token}"}
 
     organizador = user_factory.create_user(role=RoleEnum.ORGANIZADOR)
@@ -229,7 +229,7 @@ def test_event_not_found(client, db, assistant_payload ):
         "username": data["email"],
         "password": data["password"]
     })
-    token = response_login.json()["token"]
+    token = response_login.json()["access_token"]
     headers = {"Authorization": f"Bearer {token}"}
 
     response = client.post("/events/register/100", headers=headers)

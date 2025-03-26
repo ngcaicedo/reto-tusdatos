@@ -60,7 +60,7 @@ def login_user(form_data: OAuth2PasswordRequestForm, db: Session) -> dict:
         raise credentials_exception
     token = generate_token({"sub": user.email})
     return {
-        "token": token,
+        "access_token": token,
         "token_type": "bearer",
         "user": user.name,
         "role": user.role,

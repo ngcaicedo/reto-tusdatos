@@ -25,7 +25,7 @@ def auth_header():
     """ Fixture para obtener el encabezado de autenticación """
     def _auth_header(user: dict) -> dict:
         """ Función para obtener el encabezado de autenticación """
-        return {'Authorization': f'Bearer {user["token"]}'}
+        return {'Authorization': f'Bearer {user["access_token"]}'}
     return _auth_header
 
 

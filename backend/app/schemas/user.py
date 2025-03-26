@@ -9,7 +9,7 @@ class UserLogin(BaseModel):
 
 class Token(BaseModel):
     user_id: int
-    token: str
+    access_token: str
     token_type: str = "bearer"
     user: str
     role: RoleEnum

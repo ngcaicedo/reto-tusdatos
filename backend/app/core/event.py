@@ -6,6 +6,7 @@ from app.schemas.event import EventCreate, EventUpdate
 from app.core.authenticator.security import hash_password
 from fastapi import HTTPException, status
 from app.models.session import Session as SessionModel
+from sqlalchemy.orm import joinedload
 
 
 def create_event(db: Session, event_data: EventCreate, current_user: User):
@@ -124,7 +125,7 @@ def get_events(db: Session):
     Returns:
         list[Event]: Lista de eventos registrados
     """
-    return db.query(Event).all()
+    return db.query(Event).order_by(Event.date_start).all()
 
 def get_event(db: Session, event_id: int):
     """
@@ -137,7 +138,7 @@ def get_event(db: Session, event_id: int):
     Returns:
         Event: Evento registrado
     """
-    return db.query(Event).filter(Event.id == event_id).first()
+    return db.query(Event).options(joinedload(Event.sessions).joinedload(SessionModel.speaker)).filter(Event.id == event_id).first()
 
 
 def register_to_event(db: Session, event_id: int, current_user: User):

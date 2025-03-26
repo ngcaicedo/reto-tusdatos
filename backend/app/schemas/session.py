@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 from datetime import datetime
 
 class SessionBase(BaseModel):
@@ -31,3 +31,6 @@ class SessionResponse(SessionBase):
     duration: int
     date_start: datetime
     speaker_id: int
+    speaker: SpeakerResponse
+    
+    model_config = ConfigDict(from_attributes=True)

@@ -39,7 +39,7 @@ def test_create_event(client, user_factory, event_factory, session_factory, auth
     data['session_ids'] = [session['id']]
     print(data)
     headers = {
-        'Authorization': f'Bearer {user_logged['token']}'
+        'Authorization': f'Bearer {user_logged["access_token"]}'
     }
 
     response = client.post('/events/create', json=data, headers=headers)
@@ -59,7 +59,7 @@ def test_create_event_without_data(client, user_factory):
     data = {}
 
     headers = {
-        'Authorization': f'Bearer {user_logged['token']}'
+        'Authorization': f'Bearer {user_logged["access_token"]}'
     }
 
     response = client.post('/events/create', json=data, headers=headers)
@@ -80,7 +80,7 @@ def test_create_same_event(client, user_factory, event_factory, auth_header, ses
     data['session_ids'] = [session['id']]
 
     headers = {
-        'Authorization': f'Bearer {user_logged['token']}'
+        'Authorization': f'Bearer {user_logged["access_token"]}'
     }
 
     response = client.post('/events/create', json=data, headers=headers)
@@ -115,7 +115,7 @@ def test_update_event(client, user_factory, event_factory, session_factory, auth
     data['session_ids'] = [session['id']]
 
     headers = {
-        'Authorization': f'Bearer {user_logged['token']}'
+        'Authorization': f'Bearer {user_logged["access_token"]}'
     }
 
     response = client.post('/events/create', json=data, headers=headers)
@@ -144,7 +144,7 @@ def test_get_events(client, user_factory, event_factory, session_factory, auth_h
     data['session_ids'] = [session['id']]
 
     headers = {
-        'Authorization': f'Bearer {user_logged['token']}'
+        'Authorization': f'Bearer {user_logged["access_token"]}'
     }
 
     response = client.post('/events/create', json=data, headers=headers)
@@ -170,7 +170,7 @@ def test_get_event(client, user_factory, event_factory, session_factory, auth_he
     data['session_ids'] = [session['id']]
 
     headers = {
-        'Authorization': f'Bearer {user_logged['token']}'
+        'Authorization': f'Bearer {user_logged["access_token"]}'
     }
 
     response = client.post('/events/create', json=data, headers=headers)
