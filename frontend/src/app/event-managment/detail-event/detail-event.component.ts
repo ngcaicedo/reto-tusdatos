@@ -52,11 +52,23 @@ export class DetailEventComponent {
     return result;
   }
 
+  registerUserToEvent() {
+    this.eventService.registerUserToEvent(this.event.id).subscribe({
+      next: (response) => {
+        this.notify.success('Registrado correctamente');
+      },
+      error: (error) => {
+        this.notify.error(`Error al registrarte: ${error.error.detail}`);
+      },
+    });
+  }
+
   openAlert() {
     if (!this.user()) {
       this.notify.warning('Debes iniciar sesión para registrarte');
       return;
     }
+    this.registerUserToEvent();
   }
   
 }

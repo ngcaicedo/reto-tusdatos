@@ -96,6 +96,7 @@ describe('DetailEventComponent', () => {
       role: 'ASISTENTE',
       user_id: '1',
     });
+    mockEventService.registerUserToEvent.and.returnValue(of({}));
     fixture.detectChanges();
     component.openAlert();
     expect(mockEventService.registerUserToEvent).toHaveBeenCalled();
