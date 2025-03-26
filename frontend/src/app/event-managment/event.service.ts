@@ -36,4 +36,8 @@ export class EventService {
   registerUserToEvent(event_id: number): Observable<any> {
     return this.http.post(`${this.apiUrl}/events/register/${event_id}`, {});
   }
+
+  getEventsRegistedAssistant(): Observable<Event[]> {
+    return this.http.get<Event[]>(`${this.apiUrl}/events/register`);
+  }
 }
