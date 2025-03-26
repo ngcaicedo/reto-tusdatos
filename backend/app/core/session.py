@@ -124,6 +124,7 @@ def create_session(db, session: SessionCreate) -> SessionResponse:
     session_db = Session(
         name=session.name,
         description=session.description,
+        date_start=session.date_start,
         duration=session.duration,
         speaker_id=session.speaker_id,
     )
@@ -165,6 +166,7 @@ def update_session(db, session_id: int, session: SessionUpdate) -> SessionRespon
     session_db.name = session.name
     session_db.description = session.description
     session_db.duration = session.duration
+    session_db.date_start = session.date_start
     session_db.speaker_id = session.speaker_id
     db.add(session_db)
     db.commit()
