@@ -81,7 +81,7 @@ describe('EventService', () => {
 
     service.getEvents().subscribe({
       next: (res) => {
-        expect(res).toEqual(jasmine.arrayContaining(events));
+        expect(res).toEqual(events);
       },
       error: (err) => {
         console.error('error en la petición', err);
