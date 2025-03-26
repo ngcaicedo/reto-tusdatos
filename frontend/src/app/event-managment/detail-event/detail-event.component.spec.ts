@@ -34,7 +34,7 @@ describe('DetailEventComponent', () => {
   );
 
   beforeEach(async () => {
-    mockEventService = jasmine.createSpyObj('EventService', ['getEvent']);
+    mockEventService = jasmine.createSpyObj('EventService', ['getEvent', 'registerUserToEvent']);
     mockEventService.getEvent.and.returnValue(of(mockEvent));
     mockNotifyService = jasmine.createSpyObj('NotificationService', [
       'success',
@@ -88,4 +88,17 @@ describe('DetailEventComponent', () => {
     expect(mockNotifyService.warning).toHaveBeenCalled();
   });
   
+  it('should register to event', () => {
+    const authStateMock = TestBed.inject(AuthStateService);
+    authStateMock.setUser({
+      token: 'token',
+      user: 'Test User',
+      role: 'ASISTENTE',
+      user_id: '1',
+    });
+    fixture.detectChanges();
+    component.openAlert();
+    expect(mockEventService.registerUserToEvent).toHaveBeenCalled();
+  });
+
 });
