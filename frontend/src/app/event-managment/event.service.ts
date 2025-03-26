@@ -28,4 +28,8 @@ export class EventService {
   getEvents(): Observable<Event[]> {
     return this.http.get<Event[]>(`${this.apiUrl}/events/events`);
   }
+
+  getEvent(event_id: number): Observable<Event> {
+    return this.http.get<Event>(`${this.apiUrl}/events/${event_id}`);
+  }
 }

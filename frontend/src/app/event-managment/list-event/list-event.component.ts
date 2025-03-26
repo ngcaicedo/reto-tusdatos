@@ -23,7 +23,6 @@ export class ListEventComponent implements OnInit {
   ngOnInit(): void {
     this.eventService.getEvents().subscribe({
       next: (response) => {
-        console.log('entre aqui');
         this.events = response;
       },
       error: (error) => {
