@@ -1,19 +1,32 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { RegisterOrganizationComponent } from './register-organization.component';
+import { NotificationService } from '../../shared/services/notification.service';
+import { ReactiveFormsModule } from '@angular/forms';
 
 describe('RegisterOrganizationComponent', () => {
   let component: RegisterOrganizationComponent;
   let fixture: ComponentFixture<RegisterOrganizationComponent>;
+  let mockNotifyService: jasmine.SpyObj<NotificationService>;
 
   beforeEach(async () => {
+    mockNotifyService = jasmine.createSpyObj('NotificationService', [
+      'success',
+      'error',
+      'info',
+      'warning',
+    ]);
     await TestBed.configureTestingModule({
-      imports: [RegisterOrganizationComponent]
+      imports: [RegisterOrganizationComponent],
+      providers: [
+        { provide: NotificationService, useValue: mockNotifyService },
+      ]
     })
     .compileComponents();
 
     fixture = TestBed.createComponent(RegisterOrganizationComponent);
     component = fixture.componentInstance;
+    component.ngOnInit();
     fixture.detectChanges();
   });
 

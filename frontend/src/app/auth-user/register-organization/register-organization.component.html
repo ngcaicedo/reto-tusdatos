@@ -1,1 +1,58 @@
-<p>register-organization works!</p>
+<h5 class="fw-bold mx-sm-3 mb-4">Crear usuario</h5>
+
+<form [formGroup]="userForm" (ngSubmit)="!userForm.invalid && createUser()" class="w-100" style="max-width: 400px;">
+    <div class="mb-3 ms-sm-3">
+        <label for="name" class="form-label">Nombre</label>
+        <input type="text" id="name" formControlName="name" class="form-control"
+            placeholder="Ej. Pepito Pérez Gonalez" />
+        <div *ngIf="userForm.controls['name']?.touched && userForm.controls['name']?.invalid" class="text-danger small">
+            El nombre es obligatorio
+        </div>
+    </div>
+
+    <div class="mb-3 ms-sm-3">
+        <label for="email" class="form-label">Email</label>
+        <input id="email" type="text" formControlName="email" class="form-control"
+            placeholder="Email para inicio de sesión"/>
+        <div *ngIf="userForm.controls['email']?.touched && userForm.controls['email']?.invalid"
+            class="text-danger small">
+            El email es obligatorio
+        </div>
+    </div>
+
+    <div class="mb-3 ms-sm-3">
+        <label for="phone" class="form-label">Número de telefono</label>
+        <input id="phone" type="number" min="1" formControlName="phone" class="form-control" placeholder="1234567" />
+        <div *ngIf="userForm.controls['phone']?.touched && userForm.controls['phone']?.invalid"
+            class="text-danger small">
+            El numero de teléfono es obligatorio.
+        </div>
+    </div>
+
+    <div class="mb-3 ms-sm-3">
+        <label for="role" class="form-label">Rol del usuario</label>
+        <select formControlName="role" id="role" class="from-control">
+            <option value="">Elija un rol</option>
+            <option value="ADMIN">Administrador</option>
+            <option value="ORGANIZADOR">Organizador</option>
+        </select>
+        <div *ngIf="userForm.controls['date_end']?.touched && userForm.controls['date_end']?.invalid"
+            class="text-danger small">
+            El rol es obligatorio
+        </div>
+    </div>
+
+    <div class="mb-3 ms-sm-3">
+        <label for="password" class="form-label">Contraseña del usuario</label>
+        <input id="password" type="password" min="1" formControlName="password" class="form-control" placeholder="**********" />
+        <div *ngIf="userForm.controls['password']?.touched && userForm.controls['password']?.invalid"
+            class="text-danger small">
+            La contraseña es obligatoria
+        </div>
+    </div>
+
+    <div class="ms-sm-3">
+        <button type="submit" class="btn btn-primary me-2" [disabled]="!userForm.valid">Guardar</button>
+        <button type="button" class="btn btn-secondary">Cancelar</button>
+    </div>
+</form>
