@@ -9,11 +9,15 @@ export const tokenInterceptor: HttpInterceptorFn = (
 ): Observable<HttpEvent<any>> => {
   const token = sessionStorage.getItem('token');
 
-  if (token) {
+  const excludedUrls = ['/auth/login', '/users/register/assistant'];
+
+  const isExcluded = excludedUrls.some((url) => req.url.includes(url));
+
+  if (token && !isExcluded) {
     const authReq = req.clone({
       setHeaders: {
         Authorization: `Bearer ${token}`,
-      }
+      },
     });
     return next(authReq);
   }

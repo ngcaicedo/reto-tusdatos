@@ -38,10 +38,10 @@ export class CreateSessionComponent {
     });
 
     this.sessionForm = this.formBuilder.group({
-      sessionName: ['', Validators.required],
-      sessionDescription: ['', Validators.required],
-      sessionDuration: ['', Validators.required],
-      speaker: ['', Validators.required],
+      name: ['', Validators.required],
+      description: ['', Validators.required],
+      duration: ['', Validators.required],
+      speaker_id: ['', Validators.required],
     });
   }
 

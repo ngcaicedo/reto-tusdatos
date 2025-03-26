@@ -2,15 +2,15 @@
 
 <form [formGroup]="speakerForm" (ngSubmit)="!speakerForm.invalid && createSpeaker()" class="w-100" style="max-width: 400px;">
   <div class="mb-3 ms-sm-3">
-    <label for="speakerName" class="form-label">Nombre</label>
+    <label for="name" class="form-label">Nombre</label>
     <input
       type="text"
-      id="speakerName"
-      formControlName="speakerName"
+      id="name"
+      formControlName="name"
       class="form-control"
       placeholder="Ej. Pepito Pérez Gonalez"
     />
-    <div *ngIf="speakerForm.controls['speakerName'].touched && speakerForm.controls['speakerName'].invalid" class="text-danger small">
+    <div *ngIf="speakerForm.controls['name'].touched && speakerForm.controls['name'].invalid" class="text-danger small">
       El nombre es obligatorio
     </div>
   </div>

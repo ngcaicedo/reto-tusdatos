@@ -19,7 +19,7 @@ export class SessionService {
     return this.http.get(`${this.apiUrl}/sessions/speakers`);
   }
 
-  createSession(session: { sessionName: string; sessionDescription: string; sessionDuration: number; speaker: number; }) {
+  createSession(session: { name: string; description: string; duration: number; speaker_id: number; }) {
     return this.http.post(`${this.apiUrl}/sessions/create`, session);
   }
 }

@@ -26,7 +26,7 @@ export class CreateSpeakerComponent {
 
   ngOnInit() {
     this.speakerForm = this.formBuilder.group({
-      speakerName: ['', Validators.required],
+      name: ['', Validators.required],
     });
   }
 

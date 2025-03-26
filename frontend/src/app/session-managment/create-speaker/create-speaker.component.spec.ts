@@ -27,7 +27,7 @@ describe('CreateSpeakerComponent', () => {
     component.ngOnInit();
 
     component.speakerForm.setValue({
-      speakerName: 'test',
+      name: 'test',
     });
 
     fixture.detectChanges();
@@ -45,7 +45,7 @@ describe('CreateSpeakerComponent', () => {
   it('should have show name input', () => {
     const compiled = fixture.nativeElement as HTMLElement;
     expect(
-      compiled.querySelector('input[formControlName="speakerName"]')
+      compiled.querySelector('input[formControlName="name"]')
     ).toBeTruthy();
   });
 

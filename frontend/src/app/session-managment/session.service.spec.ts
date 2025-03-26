@@ -36,10 +36,10 @@ describe('SessionService', () => {
   it('should send a POST request to create session', () => {
     const speaker = new Speaker(1, 'test');
     const session = {
-      sessionName: 'test',
-      sessionDescription: 'test',
-      sessionDuration: 100,
-      speaker: speaker.id,
+      name: 'test',
+      description: 'test',
+      duration: 100,
+      speaker_id: speaker.id,
     };
 
     service.createSession(session).subscribe({

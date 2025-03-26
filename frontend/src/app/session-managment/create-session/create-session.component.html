@@ -2,42 +2,42 @@
 
 <form [formGroup]="sessionForm" class="w-100" style="max-width: 400px;">
     <div class="mb-3 ms-sm-3">
-        <label for="sessionName" class="form-label">Nombre</label>
-        <input type="text" id="sessionName" formControlName="sessionName" class="form-control"
+        <label for="name" class="form-label">Nombre</label>
+        <input type="text" id="name" formControlName="name" class="form-control"
             placeholder="Ej. Pepito Pérez Gonalez" />
-        <div *ngIf="sessionForm.controls['sessionName'].touched && sessionForm.controls['sessionName'].invalid"
+        <div *ngIf="sessionForm.controls['name'].touched && sessionForm.controls['name'].invalid"
             class="text-danger small">
             El nombre es obligatorio
         </div>
     </div>
 
     <div class="mb-3 ms-sm-3">
-        <label for="sessionDescription" class="form-label">Descripción</label>
-        <textarea id="sessionDescription" formControlName="sessionDescription" class="form-control"
+        <label for="description" class="form-label">Descripción</label>
+        <textarea id="description" formControlName="description" class="form-control"
             placeholder="Descripción de la sesión"></textarea>
-        <div *ngIf="sessionForm.controls['sessionDescription'].touched && sessionForm.controls['sessionDescription'].invalid"
+        <div *ngIf="sessionForm.controls['description'].touched && sessionForm.controls['description'].invalid"
             class="text-danger small">
             La descripción es obligatoria
         </div>
     </div>
 
     <div class="mb-3 ms-sm-3">
-        <label for="sessionDuration" class="form-label">Duración de la sesión</label>
-        <input id="sessionDuration" formControlName="sessionDuration" class="form-control"
+        <label for="duration" class="form-label">Duración de la sesión</label>
+        <input id="duration" formControlName="duration" class="form-control"
             placeholder="Descripción de la sesión" />
-        <div *ngIf="sessionForm.controls['sessionDuration'].touched && sessionForm.controls['sessionDuration'].invalid"
+        <div *ngIf="sessionForm.controls['duration'].touched && sessionForm.controls['duration'].invalid"
             class="text-danger small">
             La duración de la sesión es obligatoria
         </div>
     </div>
 
     <div class="mb-3 ms-sm-3">
-        <label for="speaker" class="form-label">Ponente</label>
-        <select id="speaker" formControlName="speaker" class="form-select">
+        <label for="speaker_id" class="form-label">Ponente</label>
+        <select id="speaker_id" formControlName="speaker_id" class="form-select">
             <option value="">Selecciona un ponente</option>
             <option *ngFor="let speaker of speakers" [value]="speaker.id">{{ speaker.name }}</option>
         </select>
-        <div *ngIf="sessionForm.controls['speaker'].touched && sessionForm.controls['speaker'].invalid"
+        <div *ngIf="sessionForm.controls['speaker_id'].touched && sessionForm.controls['speaker_id'].invalid"
             class="text-danger small">
             El ponente es obligatorio
         </div>
