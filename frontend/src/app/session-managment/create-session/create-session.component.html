@@ -1,6 +1,6 @@
-<h5 class="fw-bold mx-sm-3 mb-4">Crear ponente</h5>
+<h5 class="fw-bold mx-sm-3 mb-4">Crear sesión</h5>
 
-<form [formGroup]="sessionForm" class="w-100" style="max-width: 400px;">
+<form [formGroup]="sessionForm" (ngSubmit)="!sessionForm.invalid && createSession()" class="w-100" style="max-width: 400px;">
     <div class="mb-3 ms-sm-3">
         <label for="name" class="form-label">Nombre</label>
         <input type="text" id="name" formControlName="name" class="form-control"
@@ -22,9 +22,9 @@
     </div>
 
     <div class="mb-3 ms-sm-3">
-        <label for="duration" class="form-label">Duración de la sesión</label>
-        <input id="duration" formControlName="duration" class="form-control"
-            placeholder="Descripción de la sesión" />
+        <label for="duration" class="form-label">Duración de la sesión en horas</label>
+        <input id="duration" type="number" min="1" formControlName="duration" class="form-control"
+            placeholder="Tiempo de la sesión en horas" />
         <div *ngIf="sessionForm.controls['duration'].touched && sessionForm.controls['duration'].invalid"
             class="text-danger small">
             La duración de la sesión es obligatoria
@@ -44,7 +44,7 @@
     </div>
 
     <div class="ms-sm-3">
-        <button type="submit" class="btn btn-primary me-2">Guardar</button>
+        <button type="submit" class="btn btn-primary me-2" [disabled]="!sessionForm.valid">Guardar</button>
         <button type="button" class="btn btn-secondary">Cancelar</button>
     </div>
 </form>
