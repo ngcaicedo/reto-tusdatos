@@ -13,7 +13,7 @@ class EventCreate(BaseModel):
     date_end: datetime
     location: str
     user_created_id: int
-    session_ids: list[int] = Field(min_items=1)
+    session_ids: list[int] = Field(min_length=1)
 
 
 class EventUpdate(BaseModel):
@@ -24,7 +24,7 @@ class EventUpdate(BaseModel):
     date_start: datetime
     date_end: datetime
     location: str
-    session_ids: list[int] = Field(min_items=1)
+    session_ids: list[int] = Field(min_length=1)
 
 
 class EventResponse(BaseModel):

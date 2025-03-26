@@ -28,8 +28,9 @@ def test_assistant_has_user(db, user_factory, assistant_factory):
     assert user.assistant.id == assistant.id
 
 
-def test_register_organization_user(client):
+def test_register_organization_user(client, user_factory, auth_header):
     """ Test para verificar el registro de un usuario de organización """
+    user_login = user_factory.login_user(role=RoleEnum.ADMIN)
     data = {
         'name': fake.name(),
         'phone': fake.phone_number(),
@@ -37,8 +38,10 @@ def test_register_organization_user(client):
         'password': fake.password(),
         'role': 'ORGANIZADOR'
     }
+    
+    headers = auth_header(user_login)
 
-    response = client.post('/users/register', json=data)
+    response = client.post('/users/register', json=data, headers=headers)
     assert response.status_code == 201
     response_data = response.json()
     assert response_data['name'] == data['name']
@@ -47,8 +50,9 @@ def test_register_organization_user(client):
     assert response_data['role'] == data['role']
 
 
-def test_register_duplicate_user(client, user_factory):
+def test_register_duplicate_user(client, user_factory, auth_header):
     """ Test para verificar el registro de un usuario duplicado """
+    user_login = user_factory.login_user(role=RoleEnum.ADMIN)
     fake_password = fake.password()
     user = user_factory.create_user(password=fake_password)
     data = {
@@ -58,21 +62,24 @@ def test_register_duplicate_user(client, user_factory):
         'password': fake_password,
         'role': user.role.value
     }
+    
+    headers = auth_header(user_login)
 
-    response = client.post('/users/register', json=data)
+    response = client.post('/users/register', json=data, headers=headers)
     assert response.status_code == 400
     response_data = response.json()
     assert response_data['detail'] == 'El usuario ya se encuentra registrado'
 
 
-def test_register_user_invalid_data(client):
+def test_register_user_invalid_data(client, user_factory, auth_header):
     """ Test para verificar el registro de un usuario con datos inválidos """
+    user_login = user_factory.login_user(role=RoleEnum.ADMIN)
     data = {
         'name': fake.name(),
         'phone': fake.phone_number(),
     }
 
-    response = client.post('/users/register', json=data)
+    response = client.post('/users/register', json=data, headers = auth_header(user_login))
     assert response.status_code == 422
     response_data = response.json()
     missing_fields = {error["loc"][-1] for error in response_data["detail"] if error["msg"] == "Field required"}

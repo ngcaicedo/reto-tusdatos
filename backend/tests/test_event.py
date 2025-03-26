@@ -135,20 +135,6 @@ def test_update_event(client, user_factory, event_factory, session_factory, auth
     assert response_data['date_end'] != data['date_end']
     assert response_data['user_created_id'] == data['user_created_id']
     
-
-def test_get_events_without_auth(client, user_factory, event_factory):
-    """ Test para verificar la obtención de eventos sin autenticación """
-    user = user_factory.create_user()
-    event = event_factory.create_event(user_id=user.id, state=StateEnum.CREADO)
-    headers = {
-        'Authorization': f'Bearer '}
-
-    response = client.get('/events/events', headers=headers)
-    assert response.status_code == 401
-    response_data = response.json()
-    assert response_data['detail'] == 'No autorizado'
-
-
 def test_get_events(client, user_factory, event_factory, session_factory, auth_header):
     """ Test para verificar la obtención de eventos """
     role = [RoleEnum.ADMIN, RoleEnum.ORGANIZADOR]

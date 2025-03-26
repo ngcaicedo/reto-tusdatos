@@ -181,7 +181,7 @@ def get_sessions(db):
         List[Session]: Lista de sesiones
     """
     
-    sessions = db.query(Session).all()
+    sessions = db.query(Session).filter(Session.event_id.is_(None)).all()
     return sessions
 
 def get_session(db, session_id: int) -> SessionResponse:

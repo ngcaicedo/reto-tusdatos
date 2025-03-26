@@ -77,7 +77,7 @@ def test_login_success(client, user_factory):
     assert response.status_code == 200
     data_response = response.json()
     assert data_response.get("token") is not None
-    assert data_response.get("user") == user.email
+    assert data_response.get("user") == user.name
     assert data_response.get("role") == user.role.value
     assert data_response.get("token_type") == "bearer"
     assert data_response.get("user_id") == user.id

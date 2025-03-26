@@ -41,7 +41,7 @@ def update_event(event_id: int, event_data: EventUpdate, db: Session = Depends(g
 
 
 @event_router.get("/events", response_model=list[EventResponse])
-def get_events(db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
+def get_events(db: Session = Depends(get_db)):
     """ 
     Endpoint para obtener la lista de eventos
     Args:
@@ -53,7 +53,7 @@ def get_events(db: Session = Depends(get_db), current_user: User = Depends(get_c
     return managment.get_events(db)
 
 @event_router.get("/{event_id}", response_model=EventResponse)
-def get_event(event_id: int, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
+def get_event(event_id: int, db: Session = Depends(get_db)):
     """ 
     Endpoint para obtener un evento
     Args:

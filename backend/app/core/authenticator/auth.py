@@ -62,7 +62,7 @@ def login_user(form_data: OAuth2PasswordRequestForm, db: Session) -> dict:
     return {
         "token": token,
         "token_type": "bearer",
-        "user": user.email,
+        "user": user.name,
         "role": user.role,
         "user_id": user.id
     }

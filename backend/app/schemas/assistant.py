@@ -1,10 +1,10 @@
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel, ConfigDict, EmailStr
 from app.models.user import RoleEnum
 
 
 class AssistantCreate(BaseModel):
     name: str
-    email: str
+    email: EmailStr
     password: str
     phone: str
     role: RoleEnum = RoleEnum.ASISTENTE

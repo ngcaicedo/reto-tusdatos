@@ -4,6 +4,8 @@ from app.db.session import get_db
 from app.core.managment import Managment
 from app.schemas.user import UserResponse, UserCreate
 from app.schemas.assistant import AssistantResponse, AssistantCreate
+from app.models.user import User
+from app.core.authenticator.auth import get_current_user
 
 managment = Managment()
 
@@ -11,7 +13,7 @@ user_router = APIRouter()
 
 
 @user_router.post("/register", response_model=UserResponse, status_code=201)
-def register_user(user_data: UserCreate, db: Session = Depends(get_db)):
+def register_user(user_data: UserCreate, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
     """ 
     Endpoint para registrar un usuario
     
