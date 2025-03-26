@@ -141,4 +141,36 @@ describe('EventService', () => {
     req.flush({"message": "Registro exitoso", "event_id": 1});
   });
 
+  it('should send a GET request to get all events registed assistant', () => {
+    const events = [
+      new Event(
+        1,
+        'test',
+        'test',
+        100,
+        'CREADO',
+        '2021-09-02',
+        '2021-09-03',
+        'test',
+        1,
+        [new Session(1, 'Session 1', 'Session 1', new Date().toString(), 60, 1, {id: 1, name: 'test'})],
+        false
+      ),
+    ];
+
+    service.getEventsRegistedAssistant().subscribe({
+      next: (res) => {
+        expect(res).toEqual(events);
+      },
+      error: (err) => {
+        console.error('error en la petición', err);
+      },
+    });
+
+    const req = httpMock.expectOne(`${environment.apiUrl}/events/events-registed-assistant`);
+    expect(req.request.method).toBe('GET');
+
+    req.flush(events);
+  });
+
 });
