@@ -5,12 +5,13 @@ import { RegisterComponent } from '../auth-user/register/register.component';
 import { AuthStateService } from '../shared/states/auth-state.service';
 import { CommonModule } from '@angular/common';
 import { ListEventComponent } from '../event-managment/list-event/list-event.component';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.css'],
-  imports: [CommonModule],
+  imports: [CommonModule, RouterModule],
 })
 export class HeaderComponent implements OnInit {
   user: any;
