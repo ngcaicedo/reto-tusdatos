@@ -10,7 +10,7 @@ import { ListEventComponent } from '../event-managment/list-event/list-event.com
   selector: 'app-header',
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.css'],
-  imports: [CommonModule, ListEventComponent],
+  imports: [CommonModule],
 })
 export class HeaderComponent implements OnInit {
   user: any;

@@ -1,31 +1,32 @@
-<div class="container py-4">
-    <div class="row">
-        <!-- Info principal -->
-        <div class="col-md-8">
-            <h1 id="title" class="fw-bold">{{event.name}}</h1>
-            <p id="description" class="text-break">{{event.description}}</p>
+<div *ngIf="event">
 
-            <div class="d-flex align-items-center mb-2">
-                <span class="me-2">🧿</span>
-                <span id="location" class="fw-semibold">{{event.location}}</span>
+    <div class="container py-4" >
+        <div class="row">
+            <!-- Info principal -->
+            <div class="col-md-8">
+                <h1 id="title" class="fw-bold">{{event.name}}</h1>
+                <p id="description" class="text-break">{{event.description}}</p>
+    
+                <div class="d-flex align-items-center mb-2">
+                    <span class="me-2">🧿</span>
+                    <span id="location" class="fw-semibold">{{event.location}}</span>
+                </div>
+    
+                <button class="btn btn-primary fw-semibold" (click)="openAlert()">Registrarme</button>
             </div>
-
-            <button class="btn btn-primary fw-semibold">Registrarme</button>
-        </div>
-
-        <!-- Imagen + cupos -->
-        <div class="col-md-4 text-end">
-            <div id="capacity" class="bg-success text-white rounded px-3 py-1 mb-2 d-inline-block">
-                {{event.capacity}} cupos disponibles
+    
+            <!-- Imagen + cupos -->
+            <div class="col-md-4 text-end">
+                <div id="capacity" class="bg-success text-white rounded px-3 py-1 mb-2 d-inline-block">
+                    {{event.capacity}} cupos disponibles
+                </div>
+                <div class="bg-light border rounded" style="height: 150px;"></div>
             </div>
-            <div class="bg-light border rounded" style="height: 150px;"></div>
         </div>
-    </div>
-
-    <hr />
-
-    <!-- Lista de sesiones agrupadas -->
-    <div *ngIf="event">
+    
+        <hr />
+    
+        <!-- Lista de sesiones agrupadas -->
         <div *ngFor="let day of groupedSessions | keyvalue">
             <h2 class="fw-bold mt-4">{{ day.key }}</h2>
             <div *ngFor="let session of day.value"

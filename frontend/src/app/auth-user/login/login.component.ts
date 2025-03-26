@@ -54,7 +54,6 @@ export class LoginComponent implements OnInit {
         this.authState.setUser(userState);
         this.notify.success('Inicio de sesión exitoso');
         this.activeModal.dismiss();
-        this.router.navigate(['/']);
       },
       error: (error) => {
         this.notify.error(`Error en inicio de sesión: ${error.error.detail}`);

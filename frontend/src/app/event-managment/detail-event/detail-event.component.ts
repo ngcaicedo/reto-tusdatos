@@ -4,6 +4,7 @@ import { Event } from '../event';
 import { EventService } from '../event.service';
 import { NotificationService } from '../../shared/services/notification.service';
 import { ActivatedRoute, Router } from '@angular/router';
+import { AuthStateService } from '../../shared/states/auth-state.service';
 
 @Component({
   selector: 'app-detail-event',
@@ -13,14 +14,17 @@ import { ActivatedRoute, Router } from '@angular/router';
 })
 export class DetailEventComponent {
   event!: Event;
+  user: any;
 
   constructor(
     private eventService: EventService,
     private notify: NotificationService,
-    private router: ActivatedRoute
+    private router: ActivatedRoute,
+    private authState: AuthStateService
   ) {}
 
   ngOnInit() {
+    this.user = this.authState.user;
     const id = Number(this.router.snapshot.paramMap.get('event_id'));
     this.eventService.getEvent(id).subscribe({
       next: (response) => {
@@ -46,6 +50,13 @@ export class DetailEventComponent {
     }
   
     return result;
+  }
+
+  openAlert() {
+    if (!this.user()) {
+      this.notify.warning('Debes iniciar sesión para registrarte');
+      return;
+    }
   }
   
 }

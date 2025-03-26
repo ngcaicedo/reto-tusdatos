@@ -84,8 +84,8 @@ describe('DetailEventComponent', () => {
     const authStateMock = TestBed.inject(AuthStateService);
     authStateMock.clearUser();
     fixture.detectChanges();
-    component.openRegister();
-    expect(component.openRegister).toHaveBeenCalled();
+    component.openAlert();
+    expect(mockNotifyService.warning).toHaveBeenCalled();
   });
   
 });
