@@ -1,15 +1,17 @@
-<div class="row">
-    <div class="col-12">
-        <h1 class="fw-bold text-center">Eventos</h1>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col col-12">
+            <h1 class="fw-bold">Próximos eventos</h1>
+        </div>
     </div>
-</div>
-
-<div *ngIf="events.length === 0" class="empty-message text-center text-muted">
-    No hay eventos disponibles
-</div>
-
-<div class="d-flex flex-wrap gap-3 justify-content-start">
-    <app-card-event *ngFor="let event of events" [title]="event.name" [location]="event.location"
-        [date]="event.date_start" [state]="event.state" [event_id]="event.id">
-    </app-card-event>
+    <br>
+    <div *ngIf="events.length === 0" class="empty-message text-center text-muted">
+        No hay eventos disponibles
+    </div>
+    
+    <div class="d-flex flex-wrap gap-5 justify-content-start">
+        <app-card-event *ngFor="let event of events" [title]="event.name" [location]="event.location"
+            [date]="event.date_start" [state]="event.state" [event_id]="event.id">
+        </app-card-event>
+    </div>
 </div>
