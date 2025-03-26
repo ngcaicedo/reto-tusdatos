@@ -2,12 +2,12 @@
     <div class="row">
         <!-- Info principal -->
         <div class="col-md-8">
-            <h1 id="title" class="fw-bold">Titulo</h1>
-            <p id="description">descripcion</p>
+            <h1 id="title" class="fw-bold">{{event.name}}</h1>
+            <p id="description" class="text-break">{{event.description}}</p>
 
             <div class="d-flex align-items-center mb-2">
                 <span class="me-2">🧿</span>
-                <span id="location" class="fw-semibold">location</span>
+                <span id="location" class="fw-semibold">{{event.location}}</span>
             </div>
 
             <button class="btn btn-primary fw-semibold">Registrarme</button>
@@ -16,7 +16,7 @@
         <!-- Imagen + cupos -->
         <div class="col-md-4 text-end">
             <div id="capacity" class="bg-success text-white rounded px-3 py-1 mb-2 d-inline-block">
-                capacidad cupos disponibles
+                {{event.capacity}} cupos disponibles
             </div>
             <div class="bg-light border rounded" style="height: 150px;"></div>
         </div>
@@ -25,15 +25,29 @@
     <hr />
 
     <!-- Lista de sesiones agrupadas -->
-    <!-- <div *ngFor="let day of groupedSessions | keyvalue">
-        <h5 class="fw-bold mt-4">{{ day.key }}</h5>
-        <div *ngFor="let session of day.value"
-            class="d-flex justify-content-between align-items-center p-2 mb-1 bg-light rounded">
-            <div>
-                <div class="text-muted" style="font-size: 0.85rem;">{{ session.datetime | date:'shortTime' }}</div>
-                <div class="fw-semibold">{{ session.title }}</div>
+    <div *ngIf="event">
+        <div *ngFor="let day of groupedSessions | keyvalue">
+            <h2 class="fw-bold mt-4">{{ day.key }}</h2>
+            <div *ngFor="let session of day.value"
+                class="d-flex justify-content-between align-items-center p-2 mb-1 bg-light rounded">
+                <div class="d-flex w-100 align-items-center">
+                    <!-- Hora a la izquierda -->
+                    <div class="text-muted" style="font-size: 1.2rem; width: 33%;">
+                        {{ session.date_start | date:'shortTime' }}
+                    </div>
+
+                    <!-- Nombre de la sesión centrado -->
+                    <div class="fw-semibold text-center" style="font-size: 1.2rem; width: 34%;">
+                        {{ session.name }}
+                    </div>
+
+                    <!-- Ponente a la derecha -->
+                    <div class="text-end text-muted small" style="font-size: 1.2rem; width: 33%;">
+                        {{ session.speaker.name }}
+                    </div>
+                </div>
+
             </div>
-            <div class="text-end text-muted small">{{ session.speaker }}</div>
         </div>
-    </div> -->
+    </div>
 </div>

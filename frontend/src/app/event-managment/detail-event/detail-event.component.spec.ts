@@ -24,7 +24,7 @@ describe('DetailEventComponent', () => {
     '2021-09-03',
     'test',
     1,
-    [new Session(1, 'Session 1', 'Session 1', new Date().toString(), 60, 1)]
+    [new Session(1, 'Session 1', 'Session 1', new Date().toString(), 60, 1, {id: 1, name: 'test'})]
   );
 
   beforeEach(async () => {

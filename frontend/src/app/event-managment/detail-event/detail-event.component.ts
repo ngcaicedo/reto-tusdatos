@@ -21,7 +21,7 @@ export class DetailEventComponent {
   ) {}
 
   ngOnInit() {
-    const id = Number(this.router.snapshot.paramMap.get('id'));
+    const id = Number(this.router.snapshot.paramMap.get('event_id'));
     this.eventService.getEvent(id).subscribe({
       next: (response) => {
         this.event = response;
@@ -31,4 +31,21 @@ export class DetailEventComponent {
       },
     });
   }
+
+  get groupedSessions(): Record<string, any[]> {
+    const result: Record<string, any[]> = {};
+  
+    for (const session of this.event.sessions) {
+      const date = new Date(session.date_start).toLocaleDateString('es-ES', {
+        day: 'numeric',
+        month: 'long'
+      });
+  
+      if (!result[date]) result[date] = [];
+      result[date].push(session);
+    }
+  
+    return result;
+  }
+  
 }

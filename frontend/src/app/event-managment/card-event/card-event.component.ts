@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, SimpleChanges } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
 @Component({
@@ -15,4 +15,17 @@ export class CardEventComponent {
   @Input() state!: string;
   @Input() capacity!: number;
   @Input() event_id!: number;
+
+  readableDate = '';
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['date'] && this.date) {
+      const parsed = new Date(this.date);
+  
+      this.readableDate = parsed.toLocaleDateString('es-ES', {
+        day: 'numeric',
+        month: 'short'
+      });
+    }
+  }
 }

@@ -27,3 +27,7 @@
   border-color: #b79bc1;
   color: black;
 }
+
+.bg-success {
+  background-color: #ccb0d2 !important;
+}
