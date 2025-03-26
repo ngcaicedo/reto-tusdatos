@@ -10,9 +10,9 @@ import { authGuard } from './shared/guard/auth.guard';
 export const routes: Routes = [
     {path: '', redirectTo: 'events', pathMatch: 'full'},
     {path: 'events', component: ListEventComponent, pathMatch: 'full'},
-    {path: 'events/assistant/register', component: DetailEventAssistantComponent, pathMatch: 'full'},
+    {path: 'events/assistant/register', component: DetailEventAssistantComponent, pathMatch: 'full', canActivate: [authGuard]},
     {path: 'events/:event_id', component: DetailEventComponent, pathMatch: 'full'},
     {path: 'sessions/speaker/create', component: CreateSpeakerComponent, pathMatch: 'full', canActivate: [authGuard]},
-    {path: 'sessions/create', component: CreateSessionComponent, pathMatch: 'full'},
+    {path: 'sessions/create', component: CreateSessionComponent, pathMatch: 'full', canActivate: [authGuard]},
     {path: 'create/events', component: CreateEventComponent, pathMatch: 'full', canActivate: [authGuard]},
 ];
