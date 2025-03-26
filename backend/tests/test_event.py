@@ -247,6 +247,6 @@ def test_get_events_assistant_register(client, assistant_factory, user_factory, 
     assert response.status_code == 200
     response_data = response.json()
     assert len(response_data) == 2
-    assert response_data[0]["name"] == event1["name"]
-    assert response_data[1]["name"] == event2["name"]
+    assert response_data[0]["name"] == event1.name
+    assert response_data[1]["name"] == event2.name
     

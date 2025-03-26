@@ -12,11 +12,12 @@ def test_table_event_assistant(db):
     assert "event_assistant" in table_names
 
 
-def test_event_has_assistant(db, user_factory, event_factory, assistant_factory):
+def test_event_has_assistant(db, client, user_factory, event_factory, assistant_factory):
     """ Test para verificar que el modelo Event tiene una relación con el modelo Assistant """
     user = user_factory.create_user()
     event = event_factory.create_event(user_id=user.id, state=StateEnum.CREADO)
-    assistant = assistant_factory()
+    assistant = assistant_factory(client)
+    assistant = db.query(Assistant).filter_by(user_id=assistant['user_id']).first()
 
     event.assistants.append(assistant)
     db.commit()

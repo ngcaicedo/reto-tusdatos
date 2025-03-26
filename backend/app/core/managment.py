@@ -1,6 +1,6 @@
 from app.core.authenticator.auth import login_user
 from app.core.user import create_user, register_user_assistant
-from app.core.event import create_event, update_event, get_events, get_event, register_to_event
+from app.core.event import create_event, update_event, get_events, get_event, register_to_event, get_events_register_by_assistant
 from app.core.assistant import create_assistant, get_assistants, get_assistant, update_assistant
 from app.core.session import create_speaker, update_speaker, get_speakers, get_speaker, create_session, update_session, get_sessions, get_session
 
@@ -29,6 +29,9 @@ class Managment:
     
     def get_event(self, db, event_id):
         return get_event(db, event_id)
+    
+    def get_events_register_by_assistant(self, db, current_user):
+        return get_events_register_by_assistant(db, current_user)
     
     def register_to_event(self, db, event_id, current_user):
         return register_to_event(db, event_id, current_user)

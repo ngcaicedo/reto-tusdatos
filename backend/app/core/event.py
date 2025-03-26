@@ -2,11 +2,12 @@ from sqlalchemy.orm import Session
 from app.models.user import User, RoleEnum
 from app.models.event_assistant import EventAssistant
 from app.models.event import Event
-from app.schemas.event import EventCreate, EventUpdate
+from app.schemas.event import EventCreate, EventResponse, EventUpdate
 from app.core.authenticator.security import hash_password
 from fastapi import HTTPException, status
 from app.models.session import Session as SessionModel
 from sqlalchemy.orm import joinedload
+from app.models.assistant import Assistant
 
 
 def create_event(db: Session, event_data: EventCreate, current_user: User):
@@ -42,19 +43,20 @@ def create_event(db: Session, event_data: EventCreate, current_user: User):
     db.add(db_event)
     db.commit()
     db.refresh(db_event)
-    
-    sessions = db.query(SessionModel).filter(SessionModel.id.in_(event_data.session_ids)).all()
-    
+
+    sessions = db.query(SessionModel).filter(
+        SessionModel.id.in_(event_data.session_ids)).all()
+
     if len(sessions) != len(event_data.session_ids):
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="No se encontraron todas las sesiones",
             headers={"WWW-Authenticate": "Bearer"},
         )
-    
+
     for session in sessions:
         session.event_id = db_event.id
-    
+
     db.commit()
     return db_event
 
@@ -76,15 +78,15 @@ def update_event(db: Session, event_id: int, event_data: EventUpdate):
             detail="El evento no se encuentra registrado",
             headers={"WWW-Authenticate": "Bearer"},
         )
-        
-    events = db.query(Event).filter(Event.name == event_data.name, Event.id != event_id).all()
+
+    events = db.query(Event).filter(
+        Event.name == event_data.name, Event.id != event_id).all()
     if len(events) > 1:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="El evento ya se encuentra registrado",
             headers={"WWW-Authenticate": "Bearer"},
         )
-        
 
     event.name = event_data.name
     event.description = event_data.description
@@ -93,23 +95,23 @@ def update_event(db: Session, event_id: int, event_data: EventUpdate):
     event.date_start = event_data.date_start
     event.date_end = event_data.date_end
     event.location = event_data.location
-    
-    
-    sessions = db.query(SessionModel).filter(SessionModel.id.in_(event_data.session_ids)).all()
-    
+
+    sessions = db.query(SessionModel).filter(
+        SessionModel.id.in_(event_data.session_ids)).all()
+
     if len(sessions) != len(event_data.session_ids):
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="No se encontraron todas las sesiones",
             headers={"WWW-Authenticate": "Bearer"},
         )
-    
+
     for session in db.query(SessionModel).filter(SessionModel.event_id == event_id).all():
         session.event_id = None
-    
+
     for session in sessions:
         session.event_id = event_id
-        
+
     db.commit()
     db.refresh(event)
     return event
@@ -121,11 +123,12 @@ def get_events(db: Session):
 
     Args:
         db (Session): Sesión de la base de datos
-    
+
     Returns:
         list[Event]: Lista de eventos registrados
     """
     return db.query(Event).order_by(Event.date_start).all()
+
 
 def get_event(db: Session, event_id: int):
     """
@@ -134,21 +137,44 @@ def get_event(db: Session, event_id: int):
     Args:
         db (Session): Sesión de la base de datos
         event_id (int): Identificador del evento a obtener
-    
+
     Returns:
         Event: Evento registrado
     """
     return db.query(Event).options(joinedload(Event.sessions).joinedload(SessionModel.speaker), joinedload(Event.assistants)).filter(Event.id == event_id).first()
 
 
+def get_events_register_by_assistant(db: Session, current_user: User):
+    """
+    Obtiene los eventos registrados por un asistente.
+
+    Args:
+        db (Session): Sesión de la base de datos
+        current_user (User): Usuario autenticado
+
+    Returns:
+        list[Event]: Lista de eventos registrados por el asistente
+    """
+    events = db.query(Event).join(Event.assistants).options(joinedload(Event.sessions).joinedload(
+        SessionModel.speaker), joinedload(Event.assistants)).filter(Assistant.id == current_user.assistant.id).all()
+
+    events_response = [
+        EventResponse.model_validate(event).model_dump() | {
+            "is_registered": True}
+        for event in events
+    ]
+
+    return events_response
+
+
 def register_to_event(db: Session, event_id: int, current_user: User):
     """ Se registra un assistente a un evento.
-    
+
     Args:
         db (Session): Sesión de la base de datos
         event_id (int): Identificador del evento
         current_user (User): Usuario autenticado
-    
+
     Returns:
         event_assistant: Asistente registrado
     """
@@ -173,7 +199,8 @@ def register_to_event(db: Session, event_id: int, current_user: User):
         )
 
     # Verificar capacidad
-    current_attendees = db.query(EventAssistant).filter(EventAssistant.event_id == event_id).count()
+    current_attendees = db.query(EventAssistant).filter(
+        EventAssistant.event_id == event_id).count()
     if current_attendees >= event.capacity:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
@@ -192,7 +219,8 @@ def register_to_event(db: Session, event_id: int, current_user: User):
         )
 
     # Registrar
-    attendee = EventAssistant(assistant_id=current_user.assistant.id, event_id=event_id)
+    attendee = EventAssistant(
+        assistant_id=current_user.assistant.id, event_id=event_id)
     db.add(attendee)
     db.commit()
     db.refresh(attendee)

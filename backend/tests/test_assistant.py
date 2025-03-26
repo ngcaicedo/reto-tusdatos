@@ -1,6 +1,7 @@
 from sqlalchemy import inspect
 from faker import Faker
 from app.models.user import User, RoleEnum
+from app.models.assistant import Assistant
 
 faker = Faker()
 
@@ -67,10 +68,11 @@ def test_update_assistant(db, client, user_factory, assistant_factory, auth_head
     user = user_factory.login_user(RoleEnum.ORGANIZADOR)
     headers = auth_header(user)
     data = assistant_payload()
-    assistant = assistant_factory()
+    assistant = assistant_factory(client)
+    assistant_id = db.query(Assistant).filter_by(user_id=assistant['user_id']).first().id
 
     response = client.put(
-        f'/assistants/update/{assistant.id}', json=data, headers=headers)
+        f'/assistants/update/{assistant_id}', json=data, headers=headers)
     assert response.status_code == 200
     response_data = response.json()
     assert response_data['name'] == data['name']
@@ -78,14 +80,16 @@ def test_update_assistant(db, client, user_factory, assistant_factory, auth_head
     assert response_data['phone'] == data['phone']
 
 
-def test_update_assistant_duplicate(client, user_factory, assistant_factory, auth_header):
+def test_update_assistant_duplicate(db, client, user_factory, assistant_factory, auth_header):
     """Test para verificar que no se puede actualizar un asistente con datos duplicados de otro existente"""
 
     # Crea un usuario organizador autenticado
     user = user_factory.login_user(RoleEnum.ORGANIZADOR)
     headers = auth_header(user)
-    assistant1 = assistant_factory()
-    assistant2 = assistant_factory()
+    assistant1 = assistant_factory(client)
+    assistant1 = db.query(Assistant).filter_by(user_id=assistant1['user_id']).first()
+    assistant2 = assistant_factory(client)
+    assistant2 = db.query(Assistant).filter_by(user_id=assistant2['user_id']).first()
 
     data_duplicate = {
         'name': assistant1.name,
@@ -109,7 +113,8 @@ def test_get_assistants(db, client, user_factory, assistant_factory, auth_header
     """ Test para verificar la obtención de asistentes """
     user = user_factory.login_user(RoleEnum.ORGANIZADOR)
     headers = auth_header(user)
-    assistant = assistant_factory()
+    assistant = assistant_factory(client)
+    assistant = db.query(Assistant).filter_by(user_id=assistant['user_id']).first()
 
     response = client.get('/assistants/assistants', headers=headers)
     assert response.status_code == 200
@@ -121,7 +126,8 @@ def test_get_assistants(db, client, user_factory, assistant_factory, auth_header
 
 def test_get_assistant(client, db, assistant_factory, user_factory, auth_header):
     """ Test para verificar la obtención de un asistente """
-    assistant = assistant_factory()
+    assistant = assistant_factory(client)
+    assistant = db.query(Assistant).filter_by(user_id=assistant['user_id']).first()
     user = user_factory.login_user(RoleEnum.ORGANIZADOR)
     headers = auth_header(user)
 
